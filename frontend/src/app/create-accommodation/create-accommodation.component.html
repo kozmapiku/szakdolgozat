@@ -1,0 +1,23 @@
+<div>
+  <form [formGroup]="form" (ngSubmit)="saveAccommodation(form)">
+    <div fxLayout="column">
+      <mat-form-field appearance="standard" class="example-full-width">
+        <mat-label>Név</mat-label>
+        <input matInput maxlength="20" formControlName="name" placeholder="Adj a szállásodnak egy nevet" #nameInput>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Város</mat-label>
+        <mat-select formControlName="city" #cityInput>
+          <mat-option *ngFor="let p of city_list" [value]="p">
+            {{ p }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="standard" >
+        <mat-label>Cím</mat-label>
+        <input matInput formControlName="address" #addressInput>
+      </mat-form-field>
+    </div>
+  </form>
+  <div>{{ form.value | json }}</div>
+</div>

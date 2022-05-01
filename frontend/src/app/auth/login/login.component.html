@@ -1,0 +1,26 @@
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="login(form)">
+      <h2>Bejelentkezés</h2>
+      <mat-error *ngIf="!loginValid">
+        Az e-mail cím vagy a jelszó nem megfelelő!
+      </mat-error>
+      <mat-form-field>
+        <input matInput placeholder="E-mail" formControlName="email" #emailInput required>
+        <mat-error *ngIf="form.hasError('required', 'email')">
+          Az e-mail cím megadása kötelező!
+        </mat-error>
+        <mat-error *ngIf="form.hasError('pattern', 'email')">
+          Az e-mail cím formátuma nem megfelelő!
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="password" placeholder="Jelszó" formControlName="password" #passwordInput required>
+        <mat-error *ngIf="form.hasError('required', 'password')">
+          A jelszó megadása kötelező!
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Bejelentkezés</button>
+    </form>
+  </mat-card-content>
+</mat-card>
