@@ -1,5 +1,10 @@
 package hu.kozma.backend;
 
+import hu.kozma.backend.mappers.UserMapper;
+import hu.kozma.backend.models.Role;
+import hu.kozma.backend.models.User;
+import hu.kozma.backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -8,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +27,9 @@ import java.util.UUID;
 
 @SpringBootApplication
 public class BackendApplication {
+
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}
+
 }

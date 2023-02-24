@@ -1,17 +1,27 @@
 package hu.kozma.backend.dto;
 
-import hu.kozma.backend.models.City;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
+import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class AccommodationDTO {
+    private long id;
     @NonNull
-    private City city;
+    private String name;
     @NonNull
-    private int maxGuests;
+    private String city;
+    @NonNull
+    private int maxGuest;
     @NonNull
     private String address;
+    @NonNull
+    private List<AnnounceDateDto> announceDateList;
+    @NonNull
+    private List<ImageDTO> listOfImages;
+    private ImageDTO mainImage;
 }

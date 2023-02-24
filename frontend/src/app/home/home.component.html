@@ -1,1 +1,21 @@
-<p>home works!</p>
+<div class="content">
+  <div fxLayout="row wrap" fxLayoutGap="16px grid">
+    <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let accomodation of accommodations;let index = index">
+      <mat-card class="mat-elevation-z4" >
+        <mat-card-header>
+          <mat-card-title>Mountains {{index}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image src="https://wompampsupport.azureedge.net/fetchimage?siteId=7575&v=2&jpgQuality=100&width=700&url=https%3A%2F%2Fi.kym-cdn.com%2Fphotos%2Fimages%2Fnewsfeed%2F000%2F439%2F604%2Fbdc.jpg">
+        <mat-card-content>
+          <p>
+            The Himalayas is a mountain range in Asia.
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>LIKE</button>
+          <button mat-button>SHARE</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>
