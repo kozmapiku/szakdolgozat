@@ -28,8 +28,10 @@ export class LoginComponent implements OnInit {
     this.authService.login(form.get("email")?.value, form.get("password")?.value).subscribe({
         next: (data) => {
             if(data.status == "OK") {
-              this.tokenStorage.saveToken(data.data.accessToken);
+              console.log(data)
+              this.tokenStorage.saveToken(data.data.token);
               this.tokenStorage.saveUser(data.data);
+              this.tokenStorage.saveExpire(data.data.expiresIn);
               this.loginValid = true;
               this.authService.authenticated = true;
               this.router.navigateByUrl("/home");

@@ -6,7 +6,7 @@
   </div>
   <div>
     <a routerLink="/home">Főoldal</a>
-    <a routerLink="/accommodation/create">Hírdetés</a>
+    <a *ngIf="authService.authenticated" routerLink="/accommodation/create">Hirdetés</a>
   </div>
   <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
     <ul fxLayout fxLayoutGap="15px" class="navigation-items">

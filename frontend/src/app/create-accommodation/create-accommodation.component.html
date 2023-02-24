@@ -4,6 +4,9 @@
       <mat-form-field appearance="standard" class="example-full-width">
         <mat-label>Név</mat-label>
         <input matInput maxlength="20" formControlName="name" placeholder="Adj a szállásodnak egy nevet" #nameInput>
+        <mat-error *ngIf="form.hasError('required', 'name')">
+          A név megadása kötelező!
+        </mat-error>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Város</mat-label>
@@ -12,12 +15,84 @@
             {{ p }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="form.hasError('required', 'city')">
+          A város megadása kötelező!
+        </mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard" >
         <mat-label>Cím</mat-label>
         <input matInput formControlName="address" #addressInput>
+        <mat-error *ngIf="form.hasError('required', 'address')">
+          A cím megadása kötelező!
+        </mat-error>
       </mat-form-field>
+      <mat-form-field appearance="standard" >
+        <mat-label>Férőhely</mat-label>
+        <input matInput type="number" min="1" max="100" formControlName="maxGuest" #guestsInput>
+        <mat-error *ngIf="form.hasError('max', 'maxGuest')">
+          A maximum férőhely 100!
+        </mat-error>
+        <mat-error *ngIf="form.hasError('min', 'maxGuest')">
+          A minimum férőhely 1!
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Add meg, hogy mettől meddig elérhető a szállásod!</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input readonly matStartDate formControlName="fromDate" placeholder="Dátum kezdete">
+          <input readonly matEndDate formControlName="endDate" placeholder="Dátum vége">
+        </mat-date-range-input>
+        <div matSuffix style="display:flex">
+          <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+          <button mat-icon-button type="button" (click)="addToDateRangeList()">
+            <mat-icon>add_box</mat-icon>
+          </button>
+        </div>
+
+        <mat-date-range-picker #picker></mat-date-range-picker>
+        <mat-error *ngIf="form.hasError('required', 'fromDate')">
+          A kezdő dátum formátuma hibás!
+        </mat-error>
+        <mat-error *ngIf="form.hasError('required', 'endDate')">
+          A befejező dátum formátuma hibás!
+        </mat-error>
+        <mat-error *ngIf="form.hasError('amountMinError', 'fromDate')">
+          Legalább egy dátum intervallum megadása kötelező!
+        </mat-error>
+      </mat-form-field>
+
+      <div *ngFor="let dates of listOfDates;let index = index" style="display:flex">
+        <p>{{dates.fromDate | date:'yyyy.MM.dd'}} - {{dates.endDate | date:'yyyy.MM.dd'}}</p>
+        <button mat-icon-button color="warn" type="button" (click)="removeFromDateList(index)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <mat-form-field>
+        <mat-label>Tölts fel egy képet!</mat-label>
+        <input matInput disabled>
+        <button mat-icon-button type="button" matSuffix (click)="imagesInput.click()">
+          <mat-icon>attach_file</mat-icon>
+        </button>
+        <input hidden (change)="selectFile($event)" formControlName="imageInput" #imagesInput type="file" id="file" accept="image/*">
+        <mat-error *ngIf="form.hasError('required', 'imageInput')">
+          Minimum egy kép feltöltése kötelező!
+        </mat-error>
+      </mat-form-field>
+      <div class="cardList">
+        <div *ngFor="let selected of previews;let index = index" class="preview">
+          <img [src]="selected">
+          <button mat-icon-button color="warn" type="button" (click)="removeSelectedFile(index)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!--[disabled]="!form.valid && listOfDates.length == 0" -->
+      <button mat-raised-button color="primary" type="submit" >Feltöltés</button>
     </div>
   </form>
   <div>{{ form.value | json }}</div>
+  <div>{{listOfDates | json}}</div>
 </div>

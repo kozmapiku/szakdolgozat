@@ -24,9 +24,15 @@ export class AuthService {
     return this.http.post<Response<string>>("http://localhost:8080/auth/register", body);
   }
 
-  logout() {
+  public logout() {
     this.authenticated = false;
     this.tokenStorage.logout();
     this.router.navigateByUrl("/");
+  }
+
+  public readUser() {
+    if (this.tokenStorage.tokenExpired()) {
+      this.authenticated = true;
+    }
   }
 }

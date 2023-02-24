@@ -25,6 +25,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -74,13 +76,14 @@ public class AuthController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
             String token = jwtTokenUtil.generateToken(userDetails);
+            long expiresIn = System.currentTimeMillis() + JwtTokenUtil.JWT_TOKEN_VALIDITY*1000;
 
             Optional<User> user = userRepository.findUserByEmail(userDTO.getEmail());
 
             if(user.isEmpty()) {
                 throw new UsernameNotFoundException("Nem található felhasználó!");
             }
-            LoginDTO loginDTO = new LoginDTO(user.get(), token);
+            LoginDTO loginDTO = new LoginDTO(user.get(), token, expiresIn);
 
             return RestResponseHandler.generateResponse(loginDTO);
         }

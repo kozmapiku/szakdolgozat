@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -24,6 +24,8 @@ import {XhrInterceptorService} from "./rest/xhr-interceptor.service";
 import { CreateAccommodationComponent } from './create-accommodation/create-accommodation.component';
 import {MatSelectModule} from "@angular/material/select";
 import { RegisterComponent } from './auth/register/register.component';
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MAT_DATE_LOCALE, MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -35,25 +37,33 @@ import { RegisterComponent } from './auth/register/register.component';
     CreateAccommodationComponent,
     RegisterComponent
   ],
-    imports: [
-        BrowserModule,
-        RoutingModule,
-        BrowserAnimationsModule,
-        MaterialModule,
-        MatSidenavModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatButtonModule,
-        FlexLayoutModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        FormsModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        MatSelectModule
-    ],
-  providers: [AuthService, {provide: HTTP_INTERCEPTORS, useClass: XhrInterceptorService, multi: true}],
+  imports: [
+    BrowserModule,
+    RoutingModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    FlexLayoutModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ],
+  providers: [AuthService,
+    {provide: HTTP_INTERCEPTORS, useClass: XhrInterceptorService, multi: true},
+    {provide: APP_INITIALIZER, useFactory: (authService: AuthService) => () => authService.readUser(),
+    multi: true, deps: [AuthService]},
+    {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

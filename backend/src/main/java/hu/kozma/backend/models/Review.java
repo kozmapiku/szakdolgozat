@@ -1,5 +1,6 @@
 package hu.kozma.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ public class Review {
     @Column(name = "id", nullable = false)
     private Long id;
     @ManyToOne
+    @JsonBackReference
     private Accommodation accommodation;
     @ManyToOne
     @JoinColumn(name = "user_id")
