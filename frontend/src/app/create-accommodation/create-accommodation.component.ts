@@ -47,11 +47,10 @@ export class CreateAccommodationComponent implements OnInit {
   }
 
   async saveAccommodation(form: FormGroup) {
-    this.imageUpload = [];
-    let promise = Promise.resolve();
-    let promises = this.listOfFiles.map(file => promise.then(() => this.pFileReader(file)));
-    let results = await Promise.all(promises);
-    this.uploadToServer(form);
+    const formData = new FormData()
+    formData.append('accommodation', JSON.stringify({name: form.get("name")?.value, address: form.get("address")?.value, maxGuest: form.get("maxGuest")?.value, city: form.get("city")?.value, announceDateList: this.listOfDates}))
+    this.listOfFiles.forEach( f => formData.append('files', f));
+    this.uploadToServer(formData);
   }
 
   pFileReader(file: any){
@@ -63,7 +62,6 @@ export class CreateAccommodationComponent implements OnInit {
         resolve(1);
       };
       fr.onerror = reject;
-      fr.readAsBinaryString(file);
     });
   }
 
@@ -114,9 +112,9 @@ export class CreateAccommodationComponent implements OnInit {
     this.listOfDates.splice(index, 1);
   }
 
-  private uploadToServer(form: FormGroup) {
+  private uploadToServer(form: FormData) {
     this.accommodationService
-      .newAccommodation(form.get("name")?.value, form.get("address")?.value, form.get("maxGuest")?.value, form.get("city")?.value, this.listOfDates, this.imageUpload)
+      .newAccommodation(form)
       .subscribe({
         next: (data)=> {
           console.log(JSON.stringify(data));

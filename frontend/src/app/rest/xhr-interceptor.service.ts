@@ -15,7 +15,6 @@ export class XhrInterceptorService implements HttpInterceptor{
        xhr = req.clone({
         headers: req.headers
           .set('X-Requested-With', 'XMLHttpRequest')
-          .set('Content-Type', 'application/json')
           .set('Authorization','Bearer' + token)
       });
     }

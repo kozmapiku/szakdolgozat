@@ -1,7 +1,7 @@
 package hu.kozma.backend.mappers;
 
 import hu.kozma.backend.dto.UserDTO;
-import hu.kozma.backend.models.User;
+import hu.kozma.backend.model.User;
 
 public class UserMapper {
     public static User toUser(UserDTO userDTO) {
@@ -9,6 +9,7 @@ public class UserMapper {
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());
         return user;
     }
 }

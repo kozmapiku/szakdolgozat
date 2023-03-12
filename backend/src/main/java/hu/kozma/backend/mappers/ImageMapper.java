@@ -1,7 +1,7 @@
 package hu.kozma.backend.mappers;
 
 import hu.kozma.backend.dto.ImageDTO;
-import hu.kozma.backend.models.Image;
+import hu.kozma.backend.model.Image;
 import hu.kozma.backend.repository.FileSystemRepository;
 import lombok.AllArgsConstructor;
 

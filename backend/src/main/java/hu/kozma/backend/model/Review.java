@@ -1,26 +1,25 @@
-package hu.kozma.backend.models;
+package hu.kozma.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Getter
 @Setter
-public class Image {
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "location")
-    private String location;
-    @ToString.Exclude
-    @JsonBackReference
     @ManyToOne
+    @JsonBackReference
     private Accommodation accommodation;
-    @Column(name = "is_main")
-    private boolean isMain;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    private String comment;
+    private int star;
 }

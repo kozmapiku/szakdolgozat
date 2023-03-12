@@ -1,7 +1,7 @@
 package hu.kozma.backend.mappers;
 
 import hu.kozma.backend.dto.AnnounceDateDto;
-import hu.kozma.backend.models.AnnounceDate;
+import hu.kozma.backend.model.AnnounceDate;
 
 import java.time.Instant;
 import java.time.ZoneId;

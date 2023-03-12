@@ -4,23 +4,22 @@ import hu.kozma.backend.dto.AccommodationDTO;
 import hu.kozma.backend.dto.ImageDTO;
 import hu.kozma.backend.mappers.AccommodationMapper;
 import hu.kozma.backend.mappers.CommonMappers;
-import hu.kozma.backend.models.Accommodation;
-import hu.kozma.backend.models.Image;
-import hu.kozma.backend.models.User;
+import hu.kozma.backend.model.Accommodation;
 import hu.kozma.backend.repository.AccommodationRepository;
 import hu.kozma.backend.repository.FileSystemRepository;
 import hu.kozma.backend.repository.ImageRepository;
 import hu.kozma.backend.repository.UserRepository;
 import hu.kozma.backend.rest.RestResponseHandler;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
-import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("/accommodation")
@@ -52,8 +51,11 @@ public class AccommodationController {
         return RestResponseHandler.generateResponse(accommodationDTOs);
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<?> addNewAccommodation(@RequestBody AccommodationDTO accommodationDTO, Principal principal) throws Exception {
+    @PostMapping(path = "/new", produces = {
+            MediaType.APPLICATION_JSON_VALUE }, consumes = {  MediaType.MULTIPART_FORM_DATA_VALUE, APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<?> addNewAccommodation(@RequestPart("files") List<MultipartFile> multipartFiles, @RequestPart("accommodation") AccommodationDTO accommodationDTO) throws Exception {
+        System.out.println(accommodationDTO);
+        /*
         Optional<User> user = userRepository.findUserByEmail(principal.getName());
         if (user.isEmpty()) {
             throw new EntityNotFoundException("A felhasználó nem található!");
@@ -71,7 +73,9 @@ public class AccommodationController {
         }
         Accommodation newAccommodation = accommodationRepository.save(accommodation);
         System.out.println(newAccommodation);
-        return RestResponseHandler.generateResponse(newAccommodation);
+
+         */
+        return RestResponseHandler.generateResponse(null);
     }
 
 }

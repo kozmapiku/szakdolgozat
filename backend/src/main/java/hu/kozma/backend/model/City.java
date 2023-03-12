@@ -1,4 +1,4 @@
-package hu.kozma.backend.models;
+package hu.kozma.backend.model;
 
 public enum City {
     BUDAPEST("Budapest"), DEBRECEN("Debrecen"), NYIREGYHAZA("Nyíregyháza");
