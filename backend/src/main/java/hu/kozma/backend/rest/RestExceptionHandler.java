@@ -1,6 +1,7 @@
 package hu.kozma.backend.rest;
 
 import hu.kozma.backend.exceptions.UserNotLoggedInException;
+import hu.kozma.backend.exceptions.UsernameAlreadyTakenException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -37,6 +38,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
     protected ResponseEntity<Object> authenticationError(AuthenticationCredentialsNotFoundException ex) {
         RestError restError = new RestError(HttpStatus.UNAUTHORIZED);
+        restError.setError(ex.getMessage());
+        return buildResponseEntity(restError);
+    }
+
+    @ExceptionHandler(UsernameAlreadyTakenException.class)
+    protected ResponseEntity<Object> usernameAlreadyTaken(UsernameAlreadyTakenException ex) {
+        RestError restError = new RestError(HttpStatus.BAD_REQUEST);
         restError.setError(ex.getMessage());
         return buildResponseEntity(restError);
     }

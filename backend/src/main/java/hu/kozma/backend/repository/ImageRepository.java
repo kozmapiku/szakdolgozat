@@ -1,7 +1,6 @@
 package hu.kozma.backend.repository;
 
-import hu.kozma.backend.models.Accommodation;
-import hu.kozma.backend.models.Image;
+import hu.kozma.backend.model.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
