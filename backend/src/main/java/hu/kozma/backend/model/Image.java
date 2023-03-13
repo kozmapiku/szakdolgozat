@@ -1,15 +1,17 @@
-package hu.kozma.backend.models;
+package hu.kozma.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +25,9 @@ public class Image {
     private Accommodation accommodation;
     @Column(name = "is_main")
     private boolean isMain;
+
+    public Image(String location) {
+        this.location = location;
+        this.isMain = false;
+    }
 }

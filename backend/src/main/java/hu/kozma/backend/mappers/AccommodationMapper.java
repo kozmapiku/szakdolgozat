@@ -1,10 +1,8 @@
 package hu.kozma.backend.mappers;
 
 import hu.kozma.backend.dto.AccommodationDTO;
-import hu.kozma.backend.models.Accommodation;
-import hu.kozma.backend.models.City;
-
-import java.util.stream.Collectors;
+import hu.kozma.backend.model.Accommodation;
+import hu.kozma.backend.model.City;
 
 public class AccommodationMapper {
     public static Accommodation toAccommodation(AccommodationDTO accommodationDTO) {

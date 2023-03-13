@@ -1,8 +1,7 @@
 package hu.kozma.backend.controllers;
 
-import hu.kozma.backend.models.City;
+import hu.kozma.backend.model.City;
 import hu.kozma.backend.rest.RestResponseHandler;
-import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

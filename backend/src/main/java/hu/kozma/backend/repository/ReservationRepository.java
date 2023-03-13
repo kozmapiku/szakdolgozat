@@ -1,6 +1,6 @@
 package hu.kozma.backend.repository;
 
-import hu.kozma.backend.models.Reservation;
+import hu.kozma.backend.model.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

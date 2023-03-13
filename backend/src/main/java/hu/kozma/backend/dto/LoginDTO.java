@@ -1,10 +1,8 @@
 package hu.kozma.backend.dto;
 
-import hu.kozma.backend.models.User;
+import hu.kozma.backend.model.User;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Optional;
 
 @Getter
 @Setter
