@@ -1,12 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators
-} from "@angular/forms";
+import {Component, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
 import {AccommodationService} from "../service/accommodation.service";
 import {NgxImageCompressService} from "ngx-image-compress";
 
@@ -65,8 +58,6 @@ export class CreateAccommodationComponent implements OnInit {
     });
   }
 
-
-
   private customValidatorFn(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const valid: boolean = this.listOfDates.length > 0;
@@ -86,8 +77,6 @@ export class CreateAccommodationComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
   }
 
-
-
   removeSelectedFile(index: number) {
     this.listOfFiles.splice(index, 1);
     this.previews.splice(index, 1);
@@ -102,6 +91,7 @@ export class CreateAccommodationComponent implements OnInit {
       this.form.get("endDate")?.reset();
     }
   }
+
   checkValidDate() : boolean | undefined{
     let from = this.form.get("fromDate");
     let end = this.form.get("endDate");

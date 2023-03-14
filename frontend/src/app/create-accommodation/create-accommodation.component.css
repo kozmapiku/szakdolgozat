@@ -41,3 +41,13 @@ input.example-right-align::-webkit-inner-spin-button {
 input.example-right-align {
   -moz-appearance: textfield;
 }
+
+mat-form-field {
+  width: 70%;
+}
+
+#date-p {
+  margin-bottom: 0;
+  vertical-align: middle;
+  display: inline-block;
+}
