@@ -1,6 +1,6 @@
 <div>
   <form [formGroup]="form" (ngSubmit)="saveAccommodation(form)">
-    <div fxLayout="column">
+    <div fxLayout="column" fxLayoutAlign="center center">
       <mat-form-field appearance="standard" class="example-full-width">
         <mat-label>Név</mat-label>
         <input matInput maxlength="20" formControlName="name" placeholder="Adj a szállásodnak egy nevet" #nameInput>
@@ -62,8 +62,9 @@
         </mat-error>
       </mat-form-field>
 
-      <div *ngFor="let dates of listOfDates;let index = index" style="display:flex">
-        <p>{{dates.fromDate | date:'yyyy.MM.dd'}} - {{dates.endDate | date:'yyyy.MM.dd'}}</p>
+      <div *ngFor="let dates of listOfDates;let index = index"
+           style="display:flex; align-items: center; justify-content: space-around">
+        <p id="date-p">{{dates.fromDate | date:'yyyy.MM.dd'}} - {{dates.endDate | date:'yyyy.MM.dd'}}</p>
         <button mat-icon-button color="warn" type="button" (click)="removeFromDateList(index)">
           <mat-icon>delete</mat-icon>
         </button>
@@ -93,6 +94,4 @@
       <button mat-raised-button color="primary" type="submit" >Feltöltés</button>
     </div>
   </form>
-  <div>{{ form.value | json }}</div>
-  <div>{{listOfDates | json}}</div>
 </div>
