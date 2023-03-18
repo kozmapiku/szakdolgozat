@@ -1,13 +1,12 @@
 package hu.kozma.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,6 +14,9 @@ import java.util.Set;
 @Getter
 @Table(name = "accommodation")
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Accommodation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +36,7 @@ public class Accommodation {
     private String address;
     @JsonManagedReference
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
-    private Set<AnnounceDate> announces = new HashSet<>();;
+    private List<AnnounceDate> announces = new ArrayList<>();
     @JsonManagedReference
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
     private Set<Image> images = new HashSet<>();
@@ -56,7 +58,8 @@ public class Accommodation {
         review.setAccommodation(this);
         reviews.add(review);
     }
-    public Optional<Image> getMainImage() {
-        return images.stream().filter(Image::isMain).findAny();
+
+    public Image getMainImage() {
+        return images.stream().filter(Image::isMain).findFirst().orElse(images.stream().findFirst().get());
     }
 }

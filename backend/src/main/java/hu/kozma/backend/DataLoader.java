@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-
 import java.util.Base64;
 
 import static io.jsonwebtoken.security.Keys.secretKeyFor;
@@ -31,7 +30,7 @@ public class DataLoader implements ApplicationRunner {
         user.setPassword(passwordEncoder.encode("teszt"));
         user.setRole(Role.USER);
         user.setEnabled(true);
-        userRepository.save(user);
+        //userRepository.save(user);
 
         SecretKey secretKey = secretKeyFor(SignatureAlgorithm.HS512);
         String a = Base64.getEncoder().encodeToString(secretKey.getEncoded());
