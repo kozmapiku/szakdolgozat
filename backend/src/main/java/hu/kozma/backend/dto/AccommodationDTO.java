@@ -1,9 +1,11 @@
 package hu.kozma.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
+
 import java.util.List;
 
 @Getter
@@ -16,12 +18,13 @@ public class AccommodationDTO {
     @NonNull
     private String city;
     @NonNull
-    private int maxGuest;
+    @JsonProperty("max_guests")
+    private Integer maxGuest;
     @NonNull
     private String address;
     @NonNull
     private List<AnnounceDateDto> announceDateList;
     @NonNull
-    private List<ImageDTO> listOfImages;
-    private ImageDTO mainImage;
+    private List<byte[]> listOfImages;
+    private byte[] mainImage;
 }

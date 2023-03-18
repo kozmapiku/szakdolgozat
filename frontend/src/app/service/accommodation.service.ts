@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {Accommodation} from "../model/accommodation.model";
 import {Response} from "../rest/response.model";
 import {environment} from "../../environments/environment";
 import {ResponseList} from "../rest/response-list";
-import {City} from "../model/city.model";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,7 @@ export class AccommodationService {
   public newAccommodation(formData: FormData) {
     let body = formData
     console.log(JSON.stringify(body))
-    return this.http.post<Response<Accommodation>>(this.baseUrl +"/accommodation/new", body);
+    return this.http.post<Response<Accommodation>>(this.baseUrl + "/accommodation/new", body);
   }
 
   public getCities() {
@@ -29,4 +28,16 @@ export class AccommodationService {
   public getAll() {
     return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/accommodation/all");
   }
+
+  public getFiltered(name: any, guests: any, from: number, end: number) {
+    let queryParams = new HttpParams();
+    queryParams = name != null ? queryParams.append("name", name) : queryParams;
+    queryParams = guests != null ? queryParams.append("guests", guests) : queryParams;
+    queryParams = !isNaN(from) ? queryParams.append("from", from) : queryParams;
+    queryParams = !isNaN(end) ? queryParams.append("end", end) : queryParams;
+    console.log("QueryParams ", queryParams);
+    return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/accommodation/all", {params: queryParams});
+  }
+
+
 }
