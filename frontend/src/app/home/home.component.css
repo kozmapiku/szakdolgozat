@@ -5,3 +5,24 @@
 .content > mat-card {
   width: 200px;
 }
+
+.equal-height {
+  height: 95%;
+}
+
+
+.mat-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-card-header {
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+}
+
+.mat-card-content {
+  flex-grow: 1;
+  overflow: auto;
+}

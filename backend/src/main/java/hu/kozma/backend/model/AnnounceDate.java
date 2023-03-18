@@ -1,11 +1,9 @@
 package hu.kozma.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -13,6 +11,9 @@ import java.time.LocalDate;
 @Setter
 @Table(name = "announce_date")
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AnnounceDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
