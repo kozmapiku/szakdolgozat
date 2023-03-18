@@ -1,20 +1,47 @@
 <div class="content">
+  <form (ngSubmit)="search(form)" [formGroup]="form" fxLayout="row" fxLayoutGap="16px">
+    <mat-form-field appearance="outline" fxFlex>
+      <mat-label>Név</mat-label>
+      <input formControlName="name" matInput type="text">
+    </mat-form-field>
+    <mat-form-field appearance="outline" fxFlex>
+      <mat-label>Férőhely</mat-label>
+      <input formControlName="guests" matInput type="number">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Időpont</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input formControlName="fromDate" matStartDate placeholder="Dátum kezdete" readonly>
+        <input formControlName="endDate" matEndDate placeholder="Dátum vége" readonly>
+      </mat-date-range-input>
+      <div matSuffix style="display:flex">
+        <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+        <button (click)="deleteRange()" mat-icon-button type="button">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    <div fxFlex>
+      <button color="primary" fxFlex mat-raised-button style="align-self: start" type="submit">Keresés</button>
+    </div>
+
+  </form>
   <div fxLayout="row wrap" fxLayoutGap="16px grid">
-    <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let accomodation of accommodations;let index = index">
-      <mat-card class="mat-elevation-z4" >
-        <mat-card-header>
-          <mat-card-title>Mountains {{index}}</mat-card-title>
+    <div *ngFor="let accommodation of accommodations;let index = index" fxFlex="50%" fxFlex.sm="50%" fxFlex.xs="100%"
+         fxLayoutAlign="stretch">
+      <mat-card [routerLink]="['/accommodation', accommodation.id, 'details']" class="mat-elevation-z4">
+        <mat-card-header style="justify-content: center">
+          <mat-card-title>{{accommodation.name}}</mat-card-title>
+          <mat-card-subtitle style="text-align: center">{{accommodation.city}}</mat-card-subtitle>
         </mat-card-header>
-        <img mat-card-image src="https://wompampsupport.azureedge.net/fetchimage?siteId=7575&v=2&jpgQuality=100&width=700&url=https%3A%2F%2Fi.kym-cdn.com%2Fphotos%2Fimages%2Fnewsfeed%2F000%2F439%2F604%2Fbdc.jpg">
+        <img [src]="'data:image/jpeg;base64,' + accommodation.mainImage" alt="Szállásról egy fénykép" mat-card-image>
         <mat-card-content>
-          <p>
-            The Himalayas is a mountain range in Asia.
-          </p>
+          <p>Férőhely: {{accommodation.max_guests}}</p>
         </mat-card-content>
-        <mat-card-actions>
-          <button mat-button>LIKE</button>
-          <button mat-button>SHARE</button>
-        </mat-card-actions>
+        <mat-card-footer>
+          <p>Cím: {{accommodation.address}}</p>
+        </mat-card-footer>
       </mat-card>
     </div>
   </div>
