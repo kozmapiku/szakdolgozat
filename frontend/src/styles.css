@@ -1,10 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
 /* for sidenav to take a whole page */
 html, body {
   margin: 0;
   height: 100%;
+}
+
+.reserved-date .mat-calendar-body-cell-content {
+  background-color: rgba(152, 14, 5, 0.25) !important;
+}
+
+.available-date .mat-calendar-body-cell-content {
+  background-color: rgba(14, 152, 5, 0.25) !important;
 }

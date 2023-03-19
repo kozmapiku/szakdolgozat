@@ -1,11 +1,9 @@
 package hu.kozma.backend.services;
 
-import hu.kozma.backend.model.Accommodation;
-import hu.kozma.backend.model.AnnounceDate;
-import hu.kozma.backend.model.Image;
-import hu.kozma.backend.model.User;
+import hu.kozma.backend.model.*;
 import hu.kozma.backend.repository.AccommodationRepository;
 import hu.kozma.backend.repository.FileSystemRepository;
+import hu.kozma.backend.repository.ReservationRepository;
 import hu.kozma.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -25,6 +23,7 @@ public class AccommodationService {
     private final AccommodationRepository accommodationRepository;
     private final FileSystemRepository fileSystemRepository;
     private final UserRepository userRepository;
+    private final ReservationRepository reservationRepository;
 
     public void saveAccommodation(Accommodation accomodation, List<MultipartFile> multipartFiles, String name) throws IOException {
         for (int i = 0; i < multipartFiles.size(); i++)
@@ -83,5 +82,17 @@ public class AccommodationService {
 
     public Boolean isWithinRange(LocalDate date, AnnounceDate announceDate) {
         return !(date.isBefore(announceDate.getStartDate()) || date.isAfter(announceDate.getEndDate()));
+    }
+
+    public Accommodation getAccommodation(Long id) {
+        return accommodationRepository.findById(id).orElse(null);
+    }
+
+    public void reserveAccommodation(Long id, Reservation reservation, String userEmail) {
+        Accommodation accommodation = accommodationRepository.findById(id).orElseThrow();
+        User user = userRepository.findUserByEmail(userEmail).orElseThrow();
+        reservation.setAccommodation(accommodation);
+        reservation.setUser(user);
+        reservationRepository.save(reservation);
     }
 }

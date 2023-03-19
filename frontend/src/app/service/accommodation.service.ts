@@ -39,5 +39,14 @@ export class AccommodationService {
     return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/accommodation/all", {params: queryParams});
   }
 
+  public getDetails(id: any) {
+    let queryParams = new HttpParams().append("id", id);
+    return this.http.get<Response<Accommodation>>(this.baseUrl + "/accommodation/get_details", {params: queryParams});
+  }
 
+
+  public reserve(id: number, from: number, end: number, guests: number) {
+    let body = {"id": id, "from": from, "end": end, "guests": guests}
+    return this.http.post<Response<string>>(this.baseUrl + "/accommodation/reserve", body);
+  }
 }

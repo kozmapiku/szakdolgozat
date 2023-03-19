@@ -24,9 +24,16 @@ import {XhrInterceptorService} from "./rest/xhr-interceptor.service";
 import {CreateAccommodationComponent} from './create-accommodation/create-accommodation.component';
 import {MatSelectModule} from "@angular/material/select";
 import {RegisterComponent} from './auth/register/register.component';
-import {MatDatepickerModule} from "@angular/material/datepicker";
+import {
+  DefaultMatCalendarRangeStrategy,
+  MAT_DATE_RANGE_SELECTION_STRATEGY,
+  MatDatepickerModule
+} from "@angular/material/datepicker";
 import {MAT_DATE_LOCALE, MatNativeDateModule} from "@angular/material/core";
 import {AccommodationDetailComponent} from './accommodation-detail/accommodation-detail.component';
+import {ReservationDialogComponent} from './accommodation-detail/reservation-dialog/reservation-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatMenuModule} from "@angular/material/menu";
 
 @NgModule({
   declarations: [
@@ -37,7 +44,8 @@ import {AccommodationDetailComponent} from './accommodation-detail/accommodation
     LoginComponent,
     CreateAccommodationComponent,
     RegisterComponent,
-    AccommodationDetailComponent
+    AccommodationDetailComponent,
+    ReservationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -57,14 +65,21 @@ import {AccommodationDetailComponent} from './accommodation-detail/accommodation
     ReactiveFormsModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatDialogModule,
+    MatMenuModule
   ],
   providers: [AuthService,
     {provide: HTTP_INTERCEPTORS, useClass: XhrInterceptorService, multi: true},
-    {provide: APP_INITIALIZER, useFactory: (authService: AuthService) => () => authService.readUser(),
-    multi: true, deps: [AuthService]},
+    {
+      provide: APP_INITIALIZER, useFactory: (authService: AuthService) => () => authService.readUser(),
+      multi: true, deps: [AuthService]
+    },
     {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
-
+    {
+      provide: MAT_DATE_RANGE_SELECTION_STRATEGY,
+      useClass: DefaultMatCalendarRangeStrategy,
+    },
   ],
   bootstrap: [AppComponent]
 })
