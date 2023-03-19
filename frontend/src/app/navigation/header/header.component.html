@@ -10,7 +10,14 @@
   </div>
   <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
     <ul fxLayout fxLayoutGap="15px" class="navigation-items">
-      <li >
+      <li>
+        <button [matMenuTriggerFor]="menu" mat-button>
+          <mat-icon>person</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>Item 1</button>
+          <button mat-menu-item>Item 2</button>
+        </mat-menu>
         <a *ngIf="!authService.authenticated" routerLink="/login">Bejelentkezés</a>
         <a *ngIf="!authService.authenticated" routerLink="/register">Regisztráció</a>
         <a *ngIf="authService.authenticated" (click)="logout()" routerLink="/">Kijelentkezés</a>

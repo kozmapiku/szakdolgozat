@@ -23,7 +23,7 @@ public class AccommodationDTO {
     @NonNull
     private String address;
     @NonNull
-    private List<AnnounceDateDto> announceDateList;
+    private List<AnnounceDateDTO> announceDateList;
     @NonNull
     private List<byte[]> listOfImages;
     private byte[] mainImage;

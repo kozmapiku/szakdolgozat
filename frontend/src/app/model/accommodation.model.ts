@@ -4,9 +4,10 @@ export interface Accommodation {
   id: number
   name: string;
   city: string;
-  mainImage: any;
+  mainImage: string;
   address: string;
   max_guests: number;
-  announceDates: AnnounceDate[];
+  announceDateList: AnnounceDate[];
+  listOfImages: string[];
 
 }

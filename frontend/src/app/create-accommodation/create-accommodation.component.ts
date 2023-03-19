@@ -41,8 +41,14 @@ export class CreateAccommodationComponent implements OnInit {
 
   async saveAccommodation(form: FormGroup) {
     const formData = new FormData()
-    formData.append('accommodation', JSON.stringify({name: form.get("name")?.value, address: form.get("address")?.value, maxGuest: form.get("maxGuest")?.value, city: form.get("city")?.value, announceDateList: this.listOfDates}))
-    this.listOfFiles.forEach( f => formData.append('files', f));
+    formData.append('accommodation', JSON.stringify({
+      name: form.get("name")?.value,
+      address: form.get("address")?.value,
+      max_guests: form.get("maxGuest")?.value,
+      city: form.get("city")?.value,
+      announceDateList: this.listOfDates
+    }))
+    this.listOfFiles.forEach(f => formData.append('files', f));
     this.uploadToServer(formData);
   }
 
