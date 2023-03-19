@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**", "/accommodation/all") //unathorized whitelist
+                .requestMatchers("/auth/**", "/accommodation/all", "/accommodation/get_details") //unathorized whitelist
                 .permitAll()
                 .anyRequest()
                 .authenticated()

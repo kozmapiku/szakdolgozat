@@ -5,16 +5,16 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @ToString
-public class AnnounceDateDto {
+public class ReservationDTO {
     @NonNull
-    private long fromDate;
+    private Long from;
     @NonNull
-    private long endDate;
+    private Long end;
     @NonNull
-    private Double price;
+    private Long id;
+    @NonNull
+    private Integer guests;
 }

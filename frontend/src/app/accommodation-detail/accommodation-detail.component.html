@@ -1,1 +1,18 @@
-<p>accommodation-detail works!</p>
+<div class="content">
+  <p>{{this.accommodation.name}}</p>
+  <p>{{this.accommodation.address}}</p>
+  <p>{{this.accommodation.max_guests}}</p>
+  <p>{{this.accommodation.city}}</p>
+  <p>{{this.accommodation.mainImage}}</p>
+  <div *ngFor="let image of accommodation.listOfImages">
+    <img [src]="'data:image/jpeg;base64,' + image" alt="Szállásról egy fénykép" width="400px">
+  </div>
+  <div *ngFor="let announceDate of accommodation.announceDateList">
+    <p>{{announceDate.from | date:'yyyy-MM-dd'}} {{announceDate.end | date:'yyyy-MM-dd'}}</p>
+  </div>
+  <mat-card style="width: 400px">
+    <mat-calendar (selectedChange)="onSelectedChange($event)" [dateClass]="dateClass()"
+                  [selected]="selectedDateRange"></mat-calendar>
+  </mat-card>
+  <button (click)="openReservationDialog()" [disabled]="!dateSelected()" mat-raised-button>Időpont foglalása</button>
+</div>
