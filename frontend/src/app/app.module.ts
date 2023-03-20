@@ -34,6 +34,10 @@ import {AccommodationDetailComponent} from './accommodation-detail/accommodation
 import {ReservationDialogComponent} from './accommodation-detail/reservation-dialog/reservation-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatMenuModule} from "@angular/material/menu";
+import {ProfileComponent} from './profile/profile.component';
+import {MyAccommodationsComponent} from './my-accommodations/my-accommodations.component';
+import {MyReviewsComponent} from './my-reviews/my-reviews.component';
+import {MyReservationsComponent} from './my-reservations/my-reservations.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +49,11 @@ import {MatMenuModule} from "@angular/material/menu";
     CreateAccommodationComponent,
     RegisterComponent,
     AccommodationDetailComponent,
-    ReservationDialogComponent
+    ReservationDialogComponent,
+    ProfileComponent,
+    MyAccommodationsComponent,
+    MyReviewsComponent,
+    MyReservationsComponent
   ],
   imports: [
     BrowserModule,
