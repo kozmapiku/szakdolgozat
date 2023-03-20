@@ -6,6 +6,10 @@ import {LoginComponent} from "../auth/login/login.component";
 import {CreateAccommodationComponent} from "../create-accommodation/create-accommodation.component";
 import {RegisterComponent} from "../auth/register/register.component";
 import {AccommodationDetailComponent} from "../accommodation-detail/accommodation-detail.component";
+import {MyAccommodationsComponent} from "../my-accommodations/my-accommodations.component";
+import {MyReviewsComponent} from "../my-reviews/my-reviews.component";
+import {MyReservationsComponent} from "../my-reservations/my-reservations.component";
+import {ProfileComponent} from "../profile/profile.component";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -13,7 +17,11 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'accommodation/create', component: CreateAccommodationComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'accommodation/:id/details', component: AccommodationDetailComponent}
+  {path: 'accommodation/:id/details', component: AccommodationDetailComponent},
+  {path: 'accommodation/mine', component: MyAccommodationsComponent},
+  {path: 'review/mine', component: MyReviewsComponent},
+  {path: 'reservation/mine', component: MyReservationsComponent},
+  {path: 'profile', component: ProfileComponent}
 ];
 
 @NgModule({

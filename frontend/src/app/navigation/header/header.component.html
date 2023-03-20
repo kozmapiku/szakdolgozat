@@ -6,21 +6,30 @@
   </div>
   <div>
     <a routerLink="/home">Főoldal</a>
-    <a *ngIf="authService.authenticated" routerLink="/accommodation/create">Hirdetés</a>
+    <a *ngIf="authService.authenticated" routerLink="/accommodation/create" style="margin-left: 20px">Hirdetés</a>
   </div>
   <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
     <ul fxLayout fxLayoutGap="15px" class="navigation-items">
       <li>
-        <button [matMenuTriggerFor]="menu" mat-button>
+        <button *ngIf="authService.authenticated" [matMenuTriggerFor]="profile" mat-button>
           <mat-icon>person</mat-icon>
+          <mat-icon>menu</mat-icon>
         </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item>Item 1</button>
-          <button mat-menu-item>Item 2</button>
+        <button *ngIf="!authService.authenticated" [matMenuTriggerFor]="auth" mat-button>
+          <mat-icon>person_outlined</mat-icon>
+          <mat-icon>menu</mat-icon>
+        </button>
+        <mat-menu #auth="matMenu">
+          <button mat-menu-item routerLink="/login">Bejelentkezés</button>
+          <button mat-menu-item routerLink="/register">Regisztráció</button>
         </mat-menu>
-        <a *ngIf="!authService.authenticated" routerLink="/login">Bejelentkezés</a>
-        <a *ngIf="!authService.authenticated" routerLink="/register">Regisztráció</a>
-        <a *ngIf="authService.authenticated" (click)="logout()" routerLink="/">Kijelentkezés</a>
+        <mat-menu #profile="matMenu">
+          <button mat-menu-item routerLink="/profile">Profilom</button>
+          <button mat-menu-item routerLink="/accommodation/mine">Meghírdetett szállásaim</button>
+          <button mat-menu-item routerLink="/review/mine">Értékeléseim</button>
+          <button mat-menu-item routerLink="/reservation/mine">Foglalásaim</button>
+          <button (click)="logout()" mat-menu-item routerLink="/">Kijelentkezés</button>
+        </mat-menu>
       </li>
     </ul>
   </div>
