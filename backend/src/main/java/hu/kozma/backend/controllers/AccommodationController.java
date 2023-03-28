@@ -7,6 +7,7 @@ import hu.kozma.backend.mappers.AnnounceDateMapper;
 import hu.kozma.backend.mappers.MapperUtils;
 import hu.kozma.backend.mappers.ReservationMapper;
 import hu.kozma.backend.model.Accommodation;
+import hu.kozma.backend.model.Image;
 import hu.kozma.backend.model.Reservation;
 import hu.kozma.backend.repository.FileSystemRepository;
 import hu.kozma.backend.rest.RestResponseHandler;
@@ -41,7 +42,9 @@ public class AccommodationController {
         List<AccommodationDTO> accommodationDTOs = accommodations.stream().map(accommodation -> {
             AccommodationDTO accommodationDTO = AccommodationMapper.toAccommodationDTO(accommodation);
             try {
-                accommodationDTO.setMainImage(fileSystemRepository.load(accommodation.getMainImage()));
+                Image mainImage = accommodation.getMainImage();
+                accommodationDTO.setMainImage(fileSystemRepository.load(mainImage));
+                accommodationDTO.setMainImageIndex(mainImage.getIndex());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -73,8 +76,8 @@ public class AccommodationController {
             MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<?> addNewAccommodation(@RequestPart("files") List<MultipartFile> multipartFiles, @RequestPart("accommodation") AccommodationDTO accommodationDTO, Principal principal) throws Exception {
         Accommodation accomodation = AccommodationMapper.toAccommodation(accommodationDTO);
-        accommodationService.saveAccommodation(accomodation, multipartFiles, principal.getName());
-        return RestResponseHandler.generateResponse(null);
+        accommodationService.saveAccommodation(accomodation, multipartFiles, accommodationDTO.getMainImageIndex(), principal.getName());
+        return RestResponseHandler.generateResponse("Szállás létrehozása sikeres!");
     }
 
     @PostMapping("/reserve")

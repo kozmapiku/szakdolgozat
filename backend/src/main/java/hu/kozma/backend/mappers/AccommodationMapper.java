@@ -10,7 +10,7 @@ public class AccommodationMapper {
         Accommodation accommodation = new Accommodation();
         accommodation.setName(accommodationDTO.getName());
         accommodation.setAddress(accommodationDTO.getAddress());
-        accommodation.setCity(City.valueOf(accommodationDTO.getCity().toUpperCase()));
+        accommodation.setCity(City.findByName(accommodationDTO.getCity()));
         accommodation.setMaxGuests(accommodationDTO.getMaxGuest());
         accommodationDTO.getAnnounceDateList().stream()
                 .map(AnnounceDateMapper::toAnnounceDate).forEach(accommodation::addAnnounceDate);
@@ -21,7 +21,7 @@ public class AccommodationMapper {
         AccommodationDTO accommodationDTO = new AccommodationDTO();
         accommodationDTO.setId(accommodation.getId());
         accommodationDTO.setName(accommodation.getName());
-        accommodationDTO.setCity(accommodation.getCity().name());
+        accommodationDTO.setCity(accommodation.getCity().getName());
         accommodationDTO.setAddress(accommodation.getAddress());
         accommodationDTO.setMaxGuest(accommodation.getMaxGuests());
         return accommodationDTO;

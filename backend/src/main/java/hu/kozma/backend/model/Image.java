@@ -1,12 +1,11 @@
 package hu.kozma.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import jakarta.persistence.*;
 
 @Entity
 @Getter
@@ -17,6 +16,8 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    @Column(name = "index")
+    private Integer index;
     @Column(name = "location")
     private String location;
     @ToString.Exclude
@@ -26,8 +27,9 @@ public class Image {
     @Column(name = "is_main")
     private boolean isMain;
 
-    public Image(String location) {
+    public Image(String location, Integer index, boolean isMain) {
         this.location = location;
-        this.isMain = false;
+        this.isMain = isMain;
+        this.index = index;
     }
 }

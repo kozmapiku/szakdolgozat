@@ -5,6 +5,7 @@ export interface Accommodation {
   name: string;
   city: string;
   mainImage: string;
+  mainImageIndex: number;
   address: string;
   max_guests: number;
   announceDateList: AnnounceDate[];

@@ -1,6 +1,8 @@
 package hu.kozma.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -23,8 +25,12 @@ public class AccommodationDTO {
     @NonNull
     private String address;
     @NonNull
+    @Size(min = 1)
     private List<AnnounceDateDTO> announceDateList;
     @NonNull
+    @Size(min = 1)
     private List<byte[]> listOfImages;
+    @Nullable
+    private Integer mainImageIndex;
     private byte[] mainImage;
 }
