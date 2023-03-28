@@ -17,8 +17,8 @@ export class AccommodationService {
 
   public newAccommodation(formData: FormData) {
     let body = formData
-    console.log(JSON.stringify(body))
-    return this.http.post<Response<Accommodation>>(this.baseUrl + "/accommodation/new", body);
+    console.log(formData)
+    return this.http.post<Response<string>>(this.baseUrl + "/accommodation/new", body);
   }
 
   public getCities() {

@@ -1,16 +1,18 @@
 <div>
-  <form [formGroup]="form" (ngSubmit)="saveAccommodation(form)">
+  <form (ngSubmit)="saveAccommodation(form)" [formGroup]="form">
     <div fxLayout="column" fxLayoutAlign="center center">
+
       <mat-form-field appearance="standard" class="example-full-width">
         <mat-label>Név</mat-label>
-        <input matInput maxlength="20" formControlName="name" placeholder="Adj a szállásodnak egy nevet" #nameInput>
+        <input #nameInput formControlName="name" matInput maxlength="20" placeholder="Adj a szállásodnak egy nevet">
         <mat-error *ngIf="form.hasError('required', 'name')">
           A név megadása kötelező!
         </mat-error>
       </mat-form-field>
+
       <mat-form-field appearance="fill">
         <mat-label>Város</mat-label>
-        <mat-select formControlName="city" #cityInput>
+        <mat-select #cityInput formControlName="city">
           <mat-option *ngFor="let p of city_list" [value]="p">
             {{ p }}
           </mat-option>
@@ -19,16 +21,18 @@
           A város megadása kötelező!
         </mat-error>
       </mat-form-field>
-      <mat-form-field appearance="standard" >
+
+      <mat-form-field appearance="standard">
         <mat-label>Cím</mat-label>
-        <input matInput formControlName="address" #addressInput>
+        <input #addressInput formControlName="address" matInput>
         <mat-error *ngIf="form.hasError('required', 'address')">
           A cím megadása kötelező!
         </mat-error>
       </mat-form-field>
-      <mat-form-field appearance="standard" >
+
+      <mat-form-field appearance="standard">
         <mat-label>Férőhely</mat-label>
-        <input matInput type="number" min="1" max="100" formControlName="maxGuest" #guestsInput>
+        <input #guestsInput formControlName="maxGuest" matInput max="100" min="1" type="number">
         <mat-error *ngIf="form.hasError('max', 'maxGuest')">
           A maximum férőhely 100!
         </mat-error>
@@ -37,61 +41,73 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Add meg, hogy mettől meddig elérhető a szállásod!</mat-label>
-        <mat-date-range-input [rangePicker]="picker">
-          <input readonly matStartDate formControlName="fromDate" placeholder="Dátum kezdete">
-          <input readonly matEndDate formControlName="endDate" placeholder="Dátum vége">
-        </mat-date-range-input>
-        <div matSuffix style="display:flex">
-          <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
-          <button mat-icon-button type="button" (click)="addToDateRangeList()">
-            <mat-icon>add_box</mat-icon>
-          </button>
-        </div>
+      <ng-container formArrayName="announceDates">
+        <ng-container *ngFor="let announceDateForm of announceDates.controls; let i = index">
+          <div [formGroupName]="i" class="group-width" fxLayout="row" fxLayoutGap="16px">
+            <mat-form-field fxFlex="60">
+              <mat-label>Add meg, hogy mettől meddig elérhető a szállásod!</mat-label>
+              <mat-date-range-input [rangePicker]="picker">
+                <input formControlName="fromDate" matStartDate placeholder="Dátum kezdete" readonly>
+                <input formControlName="endDate" matEndDate placeholder="Dátum vége" readonly>
+              </mat-date-range-input>
+              <div matSuffix style="display:flex">
+                <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+              </div>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+              <mat-error *ngIf="form.hasError('required', 'fromDate')">
+                A kezdő dátum formátuma hibás!
+              </mat-error>
+              <mat-error *ngIf="form.hasError('required', 'endDate')">
+                A befejező dátum formátuma hibás!
+              </mat-error>
+              <mat-error *ngIf="form.hasError('amountMinError', ['fromDate', 'price'])">
+                Legalább egy időpontban meg kell hírdetned a szállásod!
+              </mat-error>
+            </mat-form-field>
 
-        <mat-date-range-picker #picker></mat-date-range-picker>
-        <mat-error *ngIf="form.hasError('required', 'fromDate')">
-          A kezdő dátum formátuma hibás!
-        </mat-error>
-        <mat-error *ngIf="form.hasError('required', 'endDate')">
-          A befejező dátum formátuma hibás!
-        </mat-error>
-        <mat-error *ngIf="form.hasError('amountMinError', 'fromDate')">
-          Legalább egy dátum intervallum megadása kötelező!
-        </mat-error>
-      </mat-form-field>
+            <mat-form-field fxFlex>
+              <mat-label>Erre az időszakra vonatkozó ár/nap</mat-label>
+              <input #priceInput formControlName="price" matInput type="number">
+              <mat-error *ngIf="form.hasError('amountMinError', 'price')">
+                Legalább egy időpontban meg kell hírdetned a szállásod!
+              </mat-error>
+            </mat-form-field>
+            <div *ngIf="i != 0" fxFlex>
+              <button (click)="deleteAnnounceDate(i)" fxFlex mat-icon-button style="align-self: center" type="button">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
 
-      <div *ngFor="let dates of listOfDates;let index = index"
-           style="display:flex; align-items: center; justify-content: space-around">
-        <p id="date-p">{{dates.fromDate | date:'yyyy.MM.dd'}} - {{dates.endDate | date:'yyyy.MM.dd'}}</p>
-        <button mat-icon-button color="warn" type="button" (click)="removeFromDateList(index)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
+      <button (click)="addAnnounceDate()" mat-icon-button type="button">
+        <mat-icon>add_box</mat-icon>
+      </button>
 
       <mat-form-field>
         <mat-label>Tölts fel egy képet!</mat-label>
-        <input matInput disabled>
-        <button mat-icon-button type="button" matSuffix (click)="imagesInput.click()">
+        <input disabled matInput>
+        <button (click)="imagesInput.click()" mat-icon-button matSuffix type="button">
           <mat-icon>attach_file</mat-icon>
         </button>
-        <input hidden (change)="selectFile($event)" formControlName="imageInput" #imagesInput type="file" id="file" accept="image/*">
+        <input #imagesInput (change)="selectFile($event)" accept="image/*" formControlName="imageInput" hidden id="file"
+               type="file">
         <mat-error *ngIf="form.hasError('required', 'imageInput')">
           Minimum egy kép feltöltése kötelező!
         </mat-error>
       </mat-form-field>
+
       <div class="cardList">
-        <div *ngFor="let selected of previews;let index = index" class="preview">
-          <img [src]="selected">
-          <button mat-icon-button color="warn" type="button" (click)="removeSelectedFile(index)">
+        <div *ngFor="let selected of previews; let index = index" class="preview">
+          <img (click)="this.setPrimaryImage(index)" [ngClass]="{'primaryImage' : (this.primaryImageIndex === index)}"
+               [src]="selected">
+          <button (click)="removeSelectedFile(index)" color="warn" mat-icon-button type="button">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
       </div>
-
-      <!--[disabled]="!form.valid && listOfDates.length == 0" -->
-      <button mat-raised-button color="primary" type="submit" >Feltöltés</button>
+      <button [disabled]="!form.valid" color="primary" mat-raised-button type="submit">Feltöltés</button>
     </div>
   </form>
 </div>

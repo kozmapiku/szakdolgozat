@@ -25,9 +25,9 @@ public class AccommodationService {
     private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
 
-    public void saveAccommodation(Accommodation accomodation, List<MultipartFile> multipartFiles, String name) throws IOException {
+    public void saveAccommodation(Accommodation accomodation, List<MultipartFile> multipartFiles, Integer mainImageIndex, String name) throws IOException {
         for (int i = 0; i < multipartFiles.size(); i++)
-            accomodation.addImage(new Image(fileSystemRepository.save(multipartFiles.get(i), name, i)));
+            accomodation.addImage(new Image(fileSystemRepository.save(multipartFiles.get(i), name, i), i, i == mainImageIndex));
         User user = userRepository.findUserByEmail(name).orElseThrow(() -> new EntityNotFoundException("A felhasználó nem található!"));
         accomodation.setUser(user);
         accommodationRepository.save(accomodation);
