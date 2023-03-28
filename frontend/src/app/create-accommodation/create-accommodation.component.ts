@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AccommodationService} from "../service/accommodation.service";
 import {NgxImageCompressService} from "ngx-image-compress";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-accommodation',
@@ -10,21 +11,23 @@ import {NgxImageCompressService} from "ngx-image-compress";
 })
 export class CreateAccommodationComponent implements OnInit {
 
-  public form!: FormGroup;
+  form!: FormGroup;
   city_list: string[] = [];
-  selectedFiles!: FileList;
-  listOfFiles: any[] = [];
+  listOfFiles: File[] = [];
   previews: string[] = [];
-  listOfDates: any[] = [];
-  base64textString: any[] = [];
-  imageNames: string[] = [];
-  imageUpload: any[] = [];
+  listOfDates: Array<{ from: number, end: number, price: number }> = [];
+  primaryImageIndex: number | null = null;
 
   constructor(private fb: FormBuilder,
               private imageCompress: NgxImageCompressService,
-              private accommodationService: AccommodationService) {
+              private accommodationService: AccommodationService,
+              private router: Router) {
     accommodationService.getCities().subscribe(
       data => this.city_list = data.data)
+  }
+
+  get announceDates() {
+    return this.form.controls["announceDates"] as FormArray;
   }
 
   ngOnInit(): void {
@@ -33,42 +36,32 @@ export class CreateAccommodationComponent implements OnInit {
       city: [null, [Validators.required]],
       address: [null, [Validators.required]],
       maxGuest: [null, [Validators.required, Validators.max(100), Validators.min(1)]],
-      fromDate: [null, [this.customValidatorFn()]],
-      endDate: [null, []],
+      announceDates: this.fb.array([this.fb.group({
+        fromDate: [null, [Validators.required]],
+        endDate: [null, [Validators.required]],
+        price: [null, [Validators.required]],
+      })]),
       imageInput: [null, [Validators.required]]
     });
+
+    //TODO: Remove
+    this.form.get("name")?.setValue("Példa szállás");
+    this.form.get("address")?.setValue("Ez egy cím");
+    this.form.get("maxGuest")?.setValue(4);
   }
 
-  async saveAccommodation(form: FormGroup) {
-    const formData = new FormData()
-    formData.append('accommodation', JSON.stringify({
-      name: form.get("name")?.value,
-      address: form.get("address")?.value,
-      max_guests: form.get("maxGuest")?.value,
-      city: form.get("city")?.value,
-      announceDateList: this.listOfDates
-    }))
-    this.listOfFiles.forEach(f => formData.append('files', f));
-    this.uploadToServer(formData);
-  }
-
-  pFileReader(file: any){
-    return new Promise((resolve, reject) => {
-      let fr = new FileReader();
-      fr.onload = () => {
-        // @ts-ignore
-        this.imageUpload.push({"image" : btoa(fr.result), "name" : file.name});
-        resolve(1);
-      };
-      fr.onerror = reject;
+  addAnnounceDate() {
+    const announceDateForm = this.fb.group({
+      fromDate: [null, [Validators.required]],
+      endDate: [null, [Validators.required]],
+      price: [null, [Validators.required]],
     });
+    this.announceDates.push(announceDateForm);
   }
 
-  private customValidatorFn(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const valid: boolean = this.listOfDates.length > 0;
-      return valid ? null : {amountMinError: true};
-    };
+  deleteAnnounceDate(index: number) {
+    if (this.announceDates.length > 1)
+      this.announceDates.removeAt(index);
   }
 
   selectFile(event: any) {
@@ -86,38 +79,50 @@ export class CreateAccommodationComponent implements OnInit {
   removeSelectedFile(index: number) {
     this.listOfFiles.splice(index, 1);
     this.previews.splice(index, 1);
+    if (this.primaryImageIndex === index)
+      this.primaryImageIndex = null;
+    if (this.listOfFiles.length == 0)
+      this.form.get("imageInput")?.reset();
   }
 
-  addToDateRangeList() {
-    if(this.checkValidDate()) {
-      let from = Date.parse(this.form.get("fromDate")?.value);
-      let end = Date.parse(this.form.get("endDate")?.value);
-      this.listOfDates.push({'fromDate': from , 'endDate': end, 'price': 0})
-      this.form.get("fromDate")?.reset();
-      this.form.get("endDate")?.reset();
-    }
+  setPrimaryImage(index: number) {
+    this.primaryImageIndex = index;
+    console.log(index);
   }
 
-  checkValidDate() : boolean | undefined{
-    let from = this.form.get("fromDate");
-    let end = this.form.get("endDate");
-    return from?.value != null && end?.value != null;
+  async saveAccommodation(form: FormGroup) {
+    const formData = new FormData()
+    console.log(this.announceDates);
+    formData.append('accommodation', JSON.stringify({
+      name: form.get("name")?.value,
+      address: form.get("address")?.value,
+      max_guests: form.get("maxGuest")?.value,
+      city: form.get("city")?.value,
+      announceDateList: this.mapAnnounceDates(),
+      mainImageIndex: this.primaryImageIndex
+    }))
+    this.listOfFiles.forEach(f => formData.append('files', f));
+    this.uploadToServer(formData);
   }
 
-  removeFromDateList(index: number) {
-    this.listOfDates.splice(index, 1);
-  }
-
-  private uploadToServer(form: FormData) {
+  private uploadToServer(formData: FormData) {
     this.accommodationService
-      .newAccommodation(form)
+      .newAccommodation(formData)
       .subscribe({
-        next: (data)=> {
-          console.log(JSON.stringify(data));
+        next: (data) => {
+          console.log(data)
+          alert(data.data);
+          this.router.navigateByUrl("/");
         },
         error: (error) => {
           console.log("Error " + JSON.stringify(error));
         }
       });
+  }
+
+  private mapAnnounceDates(): Array<string> {
+    return this.announceDates.value.map((announceDate: { fromDate: string, endDate: string, price: number }) => {
+      return {from: Date.parse(announceDate.fromDate), end: Date.parse(announceDate.endDate), price: announceDate.price}
+    })
   }
 }

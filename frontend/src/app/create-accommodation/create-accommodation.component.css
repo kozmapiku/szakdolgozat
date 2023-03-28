@@ -46,8 +46,16 @@ mat-form-field {
   width: 70%;
 }
 
+.group-width {
+  width: 70%;
+}
+
 #date-p {
   margin-bottom: 0;
   vertical-align: middle;
   display: inline-block;
+}
+
+.primaryImage {
+  border: 1px solid red;
 }
