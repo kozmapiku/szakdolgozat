@@ -38,6 +38,7 @@ import {ProfileComponent} from './profile/profile.component';
 import {MyAccommodationsComponent} from './my-accommodations/my-accommodations.component';
 import {MyReviewsComponent} from './my-reviews/my-reviews.component';
 import {MyReservationsComponent} from './my-reservations/my-reservations.component';
+import {NgImageSliderModule} from "ng-image-slider";
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import {MyReservationsComponent} from './my-reservations/my-reservations.compone
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
-    MatMenuModule
+    MatMenuModule,
+    NgImageSliderModule
   ],
   providers: [AuthService,
     {provide: HTTP_INTERCEPTORS, useClass: XhrInterceptorService, multi: true},

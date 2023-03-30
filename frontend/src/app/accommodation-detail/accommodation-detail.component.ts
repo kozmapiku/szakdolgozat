@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AccommodationService} from "../service/accommodation.service";
 import {Accommodation} from "../model/accommodation.model";
 import {DateRange, MatCalendarCellCssClasses} from "@angular/material/datepicker";
@@ -17,8 +17,41 @@ export class AccommodationDetailComponent implements OnInit {
   accommodation!: Accommodation;
   selectedDateRange: DateRange<Date> = new DateRange<Date>(null, null);
   guests!: number;
+  accommodationImages: Array<object> = [
+    {
+      image: 'https://loremflickr.com/g/600/400/paris',
+      thumbImage: 'https://loremflickr.com/g/1200/800/paris',
+      alt: 'Image 1',
+      title: 'Image 1'
+    }, {
+      image: 'https://loremflickr.com/600/400/brazil,rio',
+      thumbImage: 'https://loremflickr.com/1200/800/brazil,rio',
+      title: 'Image 2',
+      alt: 'Image 2'
+    }, {
+      image: 'https://loremflickr.com/600/400/paris,girl/all',
+      thumbImage: 'https://loremflickr.com/1200/800/brazil,rio',
+      title: 'Image 3',
+      alt: 'Image 3'
+    }, {
+      image: 'https://loremflickr.com/600/400/brazil,rio',
+      thumbImage: 'https://loremflickr.com/1200/800/brazil,rio',
+      title: 'Image 4',
+      alt: 'Image 4'
+    }, {
+      image: 'https://loremflickr.com/600/400/paris,girl/all',
+      thumbImage: 'https://loremflickr.com/1200/800/paris,girl/all',
+      title: 'Image 5',
+      alt: 'Image 5'
+    }, {
+      image: 'https://loremflickr.com/600/400/brazil,rio',
+      thumbImage: 'https://i.picsum.photos/id/609/400/350.jpg',
+      title: 'Image 6',
+      alt: 'Image 6'
+    }
+  ];
 
-  constructor(private route: ActivatedRoute, private accommodationService: AccommodationService, public dialog: MatDialog) {
+  constructor(private route: ActivatedRoute, private accommodationService: AccommodationService, public dialog: MatDialog, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -31,6 +64,7 @@ export class AccommodationDetailComponent implements OnInit {
       next: (data) => {
         console.log(JSON.stringify(data));
         this.accommodation = data.data;
+        //this.fillUpImages();
       },
       error: (error) => {
         console.log("Error " + JSON.stringify(error));
@@ -111,10 +145,24 @@ export class AccommodationDetailComponent implements OnInit {
         Date.parse(this.selectedDateRange.end.toDateString()), this.guests).subscribe({
       next: (data) => {
         console.log(JSON.stringify(data));
+        alert(data.data);
+        this.router.navigateByUrl("/");
       },
       error: (error) => {
         console.log("Error " + JSON.stringify(error));
       }
+    })
+  }
+
+  private fillUpImages() {
+    this.accommodation.listOfImages.forEach(image => {
+      this.accommodationImages.push(
+        {
+          image: 'https://loremflickr.com/g/600/400/paris',
+          thumbImage: 'https://loremflickr.com/g/1200/800/paris',
+          alt: 'Image 1',
+          title: 'Image 1'
+        })
     })
   }
 }

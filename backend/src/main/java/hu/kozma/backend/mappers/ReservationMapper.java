@@ -11,4 +11,14 @@ public class ReservationMapper {
         reservation.setGuestNumber(reservationDTO.getGuests());
         return reservation;
     }
+
+    public static ReservationDTO toReservationDTO(Reservation reservation) {
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setId(reservation.getId());
+        reservationDTO.setGuests(reservation.getGuestNumber());
+        reservationDTO.setFrom(MapperUtils.toLongDate(reservation.getStartDate()));
+        reservationDTO.setEnd(MapperUtils.toLongDate(reservation.getEndDate()));
+        reservationDTO.setAccommodation(AccommodationMapper.toAccommodationDTO(reservation.getAccommodation()));
+        return reservationDTO;
+    }
 }

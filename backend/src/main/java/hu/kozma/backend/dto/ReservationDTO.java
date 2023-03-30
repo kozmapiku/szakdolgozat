@@ -17,4 +17,5 @@ public class ReservationDTO {
     private Long id;
     @NonNull
     private Integer guests;
+    private AccommodationDTO accommodation;
 }

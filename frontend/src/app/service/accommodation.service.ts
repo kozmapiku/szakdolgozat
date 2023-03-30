@@ -49,4 +49,8 @@ export class AccommodationService {
     let body = {"id": id, "from": from, "end": end, "guests": guests}
     return this.http.post<Response<string>>(this.baseUrl + "/accommodation/reserve", body);
   }
+
+  public getMyAccommodations() {
+    return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/accommodation/get_owned");
+  }
 }

@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {AuthService} from "../auth/auth.service";
+import {ReservationService} from "../service/reservation.service";
+import {Reservation} from "../model/reservation.model";
 
 @Component({
   selector: 'app-my-reservations',
@@ -7,10 +10,24 @@ import {Component, OnInit} from '@angular/core';
 })
 export class MyReservationsComponent implements OnInit {
 
-  constructor() {
+  reservations: Reservation[] = [];
+
+  constructor(private authService: AuthService, private reservationService: ReservationService) {
   }
 
   ngOnInit(): void {
+    this.getMyReservationsFromServer();
   }
 
+  private getMyReservationsFromServer() {
+    this.reservationService.getMyReservations().subscribe({
+      next: (data) => {
+        this.reservations = data.data;
+        console.log(data.data)
+      },
+      error: (error) => {
+        console.log("Error " + JSON.stringify(error));
+      }
+    })
+  }
 }

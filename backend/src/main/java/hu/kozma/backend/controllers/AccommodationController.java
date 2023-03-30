@@ -53,6 +53,23 @@ public class AccommodationController {
         return RestResponseHandler.generateResponse(accommodationDTOs);
     }
 
+    @GetMapping("/get_owned")
+    public ResponseEntity<?> owned(Principal user) {
+        List<Accommodation> accommodations = accommodationService.getAccommodations(user.getName());
+        List<AccommodationDTO> accommodationDTOs = accommodations.stream().map(accommodation -> {
+            AccommodationDTO accommodationDTO = AccommodationMapper.toAccommodationDTO(accommodation);
+            try {
+                Image mainImage = accommodation.getMainImage();
+                accommodationDTO.setMainImage(fileSystemRepository.load(mainImage));
+                accommodationDTO.setMainImageIndex(mainImage.getIndex());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            return accommodationDTO;
+        }).collect(Collectors.toList());
+        return RestResponseHandler.generateResponse(accommodationDTOs);
+    }
+
     @GetMapping("/get_details")
     public ResponseEntity<?> get(@RequestParam(value = "id") Long id) {
         Accommodation accommodation = accommodationService.getAccommodation(id);
