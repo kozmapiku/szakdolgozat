@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../auth.service";
 import {Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {TokenStorageService} from "../token-storage.service";
 
 @Component({
@@ -12,9 +12,9 @@ import {TokenStorageService} from "../token-storage.service";
 export class LoginComponent implements OnInit {
 
   public loginValid = true;
-  form!: FormGroup;
+  form!: UntypedFormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private tokenStorage: TokenStorageService,private router: Router) {
+  constructor(private fb: UntypedFormBuilder, private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -24,17 +24,17 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  public login(form: FormGroup): void {
+  public login(form: UntypedFormGroup): void {
     this.authService.login(form.get("email")?.value, form.get("password")?.value).subscribe({
-        next: (data) => {
-            if(data.status == "OK") {
-              console.log(data)
-              this.tokenStorage.saveToken(data.data.token);
-              this.tokenStorage.saveUser(data.data);
-              this.tokenStorage.saveExpire(data.data.expiresIn);
-              this.loginValid = true;
-              this.authService.authenticated = true;
-              this.router.navigateByUrl("/home");
+      next: (data) => {
+        if (data.status == "OK") {
+          console.log(data)
+          this.tokenStorage.saveToken(data.data.token);
+          this.tokenStorage.saveUser(data.data);
+          this.tokenStorage.saveExpire(data.data.expiresIn);
+          this.loginValid = true;
+          this.authService.authenticated = true;
+          this.router.navigateByUrl("/home");
             }
             else {
               this.loginValid = false;

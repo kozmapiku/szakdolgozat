@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../auth/auth.service";
 import {Accommodation} from "../model/accommodation.model";
 import {AccommodationService} from "../service/accommodation.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {UntypedFormBuilder, UntypedFormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-home',
@@ -12,9 +12,9 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 export class HomeComponent implements OnInit {
 
   accommodations: Accommodation[] = [];
-  public form!: FormGroup;
+  public form!: UntypedFormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private accommodationService: AccommodationService) {
+  constructor(private fb: UntypedFormBuilder, private authService: AuthService, private accommodationService: AccommodationService) {
 
   }
 
@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
     this.form.get("endDate")?.reset();
   }
 
-  search(form: FormGroup) {
+  search(form: UntypedFormGroup) {
     let from = Date.parse(this.form.get("fromDate")?.value);
     let end = Date.parse(this.form.get("endDate")?.value);
     this.accommodationService.getFiltered(form.get("name")?.value, form.get("guests")?.value, from, end).subscribe({

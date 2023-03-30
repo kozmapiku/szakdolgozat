@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {AccommodationService} from "../service/accommodation.service";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {Router} from "@angular/router";
@@ -11,14 +11,14 @@ import {Router} from "@angular/router";
 })
 export class CreateAccommodationComponent implements OnInit {
 
-  form!: FormGroup;
+  form!: UntypedFormGroup;
   city_list: string[] = [];
   listOfFiles: File[] = [];
   previews: string[] = [];
   listOfDates: Array<{ from: number, end: number, price: number }> = [];
   primaryImageIndex: number | null = null;
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private imageCompress: NgxImageCompressService,
               private accommodationService: AccommodationService,
               private router: Router) {
@@ -27,7 +27,7 @@ export class CreateAccommodationComponent implements OnInit {
   }
 
   get announceDates() {
-    return this.form.controls["announceDates"] as FormArray;
+    return this.form.controls["announceDates"] as UntypedFormArray;
   }
 
   ngOnInit(): void {
@@ -90,7 +90,7 @@ export class CreateAccommodationComponent implements OnInit {
     console.log(index);
   }
 
-  async saveAccommodation(form: FormGroup) {
+  async saveAccommodation(form: UntypedFormGroup) {
     const formData = new FormData()
     console.log(this.announceDates);
     formData.append('accommodation', JSON.stringify({
