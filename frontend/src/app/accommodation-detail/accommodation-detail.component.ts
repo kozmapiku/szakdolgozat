@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AccommodationService} from "../service/accommodation.service";
 import {Accommodation} from "../model/accommodation.model";
 import {DateRange, MatCalendarCellCssClasses} from "@angular/material/datepicker";
-import {MatDialog} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import {ReservationDialogComponent} from "./reservation-dialog/reservation-dialog.component";
 
 @Component({

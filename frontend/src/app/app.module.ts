@@ -11,18 +11,18 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {HeaderComponent} from './navigation/header/header.component';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
-import {MatButtonModule} from "@angular/material/button";
+import {MatLegacyButtonModule as MatButtonModule} from "@angular/material/legacy-button";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {LoginComponent} from './auth/login/login.component';
-import {MatCardModule} from "@angular/material/card";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
+import {MatLegacyCardModule as MatCardModule} from "@angular/material/legacy-card";
+import {MatLegacyFormFieldModule as MatFormFieldModule} from "@angular/material/legacy-form-field";
+import {MatLegacyInputModule as MatInputModule} from "@angular/material/legacy-input";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthService} from "./auth/auth.service";
 import {XhrInterceptorService} from "./rest/xhr-interceptor.service";
 import {CreateAccommodationComponent} from './create-accommodation/create-accommodation.component';
-import {MatSelectModule} from "@angular/material/select";
+import {MatLegacySelectModule as MatSelectModule} from "@angular/material/legacy-select";
 import {RegisterComponent} from './auth/register/register.component';
 import {
   DefaultMatCalendarRangeStrategy,
@@ -32,8 +32,8 @@ import {
 import {MAT_DATE_LOCALE, MatNativeDateModule} from "@angular/material/core";
 import {AccommodationDetailComponent} from './accommodation-detail/accommodation-detail.component';
 import {ReservationDialogComponent} from './accommodation-detail/reservation-dialog/reservation-dialog.component';
-import {MatDialogModule} from "@angular/material/dialog";
-import {MatMenuModule} from "@angular/material/menu";
+import {MatLegacyDialogModule as MatDialogModule} from "@angular/material/legacy-dialog";
+import {MatLegacyMenuModule as MatMenuModule} from "@angular/material/legacy-menu";
 import {ProfileComponent} from './profile/profile.component';
 import {MyAccommodationsComponent} from './my-accommodations/my-accommodations.component';
 import {MyReviewsComponent} from './my-reviews/my-reviews.component';
