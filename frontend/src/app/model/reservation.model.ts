@@ -5,5 +5,6 @@ export interface Reservation {
   from: number;
   end: number;
   guests: number;
+  price: number;
   accommodation: Accommodation;
 }

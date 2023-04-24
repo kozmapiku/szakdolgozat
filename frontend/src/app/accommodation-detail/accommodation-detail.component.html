@@ -1,60 +1,68 @@
 <div fxLayoutAlign="center center">
   <mat-card fxFlex="80">
-    <mat-card-header>
-      <mat-card-title><h1 class="header">{{this.accommodation.name}}</h1></mat-card-title>
-      <mat-card-subtitle><h5>{{this.accommodation.city}}, {{this.accommodation.address}}</h5></mat-card-subtitle>
+    <mat-card-header fxLayout="row">
+      <div fxFlex="70">
+        <mat-card-title><h1 class="header">{{this.accommodation.name}}</h1></mat-card-title>
+        <mat-card-subtitle><h2>{{this.accommodation.address}}</h2></mat-card-subtitle>
+      </div>
+      <div *ngIf="this.accommodation.owner == this.user" fxFlex="30" fxLayout="row"
+           style="justify-content: center; display: flex; margin-bottom: 20px">
+        <button (click)="modification()" color="primary" mat-raised-button style="margin-right: 10px; width: 150px">
+          Módosítás
+        </button>
+        <button (click)="delete()" color="warn" mat-raised-button style="width: 150px">Törlés</button>
+      </div>
     </mat-card-header>
-    <ng-image-slider #nav [images]="this.accommodationImages"></ng-image-slider>
+    <ng-image-slider [imageSize]="{width: '25%', height: 250}" [images]="this.accommodationImages"
+                     [manageImageRatio]="true"
+                     style="margin: 32px"></ng-image-slider>
     <mat-card-content style="margin: 0 16px">
-      <div fxLayout="row">
-        <div fxFlex="60">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In at lorem vestibulum diam dictum commodo. Integer
-          ultrices vehicula purus eget commodo. Donec in nibh lectus. Vivamus ut erat sit amet risus viverra vestibulum.
-          Pellentesque mattis ante eu neque vestibulum suscipit. Proin eros turpis, porttitor eget sodales et, imperdiet
-          nec justo. Ut ac feugiat dolor. Ut lorem ipsum, tempor id dapibus at, pretium eget orci.
-
-          Vestibulum rutrum euismod massa. Sed et nibh eu enim molestie dapibus. Donec non purus elementum, egestas
-          nulla non, feugiat tellus. Maecenas porttitor elit purus, eu aliquet dolor aliquam ac. Integer congue, mi quis
-          euismod dignissim, sapien justo facilisis nibh, sit amet commodo enim metus eget orci. Ut imperdiet ante
-          lorem, et accumsan dui aliquam ut. Mauris aliquam diam non turpis viverra congue. Etiam faucibus dui ac felis
-          facilisis placerat. Integer venenatis in nisi ut congue.
-
-          Fusce in eleifend massa. Maecenas mollis tempus lacus gravida vestibulum. Nunc fermentum rutrum quam, a cursus
-          sem congue id. Morbi dignissim massa eu quam luctus accumsan. Integer placerat eleifend magna, at suscipit
-          ligula laoreet sagittis. Suspendisse vulputate mi lacinia, blandit nunc et, bibendum leo. Cras ac rutrum arcu.
-          Proin at libero nisl. Suspendisse potenti. Etiam ultrices nulla quis luctus blandit.
-
-          Pellentesque vitae diam ornare, porta purus ac, interdum sapien. Proin et diam consequat lorem euismod
-          convallis nec vel neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
-          himenaeos. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque
-          laoreet id odio quis accumsan. Praesent non justo nec neque convallis dapibus sed et augue. Donec scelerisque,
-          orci id bibendum rhoncus, lorem odio sollicitudin enim, nec vehicula sapien neque id massa.
-
-          Proin mattis euismod quam in dictum. Vestibulum posuere rhoncus luctus. Praesent non risus pulvinar, pulvinar
-          nisi ac, vehicula augue. Morbi venenatis odio sed ipsum vestibulum sodales. Aliquam consequat ex quis lectus
-          efficitur, quis placerat lacus aliquet. Phasellus non venenatis odio, non laoreet massa. Donec dapibus semper
-          purus, vitae viverra lorem. Nunc scelerisque, elit non ultricies tincidunt, urna nunc egestas risus, et
-          egestas nulla turpis sed metus. Nunc sit amet rutrum dui, sed pretium massa. Vestibulum viverra elit magna, ac
-          tempor felis auctor nec.
-          <h4>Maximum férőhely: {{this.accommodation.max_guests}} fő</h4>
+      <div fxLayout="column">
+        <div fxLayout="row">
+          <div fxFlex="60" style="margin-right: 5px">
+            {{accommodation.description}}
+            <h4>Maximum férőhely: {{this.accommodation.maxGuests}} fő</h4>
+          </div>
+          <div fxFlex="40" fxLayout="column" fxLayoutAlign="start stretch">
+            <mat-card>
+              <mat-calendar (selectedChange)="onSelectedChange($event)" [dateClass]="dateClass()"
+                            [selected]="selectedDateRange"></mat-calendar>
+            </mat-card>
+            <button (click)="openReservationDialog()" [disabled]="!dateSelected()" class="reserveButton"
+                    mat-raised-button>
+              Időpont foglalása
+            </button>
+          </div>
         </div>
-        <div fxFlex="40" fxLayout="column" fxLayoutAlign="start stretch">
-          <mat-card>
-            <mat-calendar (selectedChange)="onSelectedChange($event)" [dateClass]="dateClass()"
-                          [selected]="selectedDateRange"></mat-calendar>
-          </mat-card>
-          <button (click)="openReservationDialog()" [disabled]="!dateSelected()" class="reserveButton"
-                  mat-raised-button>Időpont foglalása
-          </button>
+        <div class="map-container">
+          <google-map
+            [center]="center"
+            [options]="googleMapsOptions"
+            height="100%"
+            width="100%">
+            <map-marker
+              [position]="center">
+            </map-marker>
+          </google-map>
         </div>
-
+        <h2>Értékelések</h2>
+        <div fxLayout="column wrap" fxLayoutAlign="space-around stretch" fxLayoutGap="16px">
+          <div *ngIf="accommodation.reviews.length == 0">
+            <h3>Még nem érkezett értékelés ehhez a szálláshoz.</h3>
+          </div>
+          <div *ngFor="let review of accommodation.reviews;let index = index">
+            <mat-card class="mat-elevation-z4" fxFlex>
+              <mat-card-header>
+              </mat-card-header>
+              <mat-card-content>
+                <star-rating [rating]="review.star" [starType]="'svg'"></star-rating>
+                {{review.comment}}
+                {{review.user_name}}
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
       </div>
     </mat-card-content>
-    <p></p>
-    <p>{{this.accommodation.mainImage}}</p>
-    <div *ngFor="let image of accommodation.listOfImages">
-      <img [src]="'data:image/jpeg;base64,' + image" alt="Szállásról egy fénykép" width="400px">
-    </div>
-
   </mat-card>
 </div>

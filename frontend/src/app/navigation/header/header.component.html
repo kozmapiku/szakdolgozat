@@ -6,6 +6,7 @@
   </div>
   <div>
     <a routerLink="/home">Főoldal</a>
+    <a routerLink="/map-search" style="margin-left: 20px">Térképes kereső</a>
     <a *ngIf="authService.authenticated" routerLink="/accommodation/create" style="margin-left: 20px">Hirdetés</a>
   </div>
   <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
@@ -27,7 +28,7 @@
           <button mat-menu-item routerLink="/profile">Profilom</button>
           <button mat-menu-item routerLink="/accommodation/mine">Meghírdetett szállásaim</button>
           <button mat-menu-item routerLink="/review/mine">Értékeléseim</button>
-          <button mat-menu-item routerLink="/reservation/mine">Foglalásaim</button>
+          <button mat-menu-item routerLink="/reservation/all">Foglalásaim</button>
           <button (click)="logout()" mat-menu-item routerLink="/">Kijelentkezés</button>
         </mat-menu>
       </li>

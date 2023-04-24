@@ -1,9 +1,9 @@
 package hu.kozma.backend.model;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -21,11 +21,18 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "accommodation_id", nullable = false)
     private Accommodation accommodation;
+    @OneToOne(mappedBy = "reservation")
+    private Review review;
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
     @Column(name = "guest_number", nullable = false)
     private Integer guestNumber;
+    @Column(name = "price")
+    private Double price;
 
+    public Boolean isExpired() {
+        return endDate.isBefore(LocalDate.now());
+    }
 }

@@ -16,4 +16,8 @@ public class ReservationService {
     public List<Reservation> getReservations(String email) {
         return reservationRepository.findAllByUserEmail(email);
     }
+
+    public Reservation getReservation(Long id) {
+        return reservationRepository.findById(id).orElseThrow();
+    }
 }

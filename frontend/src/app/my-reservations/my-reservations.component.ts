@@ -30,4 +30,8 @@ export class MyReservationsComponent implements OnInit {
       }
     })
   }
+
+  public expired(index: number) {
+    return this.reservations[index].end < Date.parse(new Date().toDateString());
+  }
 }

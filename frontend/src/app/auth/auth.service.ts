@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {User} from "../model/user.model";
 import {Response} from "../rest/response.model";
@@ -16,12 +16,12 @@ export class AuthService {
 
   public login(email: string, password: string) {
     const body = { 'email': email, 'password': password };
-    return this.http.post<Response<User>>("http://localhost:8080/auth/login", body);
+    return this.http.post<Response<User>>("http://192.168.0.192:8080/auth/login", body);
   }
 
   public register(email: string, firstName: string, lastName: string, password: string) {
     const body = { 'email': email, 'firstName': firstName, 'lastName': lastName, 'password' : password };
-    return this.http.post<Response<string>>("http://localhost:8080/auth/register", body);
+    return this.http.post<Response<string>>("http://192.168.0.192:8080/auth/register", body);
   }
 
   public logout() {
@@ -34,5 +34,9 @@ export class AuthService {
     if (this.tokenStorage.tokenExpired()) {
       this.authenticated = true;
     }
+  }
+
+  public getUserMail() {
+    return this.tokenStorage.getUser().email;
   }
 }

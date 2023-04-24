@@ -29,9 +29,10 @@ export class AccommodationService {
     return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/accommodation/all");
   }
 
-  public getFiltered(name: any, guests: any, from: number, end: number) {
+  public getFiltered(name: any, address: any, guests: any, from: number, end: number) {
     let queryParams = new HttpParams();
     queryParams = name != null ? queryParams.append("name", name) : queryParams;
+    queryParams = address != null ? queryParams.append("address", address) : queryParams;
     queryParams = guests != null ? queryParams.append("guests", guests) : queryParams;
     queryParams = !isNaN(from) ? queryParams.append("from", from) : queryParams;
     queryParams = !isNaN(end) ? queryParams.append("end", end) : queryParams;
@@ -47,10 +48,16 @@ export class AccommodationService {
 
   public reserve(id: number, from: number, end: number, guests: number) {
     let body = {"id": id, "from": from, "end": end, "guests": guests}
+    console.log(body)
     return this.http.post<Response<string>>(this.baseUrl + "/accommodation/reserve", body);
   }
 
   public getMyAccommodations() {
     return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/accommodation/get_owned");
+  }
+
+  public deleteAccommodation(id: number) {
+    let body = {"id": id};
+    return this.http.post<Response<string>>(this.baseUrl + "/accommodation/delete", body);
   }
 }

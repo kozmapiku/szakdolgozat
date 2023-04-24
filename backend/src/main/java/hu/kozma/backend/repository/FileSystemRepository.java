@@ -25,4 +25,8 @@ public class FileSystemRepository {
     public byte[] load(Image image) throws Exception {
         return Files.readAllBytes(Paths.get(image.getLocation()));
     }
+
+    public byte[] load(String location) throws Exception {
+        return Files.readAllBytes(Paths.get(location));
+    }
 }

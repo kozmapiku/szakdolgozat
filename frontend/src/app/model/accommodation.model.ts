@@ -1,14 +1,21 @@
 import {AnnounceDate} from "./announce_date.model";
+import {Review} from "./review.model";
 
 export interface Accommodation {
   id: number
   name: string;
-  city: string;
+  address: string;
+  floor: number;
+  door: number;
+  lat: number;
+  lng: number;
+  description: string;
+  maxGuests: number;
+  owner: string;
+  reviews: Review[];
+  announces: AnnounceDate[];
+  reservedDays: number[];
+  images: string[];
   mainImage: string;
   mainImageIndex: number;
-  address: string;
-  max_guests: number;
-  announceDateList: AnnounceDate[];
-  listOfImages: string[];
-
 }

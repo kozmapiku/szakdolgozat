@@ -3,6 +3,7 @@ import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from
 import {AccommodationService} from "../service/accommodation.service";
 import {NgxImageCompressService} from "ngx-image-compress";
 import {Router} from "@angular/router";
+import {Address} from "ngx-google-places-autocomplete/objects/address";
 
 @Component({
   selector: 'app-create-accommodation',
@@ -12,18 +13,30 @@ import {Router} from "@angular/router";
 export class CreateAccommodationComponent implements OnInit {
 
   form!: UntypedFormGroup;
-  city_list: string[] = [];
   listOfFiles: File[] = [];
   previews: string[] = [];
   listOfDates: Array<{ from: number, end: number, price: number }> = [];
   primaryImageIndex: number | null = null;
 
+  center: google.maps.LatLngLiteral = {lat: 47, lng: 19};
+  zoom: number = 7;
+  marker: any = null;
+
+  addressOptions: any = {
+    types: ['address'],
+  }
+  googleMapsOptions: google.maps.MapOptions = {
+    mapTypeId: 'hybrid',
+    disableDoubleClickZoom: true,
+    streetViewControl: false,
+  };
+
+  address!: Address;
+
   constructor(private fb: UntypedFormBuilder,
               private imageCompress: NgxImageCompressService,
               private accommodationService: AccommodationService,
               private router: Router) {
-    accommodationService.getCities().subscribe(
-      data => this.city_list = data.data)
   }
 
   get announceDates() {
@@ -33,8 +46,11 @@ export class CreateAccommodationComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       name: [null, [Validators.required, Validators.minLength(6)]],
-      city: [null, [Validators.required]],
       address: [null, [Validators.required]],
+      floor: [null, []],
+      door: [null, []],
+      map: [null, [Validators.required]],
+      description: [null, [Validators.required]],
       maxGuest: [null, [Validators.required, Validators.max(100), Validators.min(1)]],
       announceDates: this.fb.array([this.fb.group({
         fromDate: [null, [Validators.required]],
@@ -43,14 +59,9 @@ export class CreateAccommodationComponent implements OnInit {
       })]),
       imageInput: [null, [Validators.required]]
     });
-
-    //TODO: Remove
-    this.form.get("name")?.setValue("Példa szállás");
-    this.form.get("address")?.setValue("Ez egy cím");
-    this.form.get("maxGuest")?.setValue(4);
   }
 
-  addAnnounceDate() {
+  public addAnnounceDate() {
     const announceDateForm = this.fb.group({
       fromDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
@@ -59,12 +70,12 @@ export class CreateAccommodationComponent implements OnInit {
     this.announceDates.push(announceDateForm);
   }
 
-  deleteAnnounceDate(index: number) {
+  public deleteAnnounceDate(index: number) {
     if (this.announceDates.length > 1)
       this.announceDates.removeAt(index);
   }
 
-  selectFile(event: any) {
+  public selectFile(event: any) {
     console.log(event.target.files.length);
     this.listOfFiles.push(event.target.files[0]);
     const reader = new FileReader();
@@ -76,7 +87,7 @@ export class CreateAccommodationComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
   }
 
-  removeSelectedFile(index: number) {
+  public removeSelectedFile(index: number) {
     this.listOfFiles.splice(index, 1);
     this.previews.splice(index, 1);
     if (this.primaryImageIndex === index)
@@ -85,20 +96,48 @@ export class CreateAccommodationComponent implements OnInit {
       this.form.get("imageInput")?.reset();
   }
 
-  setPrimaryImage(index: number) {
+  public setPrimaryImage(index: number) {
     this.primaryImageIndex = index;
     console.log(index);
   }
 
+  public dropMarker(event: any) {
+    this.marker = {
+      position: {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      },
+      options: {
+        animation: google.maps.Animation.DROP,
+      },
+    }
+    this.form.get("map")?.setValue("asd");
+  }
+
+  public handleAddressChange(address: Address) {
+    this.address = address;
+    if (address.formatted_address !== undefined) {
+      console.log(address.formatted_address);
+      this.center = {
+        lat: address.geometry.location.lat(),
+        lng: address.geometry.location.lng(),
+      }
+      this.zoom = 15;
+    }
+  }
+
   async saveAccommodation(form: UntypedFormGroup) {
     const formData = new FormData()
-    console.log(this.announceDates);
     formData.append('accommodation', JSON.stringify({
       name: form.get("name")?.value,
-      address: form.get("address")?.value,
-      max_guests: form.get("maxGuest")?.value,
-      city: form.get("city")?.value,
-      announceDateList: this.mapAnnounceDates(),
+      address: this.address.formatted_address !== undefined ? this.address.formatted_address : this.address.name,
+      floor: form.get("floor")?.value,
+      door: form.get("door")?.value,
+      lat: this.marker.position.lat,
+      lng: this.marker.position.lng,
+      description: form.get("description")?.value,
+      maxGuests: form.get("maxGuest")?.value,
+      announces: this.mapAnnounceDates(),
       mainImageIndex: this.primaryImageIndex
     }))
     this.listOfFiles.forEach(f => formData.append('files', f));

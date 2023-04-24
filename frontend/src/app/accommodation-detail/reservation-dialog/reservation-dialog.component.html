@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Add meg, a részletek a rendelés leadásához!</h1>
 <div mat-dialog-content>
-  <p>{{data.from}} - {{data.end}}</p>
+  <p>{{data.from | date:'yyyy. MM. dd'}} - {{data.end | date:'yyyy. MM. dd'}}</p>
   <p>Hány főre szól a foglalás?</p>
   <mat-form-field appearance="outline">
     <input [(ngModel)]="data.guests" [max]="data.maxGuests" matInput type="number">

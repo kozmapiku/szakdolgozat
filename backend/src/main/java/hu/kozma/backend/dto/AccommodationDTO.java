@@ -1,6 +1,5 @@
 package hu.kozma.backend.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -18,19 +17,31 @@ public class AccommodationDTO {
     @NonNull
     private String name;
     @NonNull
-    private String city;
-    @NonNull
-    @JsonProperty("max_guests")
-    private Integer maxGuest;
+    private Integer maxGuests;
     @NonNull
     private String address;
+    @Nullable
+    private Integer floor;
+    @Nullable
+    private Integer door;
+    @NonNull
+    private Float lat;
+    @NonNull
+    private Float lng;
+    @NonNull
+    private String description;
     @NonNull
     @Size(min = 1)
-    private List<AnnounceDateDTO> announceDateList;
+    private List<AnnounceDateDTO> announces;
+    @Nullable
+    private List<Long> reservedDays;
     @NonNull
     @Size(min = 1)
-    private List<byte[]> listOfImages;
+    private List<byte[]> images;
     @Nullable
     private Integer mainImageIndex;
     private byte[] mainImage;
+    private String owner;
+    @Nullable
+    private List<ReviewDTO> reviews;
 }

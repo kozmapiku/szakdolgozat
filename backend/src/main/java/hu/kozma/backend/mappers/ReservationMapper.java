@@ -18,7 +18,9 @@ public class ReservationMapper {
         reservationDTO.setGuests(reservation.getGuestNumber());
         reservationDTO.setFrom(MapperUtils.toLongDate(reservation.getStartDate()));
         reservationDTO.setEnd(MapperUtils.toLongDate(reservation.getEndDate()));
+        reservationDTO.setPrice(reservation.getPrice());
         reservationDTO.setAccommodation(AccommodationMapper.toAccommodationDTO(reservation.getAccommodation()));
+        reservationDTO.setMainImageLocation(reservation.getAccommodation().getMainImage().getLocation());
         return reservationDTO;
     }
 }

@@ -2,7 +2,6 @@ package hu.kozma.backend.mappers;
 
 import hu.kozma.backend.dto.AccommodationDTO;
 import hu.kozma.backend.model.Accommodation;
-import hu.kozma.backend.model.City;
 
 public class AccommodationMapper {
 
@@ -10,9 +9,13 @@ public class AccommodationMapper {
         Accommodation accommodation = new Accommodation();
         accommodation.setName(accommodationDTO.getName());
         accommodation.setAddress(accommodationDTO.getAddress());
-        accommodation.setCity(City.findByName(accommodationDTO.getCity()));
-        accommodation.setMaxGuests(accommodationDTO.getMaxGuest());
-        accommodationDTO.getAnnounceDateList().stream()
+        accommodation.setFloor(accommodationDTO.getFloor());
+        accommodation.setDoor(accommodationDTO.getDoor());
+        accommodation.setLat(accommodationDTO.getLat());
+        accommodation.setLng(accommodationDTO.getLng());
+        accommodation.setDescription(accommodationDTO.getDescription());
+        accommodation.setMaxGuests(accommodationDTO.getMaxGuests());
+        accommodationDTO.getAnnounces().stream()
                 .map(AnnounceDateMapper::toAnnounceDate).forEach(accommodation::addAnnounceDate);
         return accommodation;
     }
@@ -21,9 +24,15 @@ public class AccommodationMapper {
         AccommodationDTO accommodationDTO = new AccommodationDTO();
         accommodationDTO.setId(accommodation.getId());
         accommodationDTO.setName(accommodation.getName());
-        accommodationDTO.setCity(accommodation.getCity().getName());
         accommodationDTO.setAddress(accommodation.getAddress());
-        accommodationDTO.setMaxGuest(accommodation.getMaxGuests());
+        accommodationDTO.setFloor(accommodation.getFloor());
+        accommodationDTO.setDoor(accommodation.getDoor());
+        accommodationDTO.setLat(accommodation.getLat());
+        accommodationDTO.setLng(accommodation.getLng());
+        accommodationDTO.setDescription(accommodation.getDescription());
+        accommodationDTO.setMaxGuests(accommodation.getMaxGuests());
+        accommodationDTO.setMainImageIndex(accommodation.getMainImage().getIndex());
+        accommodationDTO.setOwner(accommodation.getUser().getEmail());
         return accommodationDTO;
     }
 }

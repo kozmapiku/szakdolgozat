@@ -3,8 +3,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AccommodationService} from "../service/accommodation.service";
 import {Accommodation} from "../model/accommodation.model";
 import {DateRange, MatCalendarCellCssClasses} from "@angular/material/datepicker";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {ReservationDialogComponent} from "./reservation-dialog/reservation-dialog.component";
+import {AuthService} from "../auth/auth.service";
 
 @Component({
   selector: 'app-accommodation-detail',
@@ -17,46 +18,27 @@ export class AccommodationDetailComponent implements OnInit {
   accommodation!: Accommodation;
   selectedDateRange: DateRange<Date> = new DateRange<Date>(null, null);
   guests!: number;
-  accommodationImages: Array<object> = [
-    {
-      image: 'https://loremflickr.com/g/600/400/paris',
-      thumbImage: 'https://loremflickr.com/g/1200/800/paris',
-      alt: 'Image 1',
-      title: 'Image 1'
-    }, {
-      image: 'https://loremflickr.com/600/400/brazil,rio',
-      thumbImage: 'https://loremflickr.com/1200/800/brazil,rio',
-      title: 'Image 2',
-      alt: 'Image 2'
-    }, {
-      image: 'https://loremflickr.com/600/400/paris,girl/all',
-      thumbImage: 'https://loremflickr.com/1200/800/brazil,rio',
-      title: 'Image 3',
-      alt: 'Image 3'
-    }, {
-      image: 'https://loremflickr.com/600/400/brazil,rio',
-      thumbImage: 'https://loremflickr.com/1200/800/brazil,rio',
-      title: 'Image 4',
-      alt: 'Image 4'
-    }, {
-      image: 'https://loremflickr.com/600/400/paris,girl/all',
-      thumbImage: 'https://loremflickr.com/1200/800/paris,girl/all',
-      title: 'Image 5',
-      alt: 'Image 5'
-    }, {
-      image: 'https://loremflickr.com/600/400/brazil,rio',
-      thumbImage: 'https://i.picsum.photos/id/609/400/350.jpg',
-      title: 'Image 6',
-      alt: 'Image 6'
-    }
-  ];
+  accommodationImages: Array<object> = [];
+  user!: any;
+  center!: google.maps.LatLngLiteral;
 
-  constructor(private route: ActivatedRoute, private accommodationService: AccommodationService, public dialog: MatDialog, private router: Router) {
+  googleMapsOptions: google.maps.MapOptions = {
+    disableDoubleClickZoom: true,
+    streetViewControl: false,
+  };
+
+  constructor(private route: ActivatedRoute,
+              private accommodationService: AccommodationService,
+              public dialog: MatDialog,
+              private router: Router,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getDetailsFromServer()
+    this.user = this.authService.getUserMail();
+    console.log(this.user);
   }
 
   public getDetailsFromServer() {
@@ -64,7 +46,8 @@ export class AccommodationDetailComponent implements OnInit {
       next: (data) => {
         console.log(JSON.stringify(data));
         this.accommodation = data.data;
-        //this.fillUpImages();
+        this.fillUpImages();
+        this.center = {lat: this.accommodation.lat, lng: this.accommodation.lng};
       },
       error: (error) => {
         console.log("Error " + JSON.stringify(error));
@@ -74,9 +57,11 @@ export class AccommodationDetailComponent implements OnInit {
 
   dateClass() {
     return (date: Date): MatCalendarCellCssClasses => {
-      const highlightDate = this.accommodation.announceDateList
-          .flatMap(announceDate => this.getDates(new Date(announceDate.from), new Date(announceDate.end)))
-          .some(d => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
+      const del = this.accommodation.reservedDays;
+      const highlightDate = this.accommodation.announces
+        .flatMap(announceDate => this.getDates(new Date(announceDate.from), new Date(announceDate.end)))
+        .filter(d => !del.includes(Date.parse(d.toDateString())))
+        .some(d => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
 
       return highlightDate ? 'available-date' : 'reserved-date';
     };
@@ -107,7 +92,7 @@ export class AccommodationDetailComponent implements OnInit {
       data: {
         from: this.selectedDateRange.start,
         end: this.selectedDateRange.end,
-        maxGuests: this.accommodation.max_guests
+        maxGuests: this.accommodation.maxGuests
       }
     });
 
@@ -122,13 +107,19 @@ export class AccommodationDetailComponent implements OnInit {
   }
 
   private getDates(startDate: Date, stopDate: Date) {
-    var dateArray = [];
-    var currentDate = startDate;
+    let dateArray = [];
+    let currentDate = startDate;
     while (currentDate <= stopDate) {
-      dateArray.push(new Date(currentDate));
+      if (currentDate > new Date()) {
+        dateArray.push(new Date(currentDate));
+      }
       currentDate = this.addDay(currentDate);
     }
     return dateArray;
+  }
+
+  private getDate(date: Date) {
+    return new Date(date);
   }
 
   private addDay(date: Date): Date {
@@ -155,15 +146,33 @@ export class AccommodationDetailComponent implements OnInit {
   }
 
   private fillUpImages() {
-    this.accommodation.listOfImages.forEach(image => {
+    this.accommodation.images.forEach(image => {
       this.accommodationImages.push(
         {
-          image: 'https://loremflickr.com/g/600/400/paris',
-          thumbImage: 'https://loremflickr.com/g/1200/800/paris',
-          alt: 'Image 1',
-          title: 'Image 1'
+          image: 'data:image/jpeg;base64,' + image,
+          thumbImage: 'data:image/jpeg;base64,' + image,
+          alt: 'Egy kép a szállásról'
         })
     })
+  }
+
+  modification() {
+
+  }
+
+  delete() {
+    if (confirm("Biztos törölni szeretnéd ezt a szállást?")) {
+      this.accommodationService.deleteAccommodation(this.accommodation.id).subscribe({
+        next: (data) => {
+          console.log(JSON.stringify(data));
+          alert(data.data);
+          this.router.navigateByUrl("/");
+        },
+        error: (error) => {
+          console.log("Error " + JSON.stringify(error));
+        }
+      })
+    }
   }
 }
 

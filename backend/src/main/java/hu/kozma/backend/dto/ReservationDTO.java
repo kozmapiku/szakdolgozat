@@ -17,5 +17,7 @@ public class ReservationDTO {
     private Long id;
     @NonNull
     private Integer guests;
+    private Double price;
     private AccommodationDTO accommodation;
+    private String mainImageLocation;
 }

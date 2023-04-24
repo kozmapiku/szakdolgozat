@@ -1,5 +1,6 @@
 package hu.kozma.backend.services;
 
+import hu.kozma.backend.mappers.MapperUtils;
 import hu.kozma.backend.model.*;
 import hu.kozma.backend.repository.AccommodationRepository;
 import hu.kozma.backend.repository.FileSystemRepository;
@@ -35,8 +36,8 @@ public class AccommodationService {
         accommodationRepository.save(accomodation);
     }
 
-    public List<Accommodation> getAccommodations(String name, Integer guests, LocalDate start, LocalDate end) {
-        List<Accommodation> accommodations = accommodationRepository.findFiltered(name, guests);
+    public List<Accommodation> getAccommodations(String name, String address, Integer guests, LocalDate start, LocalDate end) {
+        List<Accommodation> accommodations = accommodationRepository.findFiltered(name, address, guests);
         if (start != null && end != null) return filterAccommodationsByDate(accommodations, start, end);
         else if (start != null) return filterAccommodationsByStartDate(accommodations, start);
         else if (end != null) return filterAccommodationsByEndDate(accommodations, end);
@@ -95,10 +96,48 @@ public class AccommodationService {
         User user = userRepository.findUserByEmail(userEmail).orElseThrow();
         reservation.setAccommodation(accommodation);
         reservation.setUser(user);
+        reservation.setPrice(calculatePrice(reservation, accommodation));
         reservationRepository.save(reservation);
+    }
+
+    private Double calculatePrice(Reservation reservation, Accommodation accommodation) {
+        return reservation.getStartDate().datesUntil(reservation.getEndDate().plusDays(1))
+                .mapToDouble(date -> getPriceForDay(date, accommodation))
+                .reduce(0, Double::sum);
+    }
+
+    private Double getPriceForDay(LocalDate date, Accommodation accommodation) {
+        return accommodation.getAnnounces().stream().filter(announceDate -> isWithinRange(date, announceDate))
+                .findAny()
+                .orElseThrow()
+                .getPrice();
     }
 
     public List<Accommodation> getAccommodations(String name) {
         return accommodationRepository.findByUser_Email(name);
+    }
+
+    public void deleteAccommodation(Long id, String name) {
+        Accommodation accommodation = accommodationRepository.findById(id).orElseThrow();
+        if (!accommodation.getUser().getEmail().equals(name)) {
+            throw new IllegalArgumentException();
+        }
+        if (accommodation.getReservations().stream().anyMatch(reservation -> !reservation.isExpired())) {
+            //TODO exception arra, hogy nem törli, amíg van aktív foglalás
+            throw new IllegalArgumentException();
+        }
+        accommodationRepository.delete(accommodation);
+    }
+
+    public List<Long> getReservedDays(Accommodation accommodation) {
+        List<Long> reservedDays = new ArrayList<>();
+        accommodation.getReservations().forEach(reservation -> {
+            LocalDate current = reservation.getStartDate();
+            while (current.isBefore(reservation.getEndDate()) || current.isEqual(reservation.getEndDate())) {
+                reservedDays.add(MapperUtils.toLongDate(current));
+                current = current.plusDays(1);
+            }
+        });
+        return reservedDays;
     }
 }

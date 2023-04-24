@@ -1,0 +1,5 @@
+.acc-img {
+  object-fit: scale-down; /*this makes the image in src fit to the size specified below*/
+  max-width: 100%;
+  max-height: 200px;
+}

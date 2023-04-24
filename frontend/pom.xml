@@ -26,7 +26,7 @@
                 <configuration>
                   <workingDirectory>./</workingDirectory>
                   <nodeVersion>v18.15.0</nodeVersion>
-                  <npmVersion>9.5.0</npmVersion>
+                  <npmVersion>9.6.5</npmVersion>
                 </configuration>
                 <executions>
                     <execution>

@@ -2,10 +2,8 @@ package hu.kozma.backend.controllers;
 
 import hu.kozma.backend.dto.AccommodationDTO;
 import hu.kozma.backend.dto.ReservationDTO;
-import hu.kozma.backend.mappers.AccommodationMapper;
-import hu.kozma.backend.mappers.AnnounceDateMapper;
-import hu.kozma.backend.mappers.MapperUtils;
-import hu.kozma.backend.mappers.ReservationMapper;
+import hu.kozma.backend.dto.SimpleIdDTO;
+import hu.kozma.backend.mappers.*;
 import hu.kozma.backend.model.Accommodation;
 import hu.kozma.backend.model.Image;
 import hu.kozma.backend.model.Reservation;
@@ -29,16 +27,18 @@ import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 @AllArgsConstructor
 @CrossOrigin(origins = "*")
 public class AccommodationController {
+
     private final AccommodationService accommodationService;
     private final FileSystemRepository fileSystemRepository;
 
     @GetMapping("/all")
     public ResponseEntity<?> all(@RequestParam(value = "name", required = false) String name,
+                                 @RequestParam(value = "address", required = false) String address,
                                  @RequestParam(value = "guests", required = false) Integer guests,
                                  @RequestParam(value = "from", required = false) Long from,
                                  @RequestParam(value = "end", required = false) Long end
     ) {
-        List<Accommodation> accommodations = accommodationService.getAccommodations(name, guests, MapperUtils.toDate(from), MapperUtils.toDate(end));
+        List<Accommodation> accommodations = accommodationService.getAccommodations(name, address, guests, MapperUtils.toDate(from), MapperUtils.toDate(end));
         List<AccommodationDTO> accommodationDTOs = accommodations.stream().map(accommodation -> {
             AccommodationDTO accommodationDTO = AccommodationMapper.toAccommodationDTO(accommodation);
             try {
@@ -76,16 +76,17 @@ public class AccommodationController {
         if (accommodation == null)
             return RestResponseHandler.generateResponse("Nincs ilyen szállás!");
         AccommodationDTO accommodationDTO = AccommodationMapper.toAccommodationDTO(accommodation);
-
-        accommodationDTO.setListOfImages(accommodation.getImages().stream().map(image -> {
+        accommodationDTO.setReservedDays(accommodationService.getReservedDays(accommodation));
+        accommodationDTO.setImages(accommodation.getImages().stream().map(image -> {
             try {
                 return fileSystemRepository.load(image);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }).collect(Collectors.toList()));
-        accommodationDTO.setAnnounceDateList(accommodation.getAnnounces().stream()
+        accommodationDTO.setAnnounces(accommodation.getAnnounces().stream()
                 .map(AnnounceDateMapper::toAnnounceDateDTO).collect(Collectors.toList()));
+        accommodationDTO.setReviews(accommodation.getReviews().stream().map(ReviewMapper::toReviewDTO).toList());
         return RestResponseHandler.generateResponse(accommodationDTO);
     }
 
@@ -102,6 +103,12 @@ public class AccommodationController {
         Reservation reservation = ReservationMapper.toReservation(reservationDTO);
         accommodationService.reserveAccommodation(reservationDTO.getId(), reservation, principal.getName());
         return RestResponseHandler.generateResponse("A foglalás sikeres!");
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteAccommodation(@RequestBody SimpleIdDTO deleteDTO, Principal principal) {
+        accommodationService.deleteAccommodation(deleteDTO.getId(), principal.getName());
+        return RestResponseHandler.generateResponse("A törlés sikeres!");
     }
 
 }
