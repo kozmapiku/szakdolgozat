@@ -1,33 +1,42 @@
 package hu.kozma.backend.services;
 
+import hu.kozma.backend.dto.ReservationDTO;
+import hu.kozma.backend.mappers.ReservationMapper;
 import hu.kozma.backend.model.Reservation;
-import hu.kozma.backend.repository.AccommodationRepository;
 import hu.kozma.backend.repository.ReservationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static hu.kozma.backend.repository.FileSystemRepository.getImage;
+import static hu.kozma.backend.repository.FileSystemRepository.getImages;
+
 @Service
 @AllArgsConstructor
 public class ReservationService {
 
     public final ReservationRepository reservationRepository;
-    private final AccommodationRepository accommodationRepository;
 
-    public List<Reservation> getReservations(String email) {
-        return reservationRepository.findAllByUserEmail(email);
+    public List<ReservationDTO> getReservations(String email) {
+        List<Reservation> reservations = reservationRepository.findAllByUserEmail(email);
+        return reservations.stream()
+                .map(ReservationMapper::toReservationDTO)
+                .peek(reservationDTO -> reservationDTO.getAccommodation().setMainImage(getImage(reservationDTO.getMainImageLocation())))
+                .toList();
     }
 
-    public Reservation getReservation(Long id) {
-        return reservationRepository.findById(id).orElseThrow();
+    public ReservationDTO getReservation(Long id) {
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+        ReservationDTO reservationDTO = ReservationMapper.toReservationDTO(reservation);
+        reservationDTO.getAccommodation().setImages(getImages(reservation.getAccommodation().getImages()));
+        return reservationDTO;
     }
 
-    public void deleteReservation(Long id, String name) {
-        Reservation reservation = reservationRepository.findById(id).orElseThrow();
-        if (!reservation.getUser().getEmail().equals(name)) {
-            throw new IllegalArgumentException();
-        }
+    public void deleteReservation(Long id, String email) {
+        Reservation reservation = reservationRepository.findByIdAndUserEmail(id, email)
+                .orElseThrow(IllegalArgumentException::new);
         reservationRepository.delete(reservation);
     }
 }

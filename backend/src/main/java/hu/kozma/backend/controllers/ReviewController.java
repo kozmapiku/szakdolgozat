@@ -25,7 +25,7 @@ public class ReviewController {
     }
 
     @GetMapping("/mine")
-    public ResponseEntity<?> mine(Principal principal) {
+    public ResponseEntity<?> getReviews(Principal principal) {
         List<ReviewDTO> reviewList = reviewService.getReviews(principal.getName());
         return RestResponseHandler.generateResponse(reviewList);
     }

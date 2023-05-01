@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {TokenStorageService} from "../auth/token-storage.service";
+import {TokenStorageService} from "../service/token-storage.service";
 
 @Injectable()
 export class XhrInterceptorService implements HttpInterceptor{

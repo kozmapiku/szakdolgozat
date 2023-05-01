@@ -1,9 +1,15 @@
 package hu.kozma.backend.services;
 
+import hu.kozma.backend.dto.AccommodationDTO;
 import hu.kozma.backend.exceptions.AnnounceDateConflict;
+import hu.kozma.backend.mappers.AccommodationMapper;
 import hu.kozma.backend.mappers.MapperUtils;
+import hu.kozma.backend.mappers.ReviewMapper;
 import hu.kozma.backend.model.*;
-import hu.kozma.backend.repository.*;
+import hu.kozma.backend.repository.AccommodationRepository;
+import hu.kozma.backend.repository.FileSystemRepository;
+import hu.kozma.backend.repository.ReservationRepository;
+import hu.kozma.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +22,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static hu.kozma.backend.repository.FileSystemRepository.getImage;
+import static hu.kozma.backend.repository.FileSystemRepository.getImages;
+
 @Service
 @AllArgsConstructor
 public class AccommodationService {
@@ -24,25 +33,32 @@ public class AccommodationService {
     private final FileSystemRepository fileSystemRepository;
     private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
-    private final ImageRepository imageRepository;
-    private final AnnounceDateRepository announceDateRepository;
 
-    public void saveAccommodation(Accommodation accomodation, List<MultipartFile> multipartFiles, Integer mainImageIndex, String name) throws IOException {
+    public void saveAccommodation(AccommodationDTO accommodationDTO, List<MultipartFile> multipartFiles, Integer mainImageIndex, String name) throws IOException {
+        User user = userRepository.findUserByEmail(name).orElseThrow(() -> new EntityNotFoundException("A felhasználó nem található!"));
         if (mainImageIndex == null)
             mainImageIndex = -1;
+        Accommodation accommodation = AccommodationMapper.toAccommodation(accommodationDTO);
         for (int i = 0; i < multipartFiles.size(); i++)
-            accomodation.addImage(new Image(fileSystemRepository.save(multipartFiles.get(i), name, i), i, i == mainImageIndex));
-        User user = userRepository.findUserByEmail(name).orElseThrow(() -> new EntityNotFoundException("A felhasználó nem található!"));
-        accomodation.setUser(user);
-        accommodationRepository.save(accomodation);
+            accommodation.addImage(new Image(fileSystemRepository.save(multipartFiles.get(i), name, i), i, i == mainImageIndex));
+        accommodation.setUser(user);
+        accommodationRepository.save(accommodation);
     }
 
-    public List<Accommodation> getAccommodations(String name, String address, Integer guests, LocalDate start, LocalDate end) {
+    public List<AccommodationDTO> getAccommodations(String name, String address, Integer guests, LocalDate start, LocalDate end) {
         List<Accommodation> accommodations = accommodationRepository.findFiltered(name, address, guests);
-        if (start != null && end != null) return filterAccommodationsByDate(accommodations, start, end);
-        else if (start != null) return filterAccommodationsByStartDate(accommodations, start);
-        else if (end != null) return filterAccommodationsByEndDate(accommodations, end);
-        return accommodations;
+
+        if (start != null && end != null) accommodations = filterAccommodationsByDate(accommodations, start, end);
+        else if (start != null) accommodations = filterAccommodationsByStartDate(accommodations, start);
+        else if (end != null) accommodations = filterAccommodationsByEndDate(accommodations, end);
+
+        return accommodations.stream().map(accommodation -> {
+            AccommodationDTO accommodationDTO = AccommodationMapper.toAccommodationDTO(accommodation);
+            accommodationDTO.setReviews(accommodation.getReviews().stream().map(ReviewMapper::toReviewDTO).toList());
+            accommodationDTO.setMainImage(getImage(accommodation.getMainImage()));
+            accommodationDTO.setMainImageIndex(accommodation.getMainImage().getIndex());
+            return accommodationDTO;
+        }).toList();
     }
 
     private List<Accommodation> filterAccommodationsByDate(List<Accommodation> accommodations, LocalDate start, LocalDate end) {
@@ -88,8 +104,12 @@ public class AccommodationService {
         return !(date.isBefore(announceDate.getStartDate()) || date.isAfter(announceDate.getEndDate()));
     }
 
-    public Accommodation getAccommodation(Long id) {
-        return accommodationRepository.findById(id).orElse(null);
+    public AccommodationDTO getAccommodation(Long id) {
+        Accommodation accommodation = accommodationRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        AccommodationDTO accommodationDTO = AccommodationMapper.toAccommodationDetailsDTO(accommodation);
+        accommodationDTO.setReservedDays(getReservedDays(accommodation));
+        accommodationDTO.setImages(getImages(accommodation.getImages()));
+        return accommodationDTO;
     }
 
     public void reserveAccommodation(Long id, Reservation reservation, String userEmail) {
@@ -114,8 +134,14 @@ public class AccommodationService {
                 .getPrice();
     }
 
-    public List<Accommodation> getAccommodations(String name) {
-        return accommodationRepository.findByUser_Email(name);
+    public List<AccommodationDTO> getAccommodations(String email) {
+        return accommodationRepository.findByUserEmail(email).stream()
+                .map(accommodation -> {
+                    AccommodationDTO accommodationDTO = AccommodationMapper.toAccommodationDTO(accommodation);
+                    accommodationDTO.setMainImage(getImage(accommodation.getMainImage()));
+                    accommodationDTO.setMainImageIndex(accommodation.getMainImage().getIndex());
+                    return accommodationDTO;
+                }).toList();
     }
 
     public void deleteAccommodation(Long id, String name) {
@@ -142,7 +168,8 @@ public class AccommodationService {
         return reservedDays;
     }
 
-    public void modifyAccommodation(Accommodation accommodation, List<MultipartFile> multipartFiles, Integer mainImageIndex, String name) throws IOException, AnnounceDateConflict {
+    public void modifyAccommodation(AccommodationDTO accommodationDTO, List<MultipartFile> multipartFiles, Integer mainImageIndex, String name) throws IOException, AnnounceDateConflict {
+        Accommodation accommodation = AccommodationMapper.toAccommodation(accommodationDTO);
         Accommodation old = accommodationRepository.findById(accommodation.getId()).orElseThrow();
         if (!old.getName().equals(accommodation.getName())) {
             old.setName(accommodation.getName());
@@ -189,7 +216,6 @@ public class AccommodationService {
         }
         old.deleteAnnounceDates();
         old.setAnnounces(newAnnounceDates);
-        System.out.println("asd");
         accommodationRepository.save(old);
     }
 

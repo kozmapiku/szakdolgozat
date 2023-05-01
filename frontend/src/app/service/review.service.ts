@@ -10,8 +10,8 @@ import {Review} from "../model/review.model";
   providedIn: 'root'
 })
 export class ReviewService {
-  baseUrl = environment.baseUrl;
 
+  baseUrl = environment.baseUrl;
   constructor(private http: HttpClient, private router: Router) {
   }
 

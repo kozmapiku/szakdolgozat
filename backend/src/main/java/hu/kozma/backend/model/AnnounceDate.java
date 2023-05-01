@@ -37,10 +37,9 @@ public class AnnounceDate {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof AnnounceDate)) {
+        if (!(o instanceof AnnounceDate c)) {
             return false;
         }
-        AnnounceDate c = (AnnounceDate) o;
 
         return startDate.isEqual(c.startDate)
                 && endDate.isEqual(c.endDate) &&

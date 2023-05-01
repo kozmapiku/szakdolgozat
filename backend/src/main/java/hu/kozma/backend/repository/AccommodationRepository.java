@@ -16,5 +16,5 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, Lo
             "(:guests is null or a.maxGuests >= :guests)")
     List<Accommodation> findFiltered(@Param("name") String name, @Param("address") String address, @Param("guests") Integer maxGuests);
 
-    List<Accommodation> findByUser_Email(String user_email);
+    List<Accommodation> findByUserEmail(String userEmail);
 }

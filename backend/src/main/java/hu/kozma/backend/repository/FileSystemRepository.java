@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Repository
 public class FileSystemRepository {
@@ -22,11 +24,37 @@ public class FileSystemRepository {
         return newFile.toAbsolutePath().toString();
     }
 
-    public byte[] load(Image image) throws Exception {
+    public static byte[] load(Image image) throws Exception {
         return Files.readAllBytes(Paths.get(image.getLocation()));
     }
 
-    public byte[] load(String location) throws Exception {
+    public static byte[] load(String location) throws Exception {
         return Files.readAllBytes(Paths.get(location));
+    }
+
+    public static List<byte[]> getImages(Set<Image> modelImages) {
+        return modelImages.stream().map(image -> {
+            try {
+                return load(image);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
+    }
+
+    public static byte[] getImage(String location) {
+        try {
+            return load(location);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static byte[] getImage(Image location) {
+        try {
+            return load(location);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

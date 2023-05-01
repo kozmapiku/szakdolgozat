@@ -3,6 +3,8 @@ package hu.kozma.backend.mappers;
 import hu.kozma.backend.dto.AccommodationDTO;
 import hu.kozma.backend.model.Accommodation;
 
+import java.util.stream.Collectors;
+
 public class AccommodationMapper {
 
     public static Accommodation toAccommodation(AccommodationDTO accommodationDTO) {
@@ -34,6 +36,17 @@ public class AccommodationMapper {
         accommodationDTO.setMaxGuests(accommodation.getMaxGuests());
         accommodationDTO.setMainImageIndex(accommodation.getMainImage().getIndex());
         accommodationDTO.setOwner(accommodation.getUser().getEmail());
+        return accommodationDTO;
+    }
+
+    public static AccommodationDTO toAccommodationDetailsDTO(Accommodation accommodation) {
+        AccommodationDTO accommodationDTO = toAccommodationDTO(accommodation);
+        accommodationDTO.setAnnounces(accommodation.getAnnounces().stream()
+                .map(AnnounceDateMapper::toAnnounceDateDTO)
+                .collect(Collectors.toList()));
+        accommodationDTO.setReviews(accommodation.getReviews().stream()
+                .map(ReviewMapper::toReviewDTO)
+                .toList());
         return accommodationDTO;
     }
 }
