@@ -45,6 +45,7 @@ import {StarRatingModule} from "angular-star-rating";
 import {GoogleMapsModule} from "@angular/google-maps";
 import {GooglePlaceModule} from "ngx-google-places-autocomplete";
 import {MapSearchComponent} from './map-search/map-search.component';
+import {ModifyAccommodationComponent} from './modify-accommodation/modify-accommodation.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import {MapSearchComponent} from './map-search/map-search.component';
     MyReservationsComponent,
     ReservationDetailsComponent,
     ReviewDialogComponent,
-    MapSearchComponent
+    MapSearchComponent,
+    ModifyAccommodationComponent
   ],
   imports: [
     BrowserModule,

@@ -11,7 +11,9 @@ public class UserDTO {
     private String lastName;
     @NonNull
     private String email;
-    @NonNull
     private String password;
+
+    private String currentPassword;
+    private String newPassword;
 
 }

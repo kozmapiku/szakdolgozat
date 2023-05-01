@@ -63,6 +63,16 @@ public class Accommodation {
         announces.add(announceDate);
     }
 
+    public void deleteAnnounceDates() {
+        this.announces.forEach(AnnounceDate::deleteAccommodation);
+        announces.clear();
+    }
+
+    public void deleteImages() {
+        this.images.forEach(Image::deleteAccommodation);
+        images.clear();
+    }
+
     public void addReview(Review review) {
         review.setAccommodation(this);
         reviews.add(review);
@@ -70,5 +80,10 @@ public class Accommodation {
 
     public Image getMainImage() {
         return images.stream().filter(Image::isMain).findFirst().orElse(images.stream().findFirst().get());
+    }
+
+    public void deleteReservation(Reservation reservation) {
+        reservations.remove(reservation);
+        reservation.removeAccommodation();
     }
 }

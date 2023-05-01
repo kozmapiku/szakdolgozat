@@ -7,6 +7,7 @@ public class AccommodationMapper {
 
     public static Accommodation toAccommodation(AccommodationDTO accommodationDTO) {
         Accommodation accommodation = new Accommodation();
+        accommodation.setId(accommodationDTO.getId());
         accommodation.setName(accommodationDTO.getName());
         accommodation.setAddress(accommodationDTO.getAddress());
         accommodation.setFloor(accommodationDTO.getFloor());

@@ -1,11 +1,9 @@
 package hu.kozma.backend.services;
 
+import hu.kozma.backend.exceptions.AnnounceDateConflict;
 import hu.kozma.backend.mappers.MapperUtils;
 import hu.kozma.backend.model.*;
-import hu.kozma.backend.repository.AccommodationRepository;
-import hu.kozma.backend.repository.FileSystemRepository;
-import hu.kozma.backend.repository.ReservationRepository;
-import hu.kozma.backend.repository.UserRepository;
+import hu.kozma.backend.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +24,8 @@ public class AccommodationService {
     private final FileSystemRepository fileSystemRepository;
     private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
+    private final ImageRepository imageRepository;
+    private final AnnounceDateRepository announceDateRepository;
 
     public void saveAccommodation(Accommodation accomodation, List<MultipartFile> multipartFiles, Integer mainImageIndex, String name) throws IOException {
         if (mainImageIndex == null)
@@ -139,5 +140,60 @@ public class AccommodationService {
             }
         });
         return reservedDays;
+    }
+
+    public void modifyAccommodation(Accommodation accommodation, List<MultipartFile> multipartFiles, Integer mainImageIndex, String name) throws IOException, AnnounceDateConflict {
+        Accommodation old = accommodationRepository.findById(accommodation.getId()).orElseThrow();
+        if (!old.getName().equals(accommodation.getName())) {
+            old.setName(accommodation.getName());
+        }
+        if (!old.getAddress().equals(accommodation.getAddress())) {
+            old.setAddress(accommodation.getAddress());
+        }
+        if (!old.getFloor().equals(accommodation.getFloor())) {
+            old.setFloor(accommodation.getFloor());
+        }
+        if (!old.getDoor().equals(accommodation.getDoor())) {
+            old.setDoor(accommodation.getDoor());
+        }
+        if (!old.getLat().equals(accommodation.getLat())) {
+            old.setLat(accommodation.getLat());
+        }
+        if (!old.getLng().equals(accommodation.getLng())) {
+            old.setLng(accommodation.getLng());
+        }
+        if (!old.getDescription().equals(accommodation.getDescription())) {
+            old.setDescription(accommodation.getDescription());
+        }
+        if (!old.getMaxGuests().equals(accommodation.getMaxGuests())) {
+            old.setMaxGuests(accommodation.getMaxGuests());
+        }
+
+        old.deleteImages();
+        old.setImages(new HashSet<>());
+        for (int i = 0; i < multipartFiles.size(); i++)
+            old.addImage(new Image(fileSystemRepository.save(multipartFiles.get(i), name, i), i, i == mainImageIndex));
+
+
+        List<AnnounceDate> newAnnounceDates = accommodation.getAnnounces();
+        for (AnnounceDate announceDate : old.getAnnounces()) {
+            if (!accommodation.getAnnounces().contains(announceDate)) {
+                if (old.getReservations().stream()
+                        .anyMatch(reservation ->
+                                reservation.getStartDate().isAfter(announceDate.getStartDate().minusDays(1))
+                                        && reservation.getEndDate().isBefore(announceDate.getEndDate().plusDays(1))
+                                        && !reservation.isExpired())) {
+                    throw new AnnounceDateConflict("Nem tudsz olyan meghírdetett időpontot megváltoztatni, amire van érvényes foglalás!");
+                }
+            }
+        }
+        old.deleteAnnounceDates();
+        old.setAnnounces(newAnnounceDates);
+        System.out.println("asd");
+        accommodationRepository.save(old);
+    }
+
+    public void deleteAnnounce(AnnounceDate announceDate) {
+
     }
 }

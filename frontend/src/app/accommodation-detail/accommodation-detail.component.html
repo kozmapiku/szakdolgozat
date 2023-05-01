@@ -7,7 +7,8 @@
       </div>
       <div *ngIf="this.accommodation.owner == this.user" fxFlex="30" fxLayout="row"
            style="justify-content: center; display: flex; margin-bottom: 20px">
-        <button (click)="modification()" color="primary" mat-raised-button style="margin-right: 10px; width: 150px">
+        <button (click)="modification()" [routerLink]="['/accommodation', accommodation.id, 'modify']" color="primary"
+                mat-raised-button style="margin-right: 10px; width: 150px">
           Módosítás
         </button>
         <button (click)="delete()" color="warn" mat-raised-button style="width: 150px">Törlés</button>
@@ -56,8 +57,8 @@
               </mat-card-header>
               <mat-card-content>
                 <star-rating [rating]="review.star" [starType]="'svg'"></star-rating>
-                {{review.comment}}
-                {{review.user_name}}
+                <p>{{review.comment}}</p>
+                <p>{{review.user_name}}</p>
               </mat-card-content>
             </mat-card>
           </div>

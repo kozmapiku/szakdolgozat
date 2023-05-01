@@ -9,6 +9,14 @@ public class ReviewMapper {
         reviewDTO.setStar(review.getStar());
         reviewDTO.setComment(review.getComment());
         reviewDTO.setUserName(review.getUser().getEmail());
+        reviewDTO.setAccommodation(AccommodationMapper.toAccommodationDTO(review.getAccommodation()));
         return reviewDTO;
+    }
+
+    public static Review toReview(ReviewDTO reviewDTO) {
+        Review review = new Review();
+        review.setStar(reviewDTO.getStar());
+        review.setComment(reviewDTO.getComment());
+        return review;
     }
 }

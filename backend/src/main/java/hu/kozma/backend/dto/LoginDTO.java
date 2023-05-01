@@ -12,11 +12,16 @@ public class LoginDTO {
     private String email;
     private String token;
     private Long expiresIn;
+
     public LoginDTO(User user, String token, Long expiresIn) {
         firstName = user.getFirstName();
         lastName = user.getLastName();
         email = user.getEmail();
         this.expiresIn = expiresIn;
         this.token = token;
+    }
+
+    public LoginDTO() {
+
     }
 }

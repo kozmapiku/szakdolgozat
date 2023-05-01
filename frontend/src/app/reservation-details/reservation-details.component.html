@@ -24,7 +24,8 @@
           </div>
         </div>
       </div>
-      <div *ngIf="this.expired()" style="justify-content: center; display: flex; margin-bottom: 20px">
+      <div *ngIf="this.expired() && !this.alreadyReviewed()"
+           style="justify-content: center; display: flex; margin-bottom: 20px">
         <button (click)="review()" color="primary" mat-raised-button style="width: 200px">Értékelés</button>
       </div>
       <div *ngIf="!this.expired()" fxLayout="row" style="margin-bottom: 20px">

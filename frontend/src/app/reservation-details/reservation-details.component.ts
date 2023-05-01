@@ -53,7 +53,17 @@ export class ReservationDetailsComponent implements OnInit {
   }
 
   public delete() {
-
+    this.reservationService.delete(this.reservation.id).subscribe({
+      next: (data) => {
+        console.log(JSON.stringify(data));
+        alert(data.data);
+        this.router.navigateByUrl("/");
+      },
+      error: (error) => {
+        console.log("Error " + JSON.stringify(error));
+        alert(error.error.error);
+      }
+    })
   }
 
   private getDetailsFromServer() {
@@ -69,16 +79,8 @@ export class ReservationDetailsComponent implements OnInit {
     });
   }
 
-  private fillUpImages() {
-    this.reservation.accommodation.images.forEach(image => {
-      this.reservationImages.push(
-        {
-          image: 'data:image/jpeg;base64,' + image,
-          thumbImage: 'data:image/jpeg;base64,' + image,
-          alt: 'Image 1',
-          title: 'Image 1'
-        })
-    })
+  alreadyReviewed() {
+    return this.reservation.review != null;
   }
 
   private sendReview() {
@@ -92,6 +94,17 @@ export class ReservationDetailsComponent implements OnInit {
       error: (error) => {
         console.log("Error " + JSON.stringify(error));
       }
+    })
+  }
+
+  private fillUpImages() {
+    this.reservation.accommodation.images.forEach(image => {
+      this.reservationImages.push(
+        {
+          image: 'data:image/jpeg;base64,' + image,
+          thumbImage: 'data:image/jpeg;base64,' + image,
+          alt: 'Kép a szállásról'
+        })
     })
   }
 }

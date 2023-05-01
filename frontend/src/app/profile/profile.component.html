@@ -1,1 +1,53 @@
-<p>profile works!</p>
+<div class="content">
+  <mat-card>
+    <mat-card-content>
+      <form (ngSubmit)="update(form)" [formGroup]="form">
+        <h2>Felhasználói fiók frissítése</h2>
+        <mat-form-field>
+          <input #emailInput formControlName="email" matInput placeholder="E-mail" required>
+          <mat-error *ngIf="form.hasError('required', 'email')">
+            Az e-mail cím megadása kötelező!
+          </mat-error>
+          <mat-error *ngIf="form.hasError('pattern', 'email')">
+            Az e-mail cím formátuma nem megfelelő!
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input #lastNameInput formControlName="lastName" matInput placeholder="Vezetéknév" required>
+          <mat-error>A vezetéknév megadása kötelező!</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input #firstNameInput formControlName="firstName" matInput placeholder="Keresztnév" required>
+          <mat-error>A keresztnév megadása kötelező!</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input #passwordInput formControlName="currentPassword" matInput placeholder="Jelenlegi jelszó"
+                 required type="password">
+          <mat-error *ngIf="form.hasError('required', 'currentPassword')">
+            A jelszó megadása kötelező!
+          </mat-error>
+          <mat-error *ngIf="form.hasError('minlength', 'currentPassword')">
+            A jelszó nem elég hosszú!
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input #passwordInput formControlName="password" matInput placeholder=" Új jelszó" type="password">
+          <mat-error *ngIf="form.hasError('required', 'password')">
+            A jelszó megadása kötelező!
+          </mat-error>
+          <mat-error *ngIf="form.hasError('minlength', 'password')">
+            A jelszó nem elég hosszú!
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input #confirmPasswordInput formControlName="confirmPassword" matInput placeholder="Jelszó ismétlése"
+                 type="password">
+          <mat-error *ngIf="form.hasError('matching')">
+            A jelszavak nem egyeznek!
+          </mat-error>
+        </mat-form-field>
+        <button [disabled]="!form.valid" color="primary" mat-raised-button type="submit">Adatok frissítése</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

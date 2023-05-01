@@ -32,4 +32,8 @@ public class Image {
         this.isMain = isMain;
         this.index = index;
     }
+
+    public void deleteAccommodation() {
+        accommodation = null;
+    }
 }

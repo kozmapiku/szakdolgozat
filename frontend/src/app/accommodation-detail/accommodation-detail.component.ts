@@ -157,7 +157,6 @@ export class AccommodationDetailComponent implements OnInit {
   }
 
   modification() {
-
   }
 
   delete() {

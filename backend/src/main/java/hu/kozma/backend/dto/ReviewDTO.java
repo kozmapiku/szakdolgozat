@@ -20,6 +20,8 @@ public class ReviewDTO {
     @Nullable
     private String comment;
     @Nullable
+    private AccommodationDTO accommodation;
+    @Nullable
     @JsonProperty("user_name")
     private String userName;
 }

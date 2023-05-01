@@ -12,6 +12,7 @@ import {MyReservationsComponent} from "../my-reservations/my-reservations.compon
 import {ProfileComponent} from "../profile/profile.component";
 import {ReservationDetailsComponent} from "../reservation-details/reservation-details.component";
 import {MapSearchComponent} from "../map-search/map-search.component";
+import {ModifyAccommodationComponent} from "../modify-accommodation/modify-accommodation.component";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -25,7 +26,8 @@ const routes: Routes = [
   {path: 'reservation/all', component: MyReservationsComponent},
   {path: 'profile', component: ProfileComponent},
   {path: 'reservation/:id/details', component: ReservationDetailsComponent},
-  {path: 'map-search', component: MapSearchComponent}
+  {path: 'map-search', component: MapSearchComponent},
+  {path: 'accommodation/:id/modify', component: ModifyAccommodationComponent}
 ];
 
 @NgModule({

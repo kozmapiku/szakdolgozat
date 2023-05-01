@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class AnnounceDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +31,23 @@ public class AnnounceDate {
     private LocalDate endDate;
     @Column(name = "price", nullable = false)
     private Double price;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof AnnounceDate)) {
+            return false;
+        }
+        AnnounceDate c = (AnnounceDate) o;
+
+        return startDate.isEqual(c.startDate)
+                && endDate.isEqual(c.endDate) &&
+                Objects.equals(price, c.price);
+    }
+
+    public void deleteAccommodation() {
+        accommodation = null;
+    }
 }

@@ -41,6 +41,7 @@ public class AccommodationController {
         List<Accommodation> accommodations = accommodationService.getAccommodations(name, address, guests, MapperUtils.toDate(from), MapperUtils.toDate(end));
         List<AccommodationDTO> accommodationDTOs = accommodations.stream().map(accommodation -> {
             AccommodationDTO accommodationDTO = AccommodationMapper.toAccommodationDTO(accommodation);
+            accommodationDTO.setReviews(accommodation.getReviews().stream().map(ReviewMapper::toReviewDTO).toList());
             try {
                 Image mainImage = accommodation.getMainImage();
                 accommodationDTO.setMainImage(fileSystemRepository.load(mainImage));
@@ -50,6 +51,7 @@ public class AccommodationController {
             }
             return accommodationDTO;
         }).collect(Collectors.toList());
+
         return RestResponseHandler.generateResponse(accommodationDTOs);
     }
 
@@ -96,6 +98,16 @@ public class AccommodationController {
         Accommodation accomodation = AccommodationMapper.toAccommodation(accommodationDTO);
         accommodationService.saveAccommodation(accomodation, multipartFiles, accommodationDTO.getMainImageIndex(), principal.getName());
         return RestResponseHandler.generateResponse("Szállás létrehozása sikeres!");
+    }
+
+    @PostMapping(path = "/modify", produces = {
+            MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<?> modifyAccommodation(@RequestPart("files") List<MultipartFile> multipartFiles, @RequestPart("accommodation") AccommodationDTO accommodationDTO, Principal principal) throws Exception {
+        Accommodation accomodation = AccommodationMapper.toAccommodation(accommodationDTO);
+
+        accommodationService.modifyAccommodation(accomodation, multipartFiles, accommodationDTO.getMainImageIndex(), principal.getName());
+
+        return RestResponseHandler.generateResponse("Szállás módosítása sikeres!");
     }
 
     @PostMapping("/reserve")

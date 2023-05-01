@@ -15,13 +15,24 @@ export class AuthService {
   constructor(private http:HttpClient, private router:Router, private tokenStorage: TokenStorageService) { }
 
   public login(email: string, password: string) {
-    const body = { 'email': email, 'password': password };
+    const body = {'email': email, 'password': password};
     return this.http.post<Response<User>>("http://192.168.0.192:8080/auth/login", body);
   }
 
   public register(email: string, firstName: string, lastName: string, password: string) {
-    const body = { 'email': email, 'firstName': firstName, 'lastName': lastName, 'password' : password };
+    const body = {'email': email, 'firstName': firstName, 'lastName': lastName, 'password': password};
     return this.http.post<Response<string>>("http://192.168.0.192:8080/auth/register", body);
+  }
+
+  public update(email: string, firstName: string, lastName: string, currentPassword: string, newPassword: string) {
+    const body = {
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
+      'password': currentPassword,
+      "newPassword": newPassword
+    };
+    return this.http.post<Response<string>>("http://192.168.0.192:8080/auth/update", body);
   }
 
   public logout() {
@@ -38,5 +49,9 @@ export class AuthService {
 
   public getUserMail() {
     return this.tokenStorage.getUser().email;
+  }
+
+  public getUserData() {
+    return this.http.get<Response<string>>("http://192.168.0.192:8080/auth/user");
   }
 }

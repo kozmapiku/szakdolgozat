@@ -23,4 +23,9 @@ export class ReservationService {
     let queryParams = new HttpParams().append("id", id);
     return this.http.get<Response<Reservation>>(this.baseUrl + "/reservation/get_details", {params: queryParams});
   }
+
+  public delete(id: number) {
+    let body = {"id": id};
+    return this.http.post<Response<string>>(this.baseUrl + "/reservation/delete", body);
+  }
 }

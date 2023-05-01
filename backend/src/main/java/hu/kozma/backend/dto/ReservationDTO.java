@@ -20,4 +20,5 @@ public class ReservationDTO {
     private Double price;
     private AccommodationDTO accommodation;
     private String mainImageLocation;
+    private ReviewDTO review;
 }

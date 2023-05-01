@@ -60,4 +60,10 @@ export class AccommodationService {
     let body = {"id": id};
     return this.http.post<Response<string>>(this.baseUrl + "/accommodation/delete", body);
   }
+
+  public modifyAccommodation(formData: FormData) {
+    let body = formData
+    console.log(formData)
+    return this.http.post<Response<string>>(this.baseUrl + "/accommodation/modify", body);
+  }
 }

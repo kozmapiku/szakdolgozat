@@ -1,4 +1,5 @@
 import {Accommodation} from "./accommodation.model";
+import {Review} from "./review.model";
 
 export interface Reservation {
   id: number
@@ -7,4 +8,5 @@ export interface Reservation {
   guests: number;
   price: number;
   accommodation: Accommodation;
+  review: Review;
 }

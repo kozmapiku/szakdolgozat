@@ -34,6 +34,10 @@ export class HomeComponent implements OnInit {
     this.search(this.form);
   }
 
+  getStar(accommodation: Accommodation) {
+    return accommodation.reviews.map(review => review.star).reduce((a, b) => a + b, 0) / accommodation.reviews.length;
+  }
+
   public search(form: UntypedFormGroup) {
     let from = Date.parse(this.form.get("fromDate")?.value);
     let end = Date.parse(this.form.get("endDate")?.value);

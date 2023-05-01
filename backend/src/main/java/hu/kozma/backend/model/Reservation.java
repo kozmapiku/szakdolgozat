@@ -35,4 +35,8 @@ public class Reservation {
     public Boolean isExpired() {
         return endDate.isBefore(LocalDate.now());
     }
+
+    public void removeAccommodation() {
+        accommodation = null;
+    }
 }
