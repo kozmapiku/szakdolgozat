@@ -12,13 +12,13 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="env" target="17" />
       <module name="model" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="backend" options="-parameters" />
+      <module name="env" options="" />
       <module name="frontend" options="-parameters" />
       <module name="szakdolgozat" options="" />
     </option>
