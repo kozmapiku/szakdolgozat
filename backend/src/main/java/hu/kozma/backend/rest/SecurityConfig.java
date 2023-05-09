@@ -26,10 +26,14 @@ public class SecurityConfig {
         http
                 .cors()
                 .and()
+                .requiresChannel()
+                .anyRequest()
+                .requiresSecure()
+                .and()
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**", "/accommodation/all", "/accommodation/get_details") //unathorized whitelist
+                .requestMatchers("/api/auth/**", "/api/accommodation/all", "/api/accommodation/detail") //unathorized whitelist
                 .permitAll()
                 .anyRequest()
                 .authenticated()

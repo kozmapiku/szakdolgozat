@@ -20,7 +20,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 
 @RestController
-@RequestMapping("/accommodation")
+@RequestMapping("/api/accommodation")
 @AllArgsConstructor
 @CrossOrigin(origins = "*")
 public class AccommodationController {
@@ -31,32 +31,33 @@ public class AccommodationController {
     public ResponseEntity<?> getAccommodations(@RequestParam(value = "name", required = false) String name,
                                                @RequestParam(value = "address", required = false) String address,
                                                @RequestParam(value = "guests", required = false) Integer guests,
-                                               @RequestParam(value = "from", required = false) Long from,
-                                               @RequestParam(value = "end", required = false) Long end) {
-        List<AccommodationDTO> accommodationDTOs = accommodationService.getAccommodations(name, address, guests, MapperUtils.toDate(from), MapperUtils.toDate(end));
+                                               @RequestParam(value = "fromDate", required = false) Long from,
+                                               @RequestParam(value = "endDate", required = false) Long end,
+                                               @RequestParam(value = "showOwn", required = false) Boolean showOwn) {
+        List<AccommodationDTO> accommodationDTOs = accommodationService.getAccommodations(name, address, guests, MapperUtils.toDate(from), MapperUtils.toDate(end), showOwn);
         return RestResponseHandler.generateResponse(accommodationDTOs);
     }
 
-    @GetMapping("/get_owned")
+    @GetMapping("/own")
     public ResponseEntity<?> getAccommodations(Principal user) {
         List<AccommodationDTO> accommodationDTOs = accommodationService.getAccommodations(user.getName());
         return RestResponseHandler.generateResponse(accommodationDTOs);
     }
 
-    @GetMapping("/get_details")
+    @GetMapping("/detail")
     public ResponseEntity<?> getAccommodationDetails(@RequestParam(value = "id") Long id) {
         AccommodationDTO accommodationDTO = accommodationService.getAccommodation(id);
         return RestResponseHandler.generateResponse(accommodationDTO);
     }
 
-    @PostMapping(path = "/new", produces = {
+    @PostMapping(path = "/create", produces = {
             MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<?> addAccommodation(@RequestPart("files") List<MultipartFile> multipartFiles, @RequestPart("accommodation") AccommodationDTO accommodationDTO, Principal principal) throws Exception {
         accommodationService.saveAccommodation(accommodationDTO, multipartFiles, accommodationDTO.getMainImageIndex(), principal.getName());
         return RestResponseHandler.generateResponse("Szállás létrehozása sikeres!");
     }
 
-    @PostMapping(path = "/modify",
+    @PostMapping(path = "/update",
             produces = {MediaType.APPLICATION_JSON_VALUE},
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, APPLICATION_OCTET_STREAM_VALUE})
     public ResponseEntity<?> updateAccommodation(@RequestPart("files") List<MultipartFile> multipartFiles, @RequestPart("accommodation") AccommodationDTO accommodationDTO, Principal principal) throws Exception {

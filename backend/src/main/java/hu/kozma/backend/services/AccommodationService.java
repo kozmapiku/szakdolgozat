@@ -12,6 +12,7 @@ import hu.kozma.backend.repository.ReservationRepository;
 import hu.kozma.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static hu.kozma.backend.repository.FileSystemRepository.getImage;
@@ -45,8 +47,14 @@ public class AccommodationService {
         accommodationRepository.save(accommodation);
     }
 
-    public List<AccommodationDTO> getAccommodations(String name, String address, Integer guests, LocalDate start, LocalDate end) {
+    public List<AccommodationDTO> getAccommodations(String name, String address, Integer guests, LocalDate start, LocalDate end, Boolean showOwn) {
         List<Accommodation> accommodations = accommodationRepository.findFiltered(name, address, guests);
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (!Optional.ofNullable(showOwn).orElse(true) && email != null) {
+            accommodations = accommodations.stream().filter(accommodation -> !accommodation.getUser().getEmail().equals(email)).toList();
+        }
 
         if (start != null && end != null) accommodations = filterAccommodationsByDate(accommodations, start, end);
         else if (start != null) accommodations = filterAccommodationsByStartDate(accommodations, start);

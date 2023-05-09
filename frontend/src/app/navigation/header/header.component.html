@@ -14,6 +14,7 @@
       <li>
         <button *ngIf="authService.authenticated" [matMenuTriggerFor]="profile" mat-button>
           <mat-icon>person</mat-icon>
+          {{authService.getUserName()}}
           <mat-icon>menu</mat-icon>
         </button>
         <button *ngIf="!authService.authenticated" [matMenuTriggerFor]="auth" mat-button>

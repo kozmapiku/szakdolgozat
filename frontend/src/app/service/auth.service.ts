@@ -12,18 +12,18 @@ import {environment} from "../../environments/environment";
 export class AuthService {
 
   authenticated = false;
-  baseUrl = environment.baseUrl;
+  baseUrl = environment.baseUrl + "/auth";
 
   constructor(private http:HttpClient, private router:Router, private tokenStorage: TokenStorageService) { }
 
   public login(email: string, password: string) {
     const body = {'email': email, 'password': password};
-    return this.http.post<Response<User>>(this.baseUrl + "/auth/login", body);
+    return this.http.post<Response<User>>(this.baseUrl + "/login", body);
   }
 
   public register(email: string, firstName: string, lastName: string, password: string) {
     const body = {'email': email, 'firstName': firstName, 'lastName': lastName, 'password': password};
-    return this.http.post<Response<string>>(this.baseUrl + "/auth/register", body);
+    return this.http.post<Response<string>>(this.baseUrl + "/register", body);
   }
 
   public update(email: string, firstName: string, lastName: string, currentPassword: string, newPassword: string) {
@@ -34,7 +34,11 @@ export class AuthService {
       'password': currentPassword,
       "newPassword": newPassword
     };
-    return this.http.post<Response<string>>(this.baseUrl + "/auth/update", body);
+    return this.http.post<Response<string>>(this.baseUrl + "/update", body);
+  }
+
+  public getUserData() {
+    return this.http.get<Response<string>>(this.baseUrl + "/user");
   }
 
   public logout() {
@@ -49,11 +53,13 @@ export class AuthService {
     }
   }
 
+  public getUserName() {
+    return this.tokenStorage.getUser().lastName + ' ' + this.tokenStorage.getUser().firstName;
+  }
+
   public getUserMail() {
     return this.tokenStorage.getUser().email;
   }
 
-  public getUserData() {
-    return this.http.get<Response<string>>(this.baseUrl + "/auth/user");
-  }
+
 }

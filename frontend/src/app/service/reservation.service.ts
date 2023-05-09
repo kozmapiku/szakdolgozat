@@ -11,18 +11,18 @@ import {Response} from "../rest/response.model";
 })
 export class ReservationService {
 
-  baseUrl = environment.baseUrl;
+  baseUrl = environment.baseUrl + "/reservation";
 
   constructor(private http: HttpClient, private router: Router) {
   }
 
   public getMyReservations() {
-    return this.http.get<ResponseList<Reservation>>(this.baseUrl + "/reservation/get_owned");
+    return this.http.get<ResponseList<Reservation>>(this.baseUrl + "/own");
   }
 
   public getDetails(id: any) {
     let queryParams = new HttpParams().append("id", id);
-    return this.http.get<Response<Reservation>>(this.baseUrl + "/reservation/get_details", {params: queryParams});
+    return this.http.get<Response<Reservation>>(this.baseUrl + "/detail", {params: queryParams});
   }
 
   public delete(id: number) {

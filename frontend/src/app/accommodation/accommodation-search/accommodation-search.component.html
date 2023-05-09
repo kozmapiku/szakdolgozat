@@ -1,36 +1,7 @@
 <div class="content">
-  <form (ngSubmit)="search(form)" [formGroup]="form" fxLayout="row" fxLayoutGap="16px">
-    <mat-form-field appearance="outline" fxFlex>
-      <mat-label>Név</mat-label>
-      <input formControlName="name" matInput type="text">
-    </mat-form-field>
-    <mat-form-field appearance="outline" fxFlex>
-      <mat-label>Cím</mat-label>
-      <input formControlName="address" matInput type="text">
-    </mat-form-field>
-    <mat-form-field appearance="outline" fxFlex>
-      <mat-label>Időpont</mat-label>
-      <mat-date-range-input [rangePicker]="picker">
-        <input formControlName="fromDate" matStartDate placeholder="Dátum kezdete" readonly>
-        <input formControlName="endDate" matEndDate placeholder="Dátum vége" readonly>
-      </mat-date-range-input>
-      <div matSuffix>
-        <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
-        <button (click)="deleteRange()" mat-icon-button type="button">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-    </mat-form-field>
-    <mat-form-field appearance="outline" fxFlex="10%">
-      <mat-label>Férőhely</mat-label>
-      <input formControlName="guests" matInput type="number">
-    </mat-form-field>
-    <div fxFlex="10%" style="padding-top: 10px">
-      <button color="primary" fxFlex mat-raised-button style="align-self: start;" type="submit">Keresés</button>
-    </div>
-
-  </form>
+  <section>
+    <app-accommodation-filter-form (filterChanged)="filterAccommodations($event)"/>
+  </section>
   <div *ngIf="accommodations.length == 0">
     <h1>Nincs találat!</h1>
   </div>

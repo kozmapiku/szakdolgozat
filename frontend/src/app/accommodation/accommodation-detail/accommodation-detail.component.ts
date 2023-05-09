@@ -6,6 +6,7 @@ import {DateRange, MatCalendarCellCssClasses} from "@angular/material/datepicker
 import {MatDialog} from "@angular/material/dialog";
 import {ReservationDialogComponent} from "../../reservation/reservation-dialog/reservation-dialog.component";
 import {AuthService} from "../../service/auth.service";
+import {ReservationDialogData} from "../../model/reservation_dialog.model";
 
 @Component({
   selector: 'app-accommodation-detail',
@@ -19,13 +20,16 @@ export class AccommodationDetailComponent implements OnInit {
   selectedDateRange: DateRange<Date> = new DateRange<Date>(null, null);
   guests!: number;
   accommodationImages: Array<object> = [];
-  user!: any;
+  availableDates: [date: Date, price: number][] = [];
   center!: google.maps.LatLngLiteral;
 
   googleMapsOptions: google.maps.MapOptions = {
     disableDoubleClickZoom: true,
     streetViewControl: false,
   };
+
+  reservationDialogData!: ReservationDialogData;
+  price: number = 0;
 
   constructor(private route: ActivatedRoute,
               private accommodationService: AccommodationService,
@@ -37,8 +41,6 @@ export class AccommodationDetailComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getDetailsFromServer()
-    this.user = this.authService.getUserMail();
-    console.log(this.user);
   }
 
   public getDetailsFromServer() {
@@ -48,6 +50,7 @@ export class AccommodationDetailComponent implements OnInit {
         this.accommodation = data.data;
         this.fillUpImages();
         this.center = {lat: this.accommodation.lat, lng: this.accommodation.lng};
+        this.calculateAvailableDates();
       },
       error: (error) => {
         console.log("Error " + JSON.stringify(error));
@@ -55,50 +58,62 @@ export class AccommodationDetailComponent implements OnInit {
     });
   }
 
+  myFilter = (date: Date): boolean => {
+    return this.availableDates
+      .some(([d, p]) => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
+  }
+
   dateClass() {
     return (date: Date): MatCalendarCellCssClasses => {
-      const del = this.accommodation.reservedDays;
-      const highlightDate = this.accommodation.announces
-        .flatMap(announceDate => this.getDates(new Date(announceDate.from), new Date(announceDate.end)))
-        .filter(d => !del.includes(Date.parse(d.toDateString())))
-        .some(d => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
-
+      const highlightDate = this.availableDates
+        .some(([d, p]) => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
       return highlightDate ? 'available-date' : 'reserved-date';
     };
   }
 
   onSelectedChange(date: Date | null): void {
+    this.price = 0;
     if (date == null) {
       return;
     }
     if (
-        this.selectedDateRange &&
-        this.selectedDateRange.start &&
-        date > this.selectedDateRange.start &&
-        !this.selectedDateRange.end
+      this.selectedDateRange &&
+      this.selectedDateRange.start &&
+      date > this.selectedDateRange.start &&
+      !this.selectedDateRange.end &&
+      this.dateValid(this.selectedDateRange.start, date)
     ) {
-      this.selectedDateRange = new DateRange(
-          this.selectedDateRange.start,
-          date
-      );
+      this.selectedDateRange = new DateRange(this.selectedDateRange.start, date);
+      this.price = this.calculatePrice();
     } else {
       this.selectedDateRange = new DateRange(date, null);
     }
   }
 
+  dateValid(start: Date, end: Date): boolean {
+    let dates = this.getDates(start, end);
+    return !dates
+      .map(date => this.availableDates
+        .some(([d, p]) => d.getDate() === date.getDate() &&
+          d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear()))
+      .includes(false);
+  }
+
   openReservationDialog() {
+    this.reservationDialogData = {
+      from: this.selectedDateRange.start,
+      end: this.selectedDateRange.end,
+      maxGuests: this.accommodation.maxGuests,
+      guests: 0,
+      price: this.price
+    };
     const dialogRef = this.dialog.open(ReservationDialogComponent, {
       width: '400px',
-      data: {
-        from: this.selectedDateRange.start,
-        end: this.selectedDateRange.end,
-        maxGuests: this.accommodation.maxGuests
-      }
+      data: this.reservationDialogData
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.guests = result;
-      this.reserve();
+      this.reserve(result);
     });
   }
 
@@ -118,31 +133,16 @@ export class AccommodationDetailComponent implements OnInit {
     return dateArray;
   }
 
-  private getDate(date: Date) {
-    return new Date(date);
+  getStar() {
+    return this.accommodation.reviews.map(review => review.star).reduce((a, b) => a + b, 0) / this.accommodation.reviews.length;
   }
 
-  private addDay(date: Date): Date {
-    var newDate = new Date(date);
-    newDate.setDate(date.getDate() + 1)
-    return newDate;
+  reservable() {
+    return this.dateSelected() && this.authService.authenticated && !this.ownAccommodation();
   }
 
-  private reserve() {
-    if (this.guests == null || this.selectedDateRange.start == null || this.selectedDateRange.end == null) {
-      return;
-    }
-    this.accommodationService.reserve(this.accommodation.id, Date.parse(this.selectedDateRange.start.toDateString()),
-        Date.parse(this.selectedDateRange.end.toDateString()), this.guests).subscribe({
-      next: (data) => {
-        console.log(JSON.stringify(data));
-        alert(data.data);
-        this.router.navigateByUrl("/");
-      },
-      error: (error) => {
-        console.log("Error " + JSON.stringify(error));
-      }
-    })
+  ownAccommodation(): boolean {
+    return this.accommodation.owner == this.authService.getUserMail();
   }
 
   private fillUpImages() {
@@ -173,11 +173,54 @@ export class AccommodationDetailComponent implements OnInit {
       })
     }
   }
-}
 
-export interface ReservationDialogData {
-  from: Date;
-  end: Date;
-  maxGuests: number;
-  guests: number;
+  private getDatesWithPrice(startDate: Date, stopDate: Date, price: number): [Date, number][] {
+    let dateArray: [Date, number][] = [];
+    let currentDate = startDate;
+    while (currentDate <= stopDate) {
+      if (currentDate > new Date()) {
+        dateArray.push([new Date(currentDate), price]);
+      }
+      currentDate = this.addDay(currentDate);
+    }
+    return dateArray;
+  }
+
+  private addDay(date: Date): Date {
+    let newDate = new Date(date);
+    newDate.setDate(date.getDate() + 1)
+    return newDate;
+  }
+
+  private reserve(reservationData: ReservationDialogData) {
+    if (reservationData == null || reservationData.end == null || reservationData.from == null || reservationData.guests == null) {
+      return;
+    }
+    this.accommodationService.reserve(this.accommodation.id, Date.parse(reservationData.from.toDateString()),
+      Date.parse(reservationData.end.toDateString()), reservationData.guests).subscribe({
+      next: (data) => {
+        console.log(JSON.stringify(data));
+        alert(data.data);
+        this.router.navigateByUrl("/");
+      },
+      error: (error) => {
+        alert(error.error.error)
+        console.log("Error " + JSON.stringify(error));
+      }
+    })
+  }
+
+  private calculateAvailableDates() {
+    const del = this.accommodation.reservedDays;
+    this.availableDates = this.accommodation.announces
+      .flatMap(announceDate => this.getDatesWithPrice(new Date(announceDate.from), new Date(announceDate.end), announceDate.price))
+      .filter(([date, price]) => !del.includes(Date.parse(date.toDateString())));
+  }
+
+  private calculatePrice() {
+    let dates = this.getDates(this.selectedDateRange.start!, this.selectedDateRange.end!);
+    return this.availableDates.filter(([date, price]) =>
+      dates.find(d => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear())
+    ).map(([date, price]) => price).reduce((a, b) => a + b, 0);
+  }
 }

@@ -1,17 +1,17 @@
 package hu.kozma.backend.dto;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
 public class AnnounceDateDTO {
-    @NonNull
+    //@NonNull
     private Long from;
-    @NonNull
+    //@NonNull
     private Long end;
     //@NonNull
     private Double price;

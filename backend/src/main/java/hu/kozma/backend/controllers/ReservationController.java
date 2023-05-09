@@ -12,20 +12,20 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reservation")
+@RequestMapping("/api/reservation")
 @AllArgsConstructor
 @CrossOrigin(origins = "*")
 public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @GetMapping("/get_owned")
+    @GetMapping("/own")
     public ResponseEntity<?> getReservations(Principal principal) {
         List<ReservationDTO> reservationDTOs = reservationService.getReservations(principal.getName());
         return RestResponseHandler.generateResponse(reservationDTOs);
     }
 
-    @GetMapping("/get_details")
+    @GetMapping("/detail")
     public ResponseEntity<?> getReservationDetails(@RequestParam("id") Long id) {
         ReservationDTO reservationDTO = reservationService.getReservation(id);
         return RestResponseHandler.generateResponse(reservationDTO);

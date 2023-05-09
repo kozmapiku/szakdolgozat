@@ -5,28 +5,23 @@ import {Accommodation} from "../model/accommodation.model";
 import {Response} from "../rest/response.model";
 import {environment} from "../../environments/environment";
 import {ResponseList} from "../rest/response-list";
+import {AccommodationFilter} from "../model/accommodation_filter.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccommodationService {
 
-  baseUrl = environment.baseUrl;
+  baseUrl = environment.baseUrl + "/accommodation";
 
   constructor(private http:HttpClient, private router:Router) { }
 
   public newAccommodation(formData: FormData) {
-    let body = formData
-    console.log(formData)
-    return this.http.post<Response<string>>(this.baseUrl + "/accommodation/new", body);
-  }
-
-  public getCities() {
-    return this.http.get<ResponseList<string>>(this.baseUrl + "/city/all");
+    return this.http.post<Response<string>>(this.baseUrl + "/create", formData);
   }
 
   public getAll() {
-    return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/accommodation/all");
+    return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/all");
   }
 
   public getFiltered(name: any, address: any, guests: any, from: number, end: number) {
@@ -37,33 +32,37 @@ export class AccommodationService {
     queryParams = !isNaN(from) ? queryParams.append("from", from) : queryParams;
     queryParams = !isNaN(end) ? queryParams.append("end", end) : queryParams;
     console.log("QueryParams ", queryParams);
-    return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/accommodation/all", {params: queryParams});
+    return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/all", {params: queryParams});
   }
 
   public getDetails(id: any) {
     let queryParams = new HttpParams().append("id", id);
-    return this.http.get<Response<Accommodation>>(this.baseUrl + "/accommodation/get_details", {params: queryParams});
+    return this.http.get<Response<Accommodation>>(this.baseUrl + "/detail", {params: queryParams});
   }
 
 
   public reserve(id: number, from: number, end: number, guests: number) {
     let body = {"id": id, "from": from, "end": end, "guests": guests}
     console.log(body)
-    return this.http.post<Response<string>>(this.baseUrl + "/accommodation/reserve", body);
+    return this.http.post<Response<string>>(this.baseUrl + "/reserve", body);
   }
 
   public getMyAccommodations() {
-    return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/accommodation/get_owned");
+    return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/own");
   }
 
   public deleteAccommodation(id: number) {
     let body = {"id": id};
-    return this.http.post<Response<string>>(this.baseUrl + "/accommodation/delete", body);
+    return this.http.post<Response<string>>(this.baseUrl + "/delete", body);
   }
 
   public modifyAccommodation(formData: FormData) {
     let body = formData
     console.log(formData)
-    return this.http.post<Response<string>>(this.baseUrl + "/accommodation/modify", body);
+    return this.http.post<Response<string>>(this.baseUrl + "/update", body);
+  }
+
+  public getAccommodations(filter: AccommodationFilter) {
+    return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/all", {params: <any>filter});
   }
 }

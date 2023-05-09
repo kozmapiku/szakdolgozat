@@ -2,16 +2,16 @@ package hu.kozma.backend.dto;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor(force = true)
+@AllArgsConstructor
 public class AccommodationDTO {
     private long id;
     @NonNull

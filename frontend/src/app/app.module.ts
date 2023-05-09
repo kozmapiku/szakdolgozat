@@ -45,6 +45,11 @@ import {GooglePlaceModule} from "ngx-google-places-autocomplete";
 import {AccommodationMapSearch} from './accommodation/accommodation-map-search/accommodation-map-search';
 import {AccommodationUpdateComponent} from './accommodation/accommodation-update/accommodation-update.component';
 import {LayoutComponent} from "./layout/layout.component";
+import {
+  AccommodationFilterFormComponent
+} from './accommodation/accommodation-filter-form/accommodation-filter-form.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {AccommodationFormComponent} from './accommodation/accommodation-form/accommodation-form.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +69,9 @@ import {LayoutComponent} from "./layout/layout.component";
     ReviewDialogComponent,
     AccommodationMapSearch,
     AccommodationUpdateComponent,
-    LayoutComponent
+    LayoutComponent,
+    AccommodationFilterFormComponent,
+    AccommodationFormComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +97,8 @@ import {LayoutComponent} from "./layout/layout.component";
     NgImageSliderModule,
     StarRatingModule.forRoot(),
     GoogleMapsModule,
-    GooglePlaceModule
+    GooglePlaceModule,
+    MatCheckboxModule
   ],
   providers: [AuthService,
     {provide: HTTP_INTERCEPTORS, useClass: XhrInterceptorService, multi: true},

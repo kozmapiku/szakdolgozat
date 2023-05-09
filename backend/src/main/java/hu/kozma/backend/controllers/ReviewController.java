@@ -11,20 +11,20 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/review")
+@RequestMapping("/api/review")
 @AllArgsConstructor
 @CrossOrigin(origins = "*")
 public class ReviewController {
 
     private ReviewService reviewService;
 
-    @PostMapping("send")
+    @PostMapping("/create")
     public ResponseEntity<?> review(@RequestBody ReviewDTO reviewDTO, Principal principal) {
         reviewService.addReview(reviewDTO, principal.getName());
         return RestResponseHandler.generateResponse("Az értékelés sikeres!");
     }
 
-    @GetMapping("/mine")
+    @GetMapping("/own")
     public ResponseEntity<?> getReviews(Principal principal) {
         List<ReviewDTO> reviewList = reviewService.getReviews(principal.getName());
         return RestResponseHandler.generateResponse(reviewList);

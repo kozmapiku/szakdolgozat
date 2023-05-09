@@ -2,10 +2,15 @@
   <mat-card fxFlex="80">
     <mat-card-header fxLayout="row">
       <div fxFlex="70">
-        <mat-card-title><h1 class="header">{{this.accommodation.name}}</h1></mat-card-title>
+        <mat-card-title>
+          <div fxLayout="row">
+            <h1 class="header">{{this.accommodation.name}}</h1>
+            <star-rating [rating]="getStar()" [starType]="'svg'"></star-rating>
+          </div>
+        </mat-card-title>
         <mat-card-subtitle><h2>{{this.accommodation.address}}</h2></mat-card-subtitle>
       </div>
-      <div *ngIf="this.accommodation.owner == this.user" fxFlex="30" fxLayout="row"
+      <div *ngIf="this.ownAccommodation()" fxFlex="30" fxLayout="row"
            style="justify-content: center; display: flex; margin-bottom: 20px">
         <button (click)="modification()" [routerLink]="['/accommodation', accommodation.id, 'modify']" color="primary"
                 mat-raised-button style="margin-right: 10px; width: 150px">
@@ -27,9 +32,11 @@
           <div fxFlex="40" fxLayout="column" fxLayoutAlign="start stretch">
             <mat-card>
               <mat-calendar (selectedChange)="onSelectedChange($event)" [dateClass]="dateClass()"
+                            [dateFilter]="myFilter"
                             [selected]="selectedDateRange"></mat-calendar>
             </mat-card>
-            <button (click)="openReservationDialog()" [disabled]="!dateSelected()" class="reserveButton"
+            <p *ngIf="this.price !== 0">Ár: {{this.price}}</p>
+            <button (click)="openReservationDialog()" [disabled]="!reservable()" class="reserveButton"
                     mat-raised-button>
               Időpont foglalása
             </button>
