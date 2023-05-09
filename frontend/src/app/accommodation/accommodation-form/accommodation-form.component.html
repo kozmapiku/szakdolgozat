@@ -1,0 +1,146 @@
+<form (ngSubmit)="saveAccommodation(form)" [formGroup]="form">
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <mat-form-field appearance="fill">
+      <mat-label>Név</mat-label>
+      <input formControlName="name" matInput maxlength="20" placeholder="Adj a szállásodnak egy nevet">
+      <mat-error *ngIf="form.hasError('required', 'name')">
+        A név megadása kötelező!
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Cím</mat-label>
+      <input (onAddressChange)="handleAddressChange($event)" [options]="addressOptions"
+             formControlName="address" matInput ngx-google-places-autocomplete placeholder="Adj meg egy címet">
+      <mat-error *ngIf="form.hasError('required', 'address')">
+        A cím megadása kötelező!
+      </mat-error>
+    </mat-form-field>
+
+    <div fxLayout="row">
+      <mat-form-field appearance="fill">
+        <mat-label>Emelet</mat-label>
+        <input formControlName="floor" matInput min="0" type="number">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Ajtó</mat-label>
+        <input formControlName="door" matInput min="0" type="number">
+      </mat-form-field>
+    </div>
+
+    <mat-form-field>
+      <mat-label>Kattints a szállásod helyére!</mat-label>
+      <input formControlName="map" hidden="hidden" matInput required>
+      <div class="map-container">
+        <google-map
+          (mapClick)="dropMarker($event)"
+          [center]="center"
+          [options]="googleMapsOptions"
+          [zoom]="zoom"
+          height="100%"
+          width="100%">
+          <map-marker
+            *ngIf="marker != null"
+            [options]="marker.options"
+            [position]="marker.position"
+          />
+        </google-map>
+      </div>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Leírás</mat-label>
+      <textarea cdkTextareaAutosize formControlName="description" matInput maxlength="2500"
+                placeholder="Adj hozzá leírást" required></textarea>
+      <mat-error *ngIf="form.hasError('required', 'description')">
+        A leírás megadása kötelező!
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Férőhely</mat-label>
+      <input formControlName="maxGuest" matInput max="100" min="1" type="number">
+      <mat-error *ngIf="form.hasError('max', 'maxGuest')">
+        A maximum férőhely 100!
+      </mat-error>
+      <mat-error *ngIf="form.hasError('min', 'maxGuest')">
+        A minimum férőhely 1!
+      </mat-error>
+    </mat-form-field>
+
+    <ng-container formArrayName="announceDates">
+      <ng-container *ngFor="let announceDateForm of announceDates.controls; let i = index">
+        <div [formGroupName]="i" class="group-width" fxLayout="row" fxLayoutGap="16px">
+          <mat-form-field fxFlex="60">
+            <mat-label>Add meg, hogy mettől meddig elérhető a szállásod!</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+              <input formControlName="fromDate" matStartDate placeholder="Dátum kezdete" readonly>
+              <input formControlName="endDate" matEndDate placeholder="Dátum vége" readonly>
+            </mat-date-range-input>
+            <div matSuffix style="display:flex">
+              <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+            </div>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+            <mat-error *ngIf="form.hasError('required', 'fromDate')">
+              A kezdő dátum formátuma hibás!
+            </mat-error>
+            <mat-error *ngIf="form.hasError('required', 'endDate')">
+              A befejező dátum formátuma hibás!
+            </mat-error>
+            <mat-error *ngIf="form.hasError('amountMinError', ['fromDate', 'price'])">
+              Legalább egy időpontban meg kell hírdetned a szállásod!
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="35">
+            <mat-label>Erre az időszakra vonatkozó ár/éjszaka</mat-label>
+            <input formControlName="price" matInput min="0" type="number">
+            <mat-error *ngIf="form.hasError('amountMinError', 'price')">
+              Legalább egy időpontban meg kell hírdetned a szállásod!
+            </mat-error>
+          </mat-form-field>
+          <div *ngIf="i == 0" fxFlex="5">
+            <button (click)="deleteAnnounceDate(i)" [disabled]="true" fxFlex mat-icon-button style="align-self: center"
+                    type="button">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+          <div *ngIf="i != 0" fxFlex="5">
+            <button (click)="deleteAnnounceDate(i)" fxFlex mat-icon-button style="align-self: center" type="button">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <button (click)="addAnnounceDate()" mat-icon-button type="button">
+      <mat-icon>add_box</mat-icon>
+    </button>
+
+    <mat-form-field>
+      <mat-label>Tölts fel egy képet! *</mat-label>
+      <input disabled matInput>
+      <button (click)="imagesInput.click()" mat-icon-button matSuffix type="button">
+        <mat-icon>attach_file</mat-icon>
+      </button>
+      <input #imagesInput (change)="selectFile($event)" accept="image/*" formControlName="imageInput" hidden id="file"
+             type="file">
+      <mat-error *ngIf="form.hasError('required', 'imageInput')">
+        Minimum egy kép feltöltése kötelező!
+      </mat-error>
+    </mat-form-field>
+
+    <div class="cardList">
+      <div *ngFor="let selected of previews; let index = index" class="preview">
+        <img (click)="this.setPrimaryImage(index)" [ngClass]="{'primaryImage' : (this.primaryImageIndex === index)}"
+             [src]="selected">
+        <button (click)="removeSelectedFile(index)" color="warn" mat-icon-button type="button">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    <button [disabled]="!form.valid || !hasImage()" color="primary" mat-raised-button type="submit">Feltöltés</button>
+  </div>
+</form>
