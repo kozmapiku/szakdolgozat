@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-    List<Reservation> findAllByUserEmail(String email);
+    List<Reservation> findByUserEmail(String email);
 
     Optional<Reservation> findByIdAndUserEmail(Long id, String userEmail);
 }

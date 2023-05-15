@@ -19,7 +19,7 @@ public class ReservationService {
     public final ReservationRepository reservationRepository;
 
     public List<ReservationDTO> getReservations(String email) {
-        List<Reservation> reservations = reservationRepository.findAllByUserEmail(email);
+        List<Reservation> reservations = reservationRepository.findByUserEmail(email);
         return reservations.stream()
                 .map(ReservationMapper::toReservationDTO)
                 .peek(reservationDTO -> reservationDTO.getAccommodation().setMainImage(getImage(reservationDTO.getMainImageLocation())))
