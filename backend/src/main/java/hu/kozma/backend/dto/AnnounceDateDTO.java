@@ -1,18 +1,20 @@
 package hu.kozma.backend.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
 @Setter
-@ToString
 @Builder
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 @AllArgsConstructor
 public class AnnounceDateDTO {
-    //@NonNull
-    private Long from;
-    //@NonNull
-    private Long end;
-    //@NonNull
+    @NotNull(message = "A kezdő dátum nem lehet üres.")
+    private Long startDate;
+    @NotNull(message = "A befejező dátum nem lehet üres.")
+    private Long endDate;
+    @NotNull
+    @Size(min = 1, max = 1000000, message = "Az ár nem megfelelő.")
     private Double price;
 }

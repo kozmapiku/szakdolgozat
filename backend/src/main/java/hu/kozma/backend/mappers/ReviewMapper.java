@@ -1,22 +1,33 @@
 package hu.kozma.backend.mappers;
 
+import hu.kozma.backend.dto.CompactReviewDTO;
 import hu.kozma.backend.dto.ReviewDTO;
+import hu.kozma.backend.dto.SaveReviewDTO;
 import hu.kozma.backend.model.Review;
 
 public class ReviewMapper {
-    public static ReviewDTO toReviewDTO(Review review) {
-        ReviewDTO reviewDTO = new ReviewDTO();
+    public static CompactReviewDTO toCompactReviewDTO(Review review) {
+        CompactReviewDTO reviewDTO = new CompactReviewDTO();
         reviewDTO.setStar(review.getStar());
         reviewDTO.setComment(review.getComment());
-        reviewDTO.setUserName(review.getUser().getEmail());
-        reviewDTO.setAccommodation(AccommodationMapper.toAccommodationDTO(review.getAccommodation()));
+        reviewDTO.setName(review.getUser().getFullName());
         return reviewDTO;
     }
 
-    public static Review toReview(ReviewDTO reviewDTO) {
+    public static Review toReview(SaveReviewDTO reviewDTO) {
         Review review = new Review();
         review.setStar(reviewDTO.getStar());
         review.setComment(reviewDTO.getComment());
         return review;
     }
+
+    public static ReviewDTO toReviewDTO(Review review) {
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setComment(review.getComment());
+        reviewDTO.setStar(review.getStar());
+        reviewDTO.setReservationId(review.getReservation().getId());
+        reviewDTO.setAccommodationDetails(AccommodationMapper.toAccommodationDetailsDTO(review.getAccommodation()));
+        return reviewDTO;
+    }
+
 }

@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+import static hu.kozma.backend.model.Role.USER;
+
 @Entity
 @Getter
 @Setter
@@ -33,11 +35,15 @@ public class User implements UserDetails {
     private boolean tokenExpired = true;
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private Role role;
+    private Role role = USER;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    public String getFullName() {
+        return lastName + " " + firstName;
     }
 
     @Override
@@ -47,12 +53,12 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return tokenExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return enabled;
     }
 
     @Override

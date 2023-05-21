@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -20,30 +21,33 @@ public class SecurityConfig {
 
     private final JwtRequestFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final AuthenticationEntryPoint authEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors()
-                .and()
-                .requiresChannel()
-                .anyRequest()
-                .requiresSecure()
-                .and()
-                .csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**", "/api/accommodation/all", "/api/accommodation/detail") //unathorized whitelist
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .cors(httpSecurityCorsConfigurer ->
+                        httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
+                .csrf(httpSecurityCsrfConfigurer ->
+                {
+                    try {
+                        httpSecurityCsrfConfigurer.disable().
+                                authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                                        authorizationManagerRequestMatcherRegistry
+                                                .requestMatchers("/api/auth/register", "/api/auth/login", "/api/accommodation/all", "/api/accommodation/detail")
+                                                .permitAll()
+                                                .anyRequest()
+                                                .authenticated());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .sessionManagement(httpSecuritySessionManagementConfigurer ->
+                        httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-        ;
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
+                        .authenticationEntryPoint(authEntryPoint));
 
         return http.build();
     }

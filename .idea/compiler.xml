@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="backend" />
-        <module name="frontend" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -19,7 +18,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="backend" options="-parameters" />
       <module name="env" options="" />
-      <module name="frontend" options="-parameters" />
+      <module name="frontend" options="" />
       <module name="szakdolgozat" options="" />
     </option>
   </component>

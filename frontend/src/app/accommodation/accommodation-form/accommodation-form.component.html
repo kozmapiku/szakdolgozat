@@ -1,11 +1,14 @@
 <form (ngSubmit)="saveAccommodation(form)" [formGroup]="form">
   <div fxLayout="column" fxLayoutAlign="center center">
     <mat-form-field appearance="fill">
-      <mat-label>Név</mat-label>
-      <input formControlName="name" matInput maxlength="20" placeholder="Adj a szállásodnak egy nevet">
-      <mat-error *ngIf="form.hasError('required', 'name')">
-        A név megadása kötelező!
-      </mat-error>
+        <mat-label>Név</mat-label>
+        <input formControlName="name" matInput maxlength="20" placeholder="Adj a szállásodnak egy nevet">
+        <mat-error *ngIf="form.hasError('required', 'name')">
+            A név megadása kötelező!
+        </mat-error>
+        <mat-error *ngIf="form.hasError('minlength', 'name')">
+            A név túl rövid!
+        </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
@@ -132,15 +135,24 @@
       </mat-error>
     </mat-form-field>
 
-    <div class="cardList">
-      <div *ngFor="let selected of previews; let index = index" class="preview">
-        <img (click)="this.setPrimaryImage(index)" [ngClass]="{'primaryImage' : (this.primaryImageIndex === index)}"
-             [src]="selected">
-        <button (click)="removeSelectedFile(index)" color="warn" mat-icon-button type="button">
-          <mat-icon>delete</mat-icon>
-        </button>
+      <div class="cardList">
+          <div *ngFor="let selected of previews; let index = index" class="preview">
+              <img (click)="this.setPrimaryImage(index)"
+                   [ngClass]="{'primaryImage' : (this.primaryImageIndex === index)}"
+                   [src]="selected">
+              <button (click)="removeSelectedFile(index)" color="warn" mat-icon-button type="button">
+                  <mat-icon>delete</mat-icon>
+              </button>
+          </div>
       </div>
-    </div>
-    <button [disabled]="!form.valid || !hasImage()" color="primary" mat-raised-button type="submit">Feltöltés</button>
+      <div *ngIf="(id === null || id === undefined); then thenBlock else elseBlock"></div>
+      <ng-template #thenBlock>
+          <button [disabled]="!form.valid || !hasImage()" color="primary" mat-raised-button type="submit">Feltöltés
+          </button>
+      </ng-template>
+      <ng-template #elseBlock>
+          <button [disabled]="!form.valid || !hasImage()" color="primary" mat-raised-button type="submit">Módosítás
+          </button>
+      </ng-template>
   </div>
 </form>

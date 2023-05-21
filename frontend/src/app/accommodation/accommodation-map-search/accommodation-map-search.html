@@ -20,7 +20,7 @@
             <h1><a
               [routerLink]="['/accommodation', accommodations[index].id, 'details']">{{accommodations[index].name}}</a>
             </h1>
-            <star-rating [rating]="getStar(accommodations[index])" [starType]="'svg'"></star-rating>
+            <star-rating [rating]="accommodations[index].star" [starType]="'svg'"></star-rating>
             <h2>{{accommodations[index].address}}</h2>
             <img [src]="'data:image/jpeg;base64,' + accommodations[index].mainImage" alt="Szállásról egy fénykép"
                  style="width: 100%">

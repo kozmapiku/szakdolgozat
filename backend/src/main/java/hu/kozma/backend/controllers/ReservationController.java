@@ -2,6 +2,8 @@ package hu.kozma.backend.controllers;
 
 import hu.kozma.backend.dto.ReservationDTO;
 import hu.kozma.backend.dto.SimpleIdDTO;
+import hu.kozma.backend.mappers.ReservationMapper;
+import hu.kozma.backend.model.Reservation;
 import hu.kozma.backend.rest.RestResponseHandler;
 import hu.kozma.backend.services.ReservationService;
 import lombok.AllArgsConstructor;
@@ -32,8 +34,17 @@ public class ReservationController {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<?> deleteReservation(@RequestBody SimpleIdDTO deleteDTO, Principal principal) {
-        reservationService.deleteReservation(deleteDTO.getId(), principal.getName());
+    public ResponseEntity<?> deleteReservation(@RequestBody Long id, Principal principal) {
+        reservationService.deleteReservation(id, principal.getName());
         return RestResponseHandler.generateResponse("A törlés sikeres!");
     }
+/*
+    @PostMapping("/reserve")
+    public ResponseEntity<?> addNewReservation(@RequestBody ReservationDTO reservationDTO, Principal principal) {
+        Reservation reservation = ReservationMapper.toReservation(reservationDTO);
+        accommodationService.reserveAccommodation(reservationDTO.getId(), reservation, principal.getName());
+        return RestResponseHandler.generateResponse("A foglalás sikeres!");
+    }
+
+ */
 }

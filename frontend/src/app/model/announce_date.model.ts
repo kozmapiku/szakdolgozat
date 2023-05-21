@@ -1,5 +1,5 @@
 export interface AnnounceDate{
-  from: number
-  end: number
-  price: number
+    startDate: number
+    endDate: number
+    price: number
 }

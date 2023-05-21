@@ -1,13 +1,13 @@
 package hu.kozma.backend.controllers;
 
-import hu.kozma.backend.dto.AccommodationDTO;
-import hu.kozma.backend.dto.ReservationDTO;
-import hu.kozma.backend.dto.SimpleIdDTO;
+import hu.kozma.backend.dto.*;
 import hu.kozma.backend.mappers.MapperUtils;
 import hu.kozma.backend.mappers.ReservationMapper;
+import hu.kozma.backend.model.Accommodation;
 import hu.kozma.backend.model.Reservation;
 import hu.kozma.backend.rest.RestResponseHandler;
 import hu.kozma.backend.services.AccommodationService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +28,8 @@ public class AccommodationController {
     private final AccommodationService accommodationService;
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAccommodations(@RequestParam(value = "name", required = false) String name,
-                                               @RequestParam(value = "address", required = false) String address,
-                                               @RequestParam(value = "guests", required = false) Integer guests,
-                                               @RequestParam(value = "fromDate", required = false) Long from,
-                                               @RequestParam(value = "endDate", required = false) Long end,
-                                               @RequestParam(value = "showOwn", required = false) Boolean showOwn) {
-        List<AccommodationDTO> accommodationDTOs = accommodationService.getAccommodations(name, address, guests, MapperUtils.toDate(from), MapperUtils.toDate(end), showOwn);
+    public ResponseEntity<?> getAccommodations(SearchAccommodationDTO searchAccommodationDTO) {
+        List<AccommodationDTO> accommodationDTOs = accommodationService.getAccommodations(searchAccommodationDTO);
         return RestResponseHandler.generateResponse(accommodationDTOs);
     }
 
@@ -46,35 +41,33 @@ public class AccommodationController {
 
     @GetMapping("/detail")
     public ResponseEntity<?> getAccommodationDetails(@RequestParam(value = "id") Long id) {
-        AccommodationDTO accommodationDTO = accommodationService.getAccommodation(id);
+        AccommodationDetailsDTO accommodationDTO = accommodationService.getAccommodation(id);
         return RestResponseHandler.generateResponse(accommodationDTO);
     }
 
-    @PostMapping(path = "/create", produces = {
-            MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity<?> addAccommodation(@RequestPart("files") List<MultipartFile> multipartFiles, @RequestPart("accommodation") AccommodationDTO accommodationDTO, Principal principal) throws Exception {
-        accommodationService.saveAccommodation(accommodationDTO, multipartFiles, accommodationDTO.getMainImageIndex(), principal.getName());
+    @PostMapping(path = "/create",
+            produces = {MediaType.APPLICATION_JSON_VALUE},
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, APPLICATION_OCTET_STREAM_VALUE})
+    public ResponseEntity<?> addAccommodation(@RequestPart("files") List<MultipartFile> multipartFiles,
+                                              @Valid @RequestPart("accommodation") SaveAccommodationDTO accommodationDTO,
+                                              Principal principal) throws Exception {
+        accommodationService.saveAccommodation(accommodationDTO, multipartFiles, principal.getName());
         return RestResponseHandler.generateResponse("Szállás létrehozása sikeres!");
     }
 
     @PostMapping(path = "/update",
             produces = {MediaType.APPLICATION_JSON_VALUE},
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, APPLICATION_OCTET_STREAM_VALUE})
-    public ResponseEntity<?> updateAccommodation(@RequestPart("files") List<MultipartFile> multipartFiles, @RequestPart("accommodation") AccommodationDTO accommodationDTO, Principal principal) throws Exception {
-        accommodationService.modifyAccommodation(accommodationDTO, multipartFiles, accommodationDTO.getMainImageIndex(), principal.getName());
+    public ResponseEntity<?> updateAccommodation(@RequestPart("files") List<MultipartFile> multipartFiles,
+                                                 @RequestPart("accommodation") UpdateAccommodationDTO accommodationDTO,
+                                                 Principal principal) throws Exception {
+        accommodationService.modifyAccommodation(accommodationDTO, multipartFiles, 0, principal.getName());
         return RestResponseHandler.generateResponse("Szállás módosítása sikeres!");
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<?> deleteAccommodation(@RequestBody SimpleIdDTO deleteDTO, Principal principal) {
-        accommodationService.deleteAccommodation(deleteDTO.getId(), principal.getName());
+    public ResponseEntity<?> deleteAccommodation(@RequestBody Long id, Principal principal) {
+        accommodationService.deleteAccommodation(id, principal.getName());
         return RestResponseHandler.generateResponse("A törlés sikeres!");
-    }
-
-    @PostMapping("/reserve")
-    public ResponseEntity<?> addNewReservation(@RequestBody ReservationDTO reservationDTO, Principal principal) {
-        Reservation reservation = ReservationMapper.toReservation(reservationDTO);
-        accommodationService.reserveAccommodation(reservationDTO.getId(), reservation, principal.getName());
-        return RestResponseHandler.generateResponse("A foglalás sikeres!");
     }
 }

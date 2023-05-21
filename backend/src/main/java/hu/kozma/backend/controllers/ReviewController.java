@@ -1,8 +1,11 @@
 package hu.kozma.backend.controllers;
 
+import hu.kozma.backend.dto.CompactReviewDTO;
 import hu.kozma.backend.dto.ReviewDTO;
+import hu.kozma.backend.dto.SaveReviewDTO;
 import hu.kozma.backend.rest.RestResponseHandler;
 import hu.kozma.backend.services.ReviewService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +22,7 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> review(@RequestBody ReviewDTO reviewDTO, Principal principal) {
+    public ResponseEntity<?> review(@Valid @RequestBody SaveReviewDTO reviewDTO, Principal principal) {
         reviewService.addReview(reviewDTO, principal.getName());
         return RestResponseHandler.generateResponse("Az értékelés sikeres!");
     }

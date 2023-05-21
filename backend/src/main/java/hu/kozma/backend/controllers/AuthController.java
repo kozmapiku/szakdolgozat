@@ -1,11 +1,14 @@
 package hu.kozma.backend.controllers;
 
 import hu.kozma.backend.dto.LoginDTO;
+import hu.kozma.backend.dto.RegisterDTO;
+import hu.kozma.backend.dto.UpdateUserDTO;
 import hu.kozma.backend.dto.UserDTO;
 import hu.kozma.backend.exceptions.UsernameAlreadyTakenException;
 import hu.kozma.backend.exceptions.WrongPasswordException;
 import hu.kozma.backend.rest.RestResponseHandler;
 import hu.kozma.backend.services.AuthenticationService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,24 +25,24 @@ public class  AuthController {
 
     @RequestMapping("/user")
     public ResponseEntity<?> getUser(Principal user) {
-        LoginDTO loginDTO = authenticationService.getUser(user.getName());
-        return RestResponseHandler.generateResponse(loginDTO);
+        UserDTO userDTO = authenticationService.getUser(user.getName());
+        return RestResponseHandler.generateResponse(userDTO);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserDTO userDTO) throws UsernameAlreadyTakenException {
-        authenticationService.register(userDTO);
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterDTO registerDTO) throws UsernameAlreadyTakenException {
+        authenticationService.register(registerDTO);
         return RestResponseHandler.generateResponse("A regisztráció sikeres volt!");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserDTO userDTO) {
-        LoginDTO loginDTO = authenticationService.login(userDTO);
-        return RestResponseHandler.generateResponse(loginDTO);
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO) {
+        UserDTO userDTO = authenticationService.login(loginDTO);
+        return RestResponseHandler.generateResponse(userDTO);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO, Principal principal) throws WrongPasswordException {
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserDTO userDTO, Principal principal) {
         authenticationService.updateUser(userDTO, principal.getName(), userDTO.getNewPassword());
         return RestResponseHandler.generateResponse("Felhasználói adatok megváltoztatása sikeres!");
     }

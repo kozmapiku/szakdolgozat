@@ -1,14 +1,14 @@
-<div fxLayoutAlign="center center">
-  <mat-card fxFlex="80">
-    <mat-card-header fxLayout="row">
-      <div fxFlex="70">
-        <mat-card-title>
-          <div fxLayout="row">
-            <h1 class="header">{{this.accommodation.name}}</h1>
-            <star-rating [rating]="getStar()" [starType]="'svg'"></star-rating>
-          </div>
-        </mat-card-title>
-        <mat-card-subtitle><h2>{{this.accommodation.address}}</h2></mat-card-subtitle>
+<div *ngIf="this.accommodation != undefined" fxLayoutAlign="center center">
+    <mat-card fxFlex="80">
+        <mat-card-header fxLayout="row">
+            <div fxFlex="70">
+                <mat-card-title>
+                    <div fxLayout="row">
+                        <h1 class="header">{{this.accommodation.name}}</h1>
+                        <star-rating [rating]="this.accommodation.star" [starType]="'svg'"></star-rating>
+                    </div>
+                </mat-card-title>
+                <mat-card-subtitle><h2>{{this.accommodation.address}}</h2></mat-card-subtitle>
       </div>
       <div *ngIf="this.ownAccommodation()" fxFlex="30" fxLayout="row"
            style="justify-content: center; display: flex; margin-bottom: 20px">

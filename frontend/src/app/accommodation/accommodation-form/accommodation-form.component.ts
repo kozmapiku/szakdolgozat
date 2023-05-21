@@ -77,29 +77,29 @@ export class AccommodationFormComponent implements OnInit {
         console.log(JSON.stringify(data));
         this.accommodation = data.data;
         this.fillUpImages();
-        this.center = {lat: this.accommodation.lat, lng: this.accommodation.lng};
-        this.form.get("name")?.setValue(this.accommodation.name);
-        this.form.get("address")?.setValue(this.accommodation.address);
-        this.form.get("floor")?.setValue(this.accommodation.floor);
-        this.form.get("door")?.setValue(this.accommodation.door);
-        this.form.get("map")?.setValue("asd");
-        this.form.get("description")?.setValue(this.accommodation.description);
-        this.form.get("maxGuest")?.setValue(this.accommodation.maxGuests);
+          this.center = {lat: this.accommodation.lat, lng: this.accommodation.lng};
+          this.form.get("name")?.setValue(this.accommodation.name);
+          this.form.get("address")?.setValue(this.accommodation.address);
+          this.form.get("floor")?.setValue(this.accommodation.floor);
+          this.form.get("door")?.setValue(this.accommodation.door);
+          this.form.get("map")?.setValue("asd");
+          this.form.get("description")?.setValue(this.accommodation.description);
+          this.form.get("maxGuest")?.setValue(this.accommodation.maxGuests);
 
-        this.announceDates.at(0).get("price")?.setValue(this.accommodation.announces[0].price);
-        this.announceDates.at(0).get("fromDate")?.setValue(new Date(this.accommodation.announces[0].from));
-        this.announceDates.at(0).get("endDate")?.setValue(new Date(this.accommodation.announces[0].end));
-        this.accommodation.announces.slice(1).forEach(announce => this.addAnnounceDateFilled(new Date(announce.from), new Date(announce.end), announce.price));
-        this.marker = {
-          position: {
-            lat: this.accommodation.lat,
-            lng: this.accommodation.lng,
-          },
-          options: {
-            animation: google.maps.Animation.DROP,
-          },
-        }
-        this.center.lng = this.accommodation.lng;
+          this.announceDates.at(0).get("price")?.setValue(this.accommodation.announces[0].price);
+          this.announceDates.at(0).get("fromDate")?.setValue(new Date(this.accommodation.announces[0].startDate));
+          this.announceDates.at(0).get("endDate")?.setValue(new Date(this.accommodation.announces[0].endDate));
+          this.accommodation.announces.slice(1).forEach(announce => this.addAnnounceDateFilled(new Date(announce.startDate), new Date(announce.endDate), announce.price));
+          this.marker = {
+              position: {
+                  lat: this.accommodation.lat,
+                  lng: this.accommodation.lng,
+              },
+              options: {
+                  animation: google.maps.Animation.DROP,
+              },
+          }
+          this.center.lng = this.accommodation.lng;
         this.center.lat = this.accommodation.lat;
 
 
@@ -248,30 +248,31 @@ export class AccommodationFormComponent implements OnInit {
   }
 
   private uploadToServer(formData: FormData) {
-    if (this.id != null) {
-      this.accommodationService.newAccommodation(formData)
-        .subscribe({
-          next: (data) => {
-            console.log(data)
-            alert(data.data);
-            this.router.navigateByUrl("/");
-          },
-          error: (error) => {
-            alert(error.error.error)
-            console.log("Error " + JSON.stringify(error));
-          }
-        });
-    } else {
-      this.accommodationService.modifyAccommodation(formData)
-        .subscribe({
-          next: (data) => {
-            console.log(data)
-            alert(data.data);
-            this.router.navigateByUrl("/");
-          },
-          error: (error) => {
-            console.log("Error " + JSON.stringify(error));
-            alert(error.error.error);
+      console.log("id" + this.id);
+      if (this.id === null || this.id === undefined) {
+          this.accommodationService.newAccommodation(formData)
+              .subscribe({
+                  next: (data) => {
+                      console.log(data)
+                      alert(data.data);
+                      this.router.navigateByUrl("/");
+                  },
+                  error: (error) => {
+                      alert(error.error.error)
+                      console.log("Error " + JSON.stringify(error));
+                  }
+              });
+      } else {
+          this.accommodationService.modifyAccommodation(formData)
+              .subscribe({
+                  next: (data) => {
+                      console.log(data)
+                      alert(data.data);
+                      this.router.navigateByUrl("/");
+                  },
+                  error: (error) => {
+                      console.log("Error " + JSON.stringify(error));
+                      alert(error.error.error);
           }
         });
     }

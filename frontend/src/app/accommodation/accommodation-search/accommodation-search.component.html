@@ -11,7 +11,7 @@
         <mat-card-header>
           <mat-card-title>{{accommodation.name}}</mat-card-title>
           <mat-card-subtitle>
-            <star-rating [rating]="getStar(accommodations[index])" [starType]="'svg'"></star-rating>
+            <star-rating [rating]="accommodation.star" [starType]="'svg'"></star-rating>
           </mat-card-subtitle>
         </mat-card-header>
         <img [src]="'data:image/jpeg;base64,' + accommodation.mainImage" alt="Szállásról egy fénykép" mat-card-image>

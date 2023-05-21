@@ -16,8 +16,6 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "index")
-    private Integer index;
     @Column(name = "location")
     private String location;
     @ToString.Exclude
@@ -27,10 +25,9 @@ public class Image {
     @Column(name = "is_main")
     private boolean isMain;
 
-    public Image(String location, Integer index, boolean isMain) {
+    public Image(String location, boolean isMain) {
         this.location = location;
         this.isMain = isMain;
-        this.index = index;
     }
 
     public void deleteAccommodation() {

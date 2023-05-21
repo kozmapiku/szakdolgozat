@@ -20,7 +20,7 @@ public class ReservationMapper {
         reservationDTO.setEnd(MapperUtils.toLongDate(reservation.getEndDate()));
         reservationDTO.setPrice(reservation.getPrice());
         if (reservation.getReview() != null) {
-            reservationDTO.setReview(ReviewMapper.toReviewDTO(reservation.getReview()));
+            reservationDTO.setReview(ReviewMapper.toCompactReviewDTO(reservation.getReview()));
         }
         reservationDTO.setAccommodation(AccommodationMapper.toAccommodationDTO(reservation.getAccommodation()));
         reservationDTO.setMainImageLocation(reservation.getAccommodation().getMainImage().getLocation());

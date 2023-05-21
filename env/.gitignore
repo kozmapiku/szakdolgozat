@@ -37,5 +37,5 @@ build/
 ### Mac OS ###
 .DS_Store
 /angular/frontend/
-/spring-boot/backend-1.0-SNAPSHOT.jar
+/spring-boot/backend.jar
 /angular/nginx.conf

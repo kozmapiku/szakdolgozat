@@ -48,11 +48,12 @@ export class ProfileComponent implements OnInit {
   getUserData(): void {
     this.authService.getUserData().subscribe({
         next: (data) => {
-          console.log(JSON.stringify(data));
-          this.user = data;
-          this.form.get("email")?.setValue(this.user.email);
-          this.form.get("firstName")?.setValue(this.user.firstName);
-          this.form.get("lastName")?.setValue(this.user.lastName);
+            console.log(JSON.stringify(data));
+            this.user = data.data;
+            console.log(this.user);
+            this.form.get("email")?.setValue(this.user.email);
+            this.form.get("firstName")?.setValue(this.user.firstName);
+            this.form.get("lastName")?.setValue(this.user.lastName);
         },
         error: (error) => {
           console.log("Error " + JSON.stringify(error));

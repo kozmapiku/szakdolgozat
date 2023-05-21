@@ -1,27 +1,18 @@
 package hu.kozma.backend.dto;
 
 import hu.kozma.backend.model.User;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginDTO {
-    private String firstName;
-    private String lastName;
+    @Email(message = "Az e-mail formátuma nem megfelelő.")
     private String email;
-    private String token;
-    private Long expiresIn;
-
-    public LoginDTO(User user, String token, Long expiresIn) {
-        firstName = user.getFirstName();
-        lastName = user.getLastName();
-        email = user.getEmail();
-        this.expiresIn = expiresIn;
-        this.token = token;
-    }
-
-    public LoginDTO() {
-
-    }
+    @Size(min = 8, message = "A jelszó nem elég hosszú.")
+    private String password;
 }

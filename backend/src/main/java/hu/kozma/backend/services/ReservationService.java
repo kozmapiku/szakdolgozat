@@ -30,7 +30,7 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
         ReservationDTO reservationDTO = ReservationMapper.toReservationDTO(reservation);
-        reservationDTO.getAccommodation().setImages(getImages(reservation.getAccommodation().getImages()));
+        //reservationDTO.getAccommodation().setImages(getImages(reservation.getAccommodation().getImages()));
         return reservationDTO;
     }
 

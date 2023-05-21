@@ -22,10 +22,10 @@ export class ReviewService {
       "star": reviewStars,
       "comment": description
     };
-    return this.http.post<Response<string>>(this.baseUrl + "/review/create", body);
+    return this.http.post<Response<string>>(this.baseUrl + "/create", body);
   }
 
   public getMyReview() {
-    return this.http.get<ResponseList<Review>>(this.baseUrl + "/review/own");
+      return this.http.get<ResponseList<Review>>(this.baseUrl + "/own");
   }
 }

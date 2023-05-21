@@ -38,34 +38,34 @@ export class AccommodationDetailComponent implements OnInit {
               private authService: AuthService) {
   }
 
-  ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.getDetailsFromServer()
-  }
+    ngOnInit(): void {
+        this.id = this.route.snapshot.paramMap.get('id');
+        this.getDetailsFromServer()
+    }
 
-  public getDetailsFromServer() {
-    this.accommodationService.getDetails(this.id).subscribe({
-      next: (data) => {
-        console.log(JSON.stringify(data));
-        this.accommodation = data.data;
-        this.fillUpImages();
-        this.center = {lat: this.accommodation.lat, lng: this.accommodation.lng};
-        this.calculateAvailableDates();
-      },
-      error: (error) => {
-        console.log("Error " + JSON.stringify(error));
-      }
-    });
-  }
+    public async getDetailsFromServer() {
+        await this.accommodationService.getDetails(this.id).subscribe({
+            next: (data) => {
+                console.log(JSON.stringify(data));
+                this.accommodation = data.data;
+                this.fillUpImages();
+                this.center = {lat: this.accommodation.lat, lng: this.accommodation.lng};
+                this.calculateAvailableDates();
+            },
+            error: (error) => {
+                console.log("Error " + JSON.stringify(error));
+            }
+        });
+    }
 
-  myFilter = (date: Date): boolean => {
-    return this.availableDates
-      .some(([d, p]) => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
-  }
+    myFilter = (date: Date): boolean => {
+        return this.availableDates
+            .some(([d, p]) => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
+    }
 
-  dateClass() {
-    return (date: Date): MatCalendarCellCssClasses => {
-      const highlightDate = this.availableDates
+    dateClass() {
+        return (date: Date): MatCalendarCellCssClasses => {
+            const highlightDate = this.availableDates
         .some(([d, p]) => d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getFullYear() === date.getFullYear());
       return highlightDate ? 'available-date' : 'reserved-date';
     };
@@ -213,7 +213,7 @@ export class AccommodationDetailComponent implements OnInit {
   private calculateAvailableDates() {
     const del = this.accommodation.reservedDays;
     this.availableDates = this.accommodation.announces
-      .flatMap(announceDate => this.getDatesWithPrice(new Date(announceDate.from), new Date(announceDate.end), announceDate.price))
+        .flatMap(announceDate => this.getDatesWithPrice(new Date(announceDate.startDate), new Date(announceDate.endDate), announceDate.price))
       .filter(([date, price]) => !del.includes(Date.parse(date.toDateString())));
   }
 

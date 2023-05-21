@@ -1,14 +1,14 @@
 package hu.kozma.backend.dto;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Getter
 @Setter
 @ToString
+@Builder
+@AllArgsConstructor
 public class SimpleIdDTO {
-    @NonNull
+    @NotNull
     private Long id;
 }

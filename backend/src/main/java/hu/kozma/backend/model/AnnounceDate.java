@@ -15,7 +15,6 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class AnnounceDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

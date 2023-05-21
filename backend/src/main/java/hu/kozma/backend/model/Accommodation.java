@@ -79,7 +79,7 @@ public class Accommodation {
     }
 
     public Image getMainImage() {
-        return images.stream().filter(Image::isMain).findFirst().orElse(images.stream().findFirst().get());
+        return images.stream().filter(Image::isMain).findFirst().orElseThrow(EntityNotFoundException::new);
     }
 
     public void deleteReservation(Reservation reservation) {

@@ -1,27 +1,22 @@
 package hu.kozma.backend.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@ToString
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReviewDTO {
-    @NotNull
-    private Long accommodationId;
-    @NotNull
-    private Long reservationId;
-    @NotNull
-    private Integer star;
-    @Nullable
     private String comment;
-    @Nullable
-    private AccommodationDTO accommodation;
-    @Nullable
-    @JsonProperty("user_name")
-    private String userName;
+    private Integer star;
+    private Long reservationId;
+    private AccommodationAltDTO accommodationDetails;
 }

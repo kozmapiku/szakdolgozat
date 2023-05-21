@@ -1,15 +1,26 @@
 package hu.kozma.backend.mappers;
 
 import hu.kozma.backend.dto.AccommodationDTO;
+import hu.kozma.backend.dto.AccommodationDetailsDTO;
+import hu.kozma.backend.dto.SaveAccommodationDTO;
 import hu.kozma.backend.model.Accommodation;
-
-import java.util.stream.Collectors;
+import hu.kozma.backend.model.Review;
 
 public class AccommodationMapper {
 
     public static Accommodation toAccommodation(AccommodationDTO accommodationDTO) {
         Accommodation accommodation = new Accommodation();
         accommodation.setId(accommodationDTO.getId());
+        accommodation.setName(accommodationDTO.getName());
+        accommodation.setAddress(accommodationDTO.getAddress());
+        accommodation.setLat(accommodationDTO.getLat());
+        accommodation.setLng(accommodationDTO.getLng());
+        accommodation.setMaxGuests(accommodationDTO.getMaxGuests());
+        return accommodation;
+    }
+
+    public static Accommodation toAccommodation(SaveAccommodationDTO accommodationDTO) {
+        Accommodation accommodation = new Accommodation();
         accommodation.setName(accommodationDTO.getName());
         accommodation.setAddress(accommodationDTO.getAddress());
         accommodation.setFloor(accommodationDTO.getFloor());
@@ -28,25 +39,19 @@ public class AccommodationMapper {
         accommodationDTO.setId(accommodation.getId());
         accommodationDTO.setName(accommodation.getName());
         accommodationDTO.setAddress(accommodation.getAddress());
-        accommodationDTO.setFloor(accommodation.getFloor());
-        accommodationDTO.setDoor(accommodation.getDoor());
         accommodationDTO.setLat(accommodation.getLat());
         accommodationDTO.setLng(accommodation.getLng());
-        accommodationDTO.setDescription(accommodation.getDescription());
         accommodationDTO.setMaxGuests(accommodation.getMaxGuests());
-        accommodationDTO.setMainImageIndex(accommodation.getMainImage().getIndex());
-        accommodationDTO.setOwner(accommodation.getUser().getEmail());
+        accommodationDTO.setStar(accommodation.getReviews().stream().mapToDouble(Review::getStar).average().orElse(0.0));
         return accommodationDTO;
     }
 
-    public static AccommodationDTO toAccommodationDetailsDTO(Accommodation accommodation) {
-        AccommodationDTO accommodationDTO = toAccommodationDTO(accommodation);
-        accommodationDTO.setAnnounces(accommodation.getAnnounces().stream()
-                .map(AnnounceDateMapper::toAnnounceDateDTO)
-                .collect(Collectors.toList()));
-        accommodationDTO.setReviews(accommodation.getReviews().stream()
-                .map(ReviewMapper::toReviewDTO)
-                .toList());
-        return accommodationDTO;
+    public static AccommodationDetailsDTO toAccommodationDetailsDTO(Accommodation accommodation) {
+        AccommodationDetailsDTO accommodationDetailsDTO = new AccommodationDetailsDTO(toAccommodationDTO(accommodation));
+        accommodationDetailsDTO.setOwner(accommodation.getUser().getEmail());
+        accommodationDetailsDTO.setDescription(accommodation.getDescription());
+        accommodationDetailsDTO.setAnnounces(accommodation.getAnnounces().stream().map(AnnounceDateMapper::toAnnounceDateDTO).toList());
+        accommodationDetailsDTO.setReviews(accommodation.getReviews().stream().map(ReviewMapper::toCompactReviewDTO).toList());
+        return accommodationDetailsDTO;
     }
 }
