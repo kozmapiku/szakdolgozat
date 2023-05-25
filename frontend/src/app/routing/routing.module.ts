@@ -13,21 +13,22 @@ import {ProfileComponent} from "../authorization/profile/profile.component";
 import {ReservationDetailsComponent} from "../reservation/reservation-details/reservation-details.component";
 import {AccommodationMapSearch} from "../accommodation/accommodation-map-search/accommodation-map-search";
 import {AccommodationUpdateComponent} from "../accommodation/accommodation-update/accommodation-update.component";
+import {authGuard} from "../service/auth.guard";
 
 const routes: Routes = [
-  {path: 'home', component: AccommodationSearchComponent},
-  {path: '', redirectTo: '/home', pathMatch: 'full'},
-  {path: 'login', component: LoginComponent},
-  {path: 'accommodation/create', component: AccommodationCreateComponent},
-  {path: 'register', component: RegisterComponent},
-  {path: 'accommodation/:id/details', component: AccommodationDetailComponent},
-  {path: 'accommodation/mine', component: AccommodationOwnComponent},
-  {path: 'review/mine', component: ReviewOwnComponent},
-  {path: 'reservation/all', component: ReservationOwnComponent},
-  {path: 'profile', component: ProfileComponent},
-  {path: 'reservation/:id/details', component: ReservationDetailsComponent},
-  {path: 'map-search', component: AccommodationMapSearch},
-  {path: 'accommodation/:id/modify', component: AccommodationUpdateComponent}
+    {path: 'home', component: AccommodationSearchComponent},
+    {path: '', redirectTo: '/home', pathMatch: 'full'},
+    {path: 'login', component: LoginComponent},
+    {path: 'accommodation/create', component: AccommodationCreateComponent, canActivate: [authGuard]},
+    {path: 'register', component: RegisterComponent},
+    {path: 'accommodation/:id/details', component: AccommodationDetailComponent},
+    {path: 'accommodation/mine', component: AccommodationOwnComponent, canActivate: [authGuard]},
+    {path: 'review/mine', component: ReviewOwnComponent, canActivate: [authGuard]},
+    {path: 'reservation/all', component: ReservationOwnComponent, canActivate: [authGuard]},
+    {path: 'profile', component: ProfileComponent, canActivate: [authGuard]},
+    {path: 'reservation/:id/details', component: ReservationDetailsComponent, canActivate: [authGuard]},
+    {path: 'map-search', component: AccommodationMapSearch},
+    {path: 'accommodation/:id/modify', component: AccommodationUpdateComponent, canActivate: [authGuard]}
 ];
 
 @NgModule({

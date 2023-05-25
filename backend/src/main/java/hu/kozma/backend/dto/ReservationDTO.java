@@ -9,12 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 public class ReservationDTO {
-    private Long from;
-    private Long end;
+    private AccommodationAltDTO accommodation;
+    private Long startDate;
+    private Long endDate;
     private Long id;
     private Integer guests;
     private Double price;
-    private AccommodationDTO accommodation;
-    private String mainImageLocation;
+    private Boolean isEnded;
     private CompactReviewDTO review;
 }

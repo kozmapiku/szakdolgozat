@@ -32,6 +32,6 @@ export class ReservationOwnComponent implements OnInit {
   }
 
   public expired(index: number) {
-    return this.reservations[index].end < Date.parse(new Date().toDateString());
+    return this.reservations[index].endDate < Date.parse(new Date().toDateString());
   }
 }

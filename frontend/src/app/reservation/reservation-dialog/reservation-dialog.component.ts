@@ -12,6 +12,7 @@ export class ReservationDialogComponent implements OnInit {
   constructor(
       public dialogRef: MatDialogRef<ReservationDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: ReservationDialogData) {
+      console.log(data)
   }
 
   onNoClick(): void {

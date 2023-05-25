@@ -1,11 +1,11 @@
 package hu.kozma.backend.controllers;
 
 import hu.kozma.backend.dto.ReservationDTO;
-import hu.kozma.backend.dto.SimpleIdDTO;
-import hu.kozma.backend.mappers.ReservationMapper;
-import hu.kozma.backend.model.Reservation;
+import hu.kozma.backend.dto.SaveReservation;
+import hu.kozma.backend.dto.UpdateReservationDTO;
 import hu.kozma.backend.rest.RestResponseHandler;
 import hu.kozma.backend.services.ReservationService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +28,8 @@ public class ReservationController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<?> getReservationDetails(@RequestParam("id") Long id) {
-        ReservationDTO reservationDTO = reservationService.getReservation(id);
+    public ResponseEntity<?> getReservationDetails(@RequestParam("id") Long id, Principal principal) {
+        ReservationDTO reservationDTO = reservationService.getReservation(id, principal.getName());
         return RestResponseHandler.generateResponse(reservationDTO);
     }
 
@@ -38,13 +38,16 @@ public class ReservationController {
         reservationService.deleteReservation(id, principal.getName());
         return RestResponseHandler.generateResponse("A törlés sikeres!");
     }
-/*
+
     @PostMapping("/reserve")
-    public ResponseEntity<?> addNewReservation(@RequestBody ReservationDTO reservationDTO, Principal principal) {
-        Reservation reservation = ReservationMapper.toReservation(reservationDTO);
-        accommodationService.reserveAccommodation(reservationDTO.getId(), reservation, principal.getName());
+    public ResponseEntity<?> addNewReservation(@Valid @RequestBody SaveReservation reservationDTO, Principal principal) {
+        reservationService.reserveAccommodation(reservationDTO, principal.getName());
         return RestResponseHandler.generateResponse("A foglalás sikeres!");
     }
 
- */
+    @PostMapping("/update")
+    public ResponseEntity<?> updateReservation(@Valid @RequestBody UpdateReservationDTO reservationDTO, Principal principal) {
+        reservationService.updateReservation(reservationDTO, principal.getName());
+        return RestResponseHandler.generateResponse("A foglalás módosítása sikeres!");
+    }
 }

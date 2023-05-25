@@ -31,8 +31,7 @@ export class LoginComponent implements OnInit {
             console.log(data)
             this.tokenStorage.saveToken(data.data.token);
             this.tokenStorage.saveUser(data.data);
-            this.tokenStorage.saveExpire(data.data.
-            );
+            this.tokenStorage.saveExpire(data.data.expiresIn);
             this.loginValid = true;
             this.authService.authenticated = true;
             this.router.navigateByUrl("/home");

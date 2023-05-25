@@ -3,9 +3,7 @@ package hu.kozma.backend.services;
 import hu.kozma.backend.dto.*;
 import hu.kozma.backend.exceptions.AnnounceDateConflict;
 import hu.kozma.backend.mappers.AccommodationMapper;
-import hu.kozma.backend.mappers.ImageMapper;
 import hu.kozma.backend.mappers.MapperUtils;
-import hu.kozma.backend.mappers.ReviewMapper;
 import hu.kozma.backend.model.*;
 import hu.kozma.backend.repository.AccommodationRepository;
 import hu.kozma.backend.repository.FileSystemRepository;
@@ -13,7 +11,6 @@ import hu.kozma.backend.repository.ReservationRepository;
 import hu.kozma.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -125,7 +122,7 @@ public class AccommodationService {
         return mergedAnnounceDates;
     }
 
-    public Boolean isWithinRange(LocalDate date, AnnounceDate announceDate) {
+    public static Boolean isWithinRange(LocalDate date, AnnounceDate announceDate) {
         return !(date.isBefore(announceDate.getStartDate()) || date.isAfter(announceDate.getEndDate()));
     }
 
@@ -135,15 +132,6 @@ public class AccommodationService {
         accommodationDetailsDTO.setImages(getImages(accommodation.getImages()));
         accommodationDetailsDTO.setReservedDays(getReservedDays(accommodation));
         return accommodationDetailsDTO;
-    }
-
-    public void reserveAccommodation(Long id, Reservation reservation, String userEmail) {
-        Accommodation accommodation = accommodationRepository.findById(id).orElseThrow();
-        User user = userRepository.findUserByEmail(userEmail).orElseThrow();
-        reservation.setAccommodation(accommodation);
-        reservation.setUser(user);
-        reservation.setPrice(calculatePrice(reservation, accommodation));
-        reservationRepository.save(reservation);
     }
 
     private Double calculatePrice(Reservation reservation, Accommodation accommodation) {

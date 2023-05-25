@@ -18,5 +18,4 @@ export interface Accommodation {
     reservedDays: number[];
     images: string[];
     mainImage: string;
-    mainImageIndex: number;
 }

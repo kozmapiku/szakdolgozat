@@ -5,6 +5,8 @@ import hu.kozma.backend.dto.ReviewDTO;
 import hu.kozma.backend.dto.SaveReviewDTO;
 import hu.kozma.backend.model.Review;
 
+import static hu.kozma.backend.repository.FileSystemRepository.getImages;
+
 public class ReviewMapper {
     public static CompactReviewDTO toCompactReviewDTO(Review review) {
         CompactReviewDTO reviewDTO = new CompactReviewDTO();
@@ -26,7 +28,8 @@ public class ReviewMapper {
         reviewDTO.setComment(review.getComment());
         reviewDTO.setStar(review.getStar());
         reviewDTO.setReservationId(review.getReservation().getId());
-        reviewDTO.setAccommodationDetails(AccommodationMapper.toAccommodationDetailsDTO(review.getAccommodation()));
+        reviewDTO.setAccommodation(AccommodationMapper.toAccommodationAltDTO(review.getAccommodation()));
+        reviewDTO.getAccommodation().setImages(getImages(review.getAccommodation().getImages()));
         return reviewDTO;
     }
 

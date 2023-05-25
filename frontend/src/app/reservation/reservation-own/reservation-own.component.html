@@ -6,24 +6,25 @@
     <div *ngFor="let reservation of reservations;let index = index">
       <mat-card [routerLink]="['/reservation', reservation.id, 'details']" class="mat-elevation-z4" fxFlex>
         <mat-card-header>
-          <mat-card-title>{{reservation.accommodation.address}}</mat-card-title>
-          <mat-card-subtitle>{{reservation.from | date:'yyyy. MM. dd'}}
-            - {{reservation.end | date:'yyyy. MM. dd'}}</mat-card-subtitle>
+            <mat-card-title>{{reservation.accommodation.address}}</mat-card-title>
+            <mat-card-subtitle>{{reservation.startDate | date:'yyyy. MM. dd'}}
+                - {{reservation.endDate | date:'yyyy. MM. dd'}}</mat-card-subtitle>
         </mat-card-header>
-        <mat-card-content>
-          <div fxLayout="row">
-            <div fxFlex="30" style="height: 200px">
-              <img [src]="'data:image/jpeg;base64,' + reservation.accommodation.mainImage" alt="Szállásról egy fénykép"
-                   class="acc-img">
-            </div>
-            <div fxFlex="70">
-              <h2>{{reservation.accommodation.name}}</h2>
-              <p>{{reservation.price}} Ft</p>
-              <p *ngIf="this.expired(index)">Teljesült</p>
-              <p *ngIf="!this.expired(index)">Jövőbeli esemény</p>
-            </div>
-          </div>
-        </mat-card-content>
+          <mat-card-content>
+              <div fxLayout="row">
+                  <div fxFlex="30" style="height: 200px">
+                      <img [src]="'data:image/jpeg;base64,' + reservation.accommodation.mainImage"
+                           alt="Szállásról egy fénykép"
+                           class="acc-img">
+                  </div>
+                  <div fxFlex="70">
+                      <h2>{{reservation.accommodation.name}}</h2>
+                      <p>{{reservation.price}} Ft</p>
+                      <p *ngIf="reservation.isEnded">Teljesült</p>
+                      <p *ngIf="!reservation.isEnded">Jövőbeli esemény</p>
+                  </div>
+              </div>
+          </mat-card-content>
       </mat-card>
     </div>
   </div>

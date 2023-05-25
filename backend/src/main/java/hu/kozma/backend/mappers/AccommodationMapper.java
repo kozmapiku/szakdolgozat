@@ -1,23 +1,15 @@
 package hu.kozma.backend.mappers;
 
+import hu.kozma.backend.dto.AccommodationAltDTO;
 import hu.kozma.backend.dto.AccommodationDTO;
 import hu.kozma.backend.dto.AccommodationDetailsDTO;
 import hu.kozma.backend.dto.SaveAccommodationDTO;
 import hu.kozma.backend.model.Accommodation;
 import hu.kozma.backend.model.Review;
 
-public class AccommodationMapper {
+import static hu.kozma.backend.repository.FileSystemRepository.getImage;
 
-    public static Accommodation toAccommodation(AccommodationDTO accommodationDTO) {
-        Accommodation accommodation = new Accommodation();
-        accommodation.setId(accommodationDTO.getId());
-        accommodation.setName(accommodationDTO.getName());
-        accommodation.setAddress(accommodationDTO.getAddress());
-        accommodation.setLat(accommodationDTO.getLat());
-        accommodation.setLng(accommodationDTO.getLng());
-        accommodation.setMaxGuests(accommodationDTO.getMaxGuests());
-        return accommodation;
-    }
+public class AccommodationMapper {
 
     public static Accommodation toAccommodation(SaveAccommodationDTO accommodationDTO) {
         Accommodation accommodation = new Accommodation();
@@ -53,5 +45,15 @@ public class AccommodationMapper {
         accommodationDetailsDTO.setAnnounces(accommodation.getAnnounces().stream().map(AnnounceDateMapper::toAnnounceDateDTO).toList());
         accommodationDetailsDTO.setReviews(accommodation.getReviews().stream().map(ReviewMapper::toCompactReviewDTO).toList());
         return accommodationDetailsDTO;
+    }
+
+    public static AccommodationAltDTO toAccommodationAltDTO(Accommodation accommodation) {
+        AccommodationAltDTO accommodationAltDTO = new AccommodationAltDTO();
+        accommodationAltDTO.setName(accommodation.getName());
+        accommodationAltDTO.setAddress(accommodation.getAddress());
+        accommodationAltDTO.setId(accommodation.getId());
+        accommodationAltDTO.setMainImage(getImage(accommodation.getMainImage()));
+        accommodationAltDTO.setMaxGuests(accommodation.getMaxGuests());
+        return accommodationAltDTO;
     }
 }

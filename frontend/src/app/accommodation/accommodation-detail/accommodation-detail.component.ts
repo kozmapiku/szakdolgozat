@@ -7,6 +7,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ReservationDialogComponent} from "../../reservation/reservation-dialog/reservation-dialog.component";
 import {AuthService} from "../../service/auth.service";
 import {ReservationDialogData} from "../../model/reservation_dialog.model";
+import {ReservationService} from "../../service/reservation.service";
 
 @Component({
   selector: 'app-accommodation-detail',
@@ -15,28 +16,29 @@ import {ReservationDialogData} from "../../model/reservation_dialog.model";
 })
 export class AccommodationDetailComponent implements OnInit {
 
-  id!: string | null;
-  accommodation!: Accommodation;
-  selectedDateRange: DateRange<Date> = new DateRange<Date>(null, null);
-  guests!: number;
-  accommodationImages: Array<object> = [];
-  availableDates: [date: Date, price: number][] = [];
-  center!: google.maps.LatLngLiteral;
+    id!: string | null;
+    accommodation!: Accommodation;
+    selectedDateRange: DateRange<Date> = new DateRange<Date>(null, null);
+    guests!: number;
+    accommodationImages: Array<object> = [];
+    availableDates: [date: Date, price: number][] = [];
+    center!: google.maps.LatLngLiteral;
 
-  googleMapsOptions: google.maps.MapOptions = {
-    disableDoubleClickZoom: true,
-    streetViewControl: false,
-  };
+    googleMapsOptions: google.maps.MapOptions = {
+        disableDoubleClickZoom: true,
+        streetViewControl: false,
+    };
 
-  reservationDialogData!: ReservationDialogData;
-  price: number = 0;
+    reservationDialogData!: ReservationDialogData;
+    price: number = 0;
 
-  constructor(private route: ActivatedRoute,
-              private accommodationService: AccommodationService,
-              public dialog: MatDialog,
-              private router: Router,
-              private authService: AuthService) {
-  }
+    constructor(private route: ActivatedRoute,
+                private accommodationService: AccommodationService,
+                public dialog: MatDialog,
+                private router: Router,
+                private authService: AuthService,
+                private reservationService: ReservationService) {
+    }
 
     ngOnInit(): void {
         this.id = this.route.snapshot.paramMap.get('id');
@@ -101,11 +103,11 @@ export class AccommodationDetailComponent implements OnInit {
 
   openReservationDialog() {
     this.reservationDialogData = {
-      from: this.selectedDateRange.start,
-      end: this.selectedDateRange.end,
-      maxGuests: this.accommodation.maxGuests,
-      guests: 0,
-      price: this.price
+        startDate: this.selectedDateRange.start,
+        endDate: this.selectedDateRange.end,
+        maxGuests: this.accommodation.maxGuests,
+        guests: 0,
+        price: this.price
     };
     const dialogRef = this.dialog.open(ReservationDialogComponent, {
       width: '400px',
@@ -193,21 +195,21 @@ export class AccommodationDetailComponent implements OnInit {
   }
 
   private reserve(reservationData: ReservationDialogData) {
-    if (reservationData == null || reservationData.end == null || reservationData.from == null || reservationData.guests == null) {
-      return;
-    }
-    this.accommodationService.reserve(this.accommodation.id, Date.parse(reservationData.from.toDateString()),
-      Date.parse(reservationData.end.toDateString()), reservationData.guests).subscribe({
-      next: (data) => {
-        console.log(JSON.stringify(data));
-        alert(data.data);
-        this.router.navigateByUrl("/");
-      },
-      error: (error) => {
-        alert(error.error.error)
-        console.log("Error " + JSON.stringify(error));
+      if (reservationData == null || reservationData.endDate == null || reservationData.startDate == null || reservationData.guests == null) {
+          return;
       }
-    })
+      this.reservationService.reserve(this.accommodation.id, Date.parse(reservationData.startDate.toDateString()),
+          Date.parse(reservationData.endDate.toDateString()), reservationData.guests).subscribe({
+          next: (data) => {
+              console.log(JSON.stringify(data));
+              alert(data.data);
+              this.router.navigateByUrl("/");
+          },
+          error: (error) => {
+              alert(error.error.error)
+              console.log("Error " + JSON.stringify(error));
+          }
+      })
   }
 
   private calculateAvailableDates() {
