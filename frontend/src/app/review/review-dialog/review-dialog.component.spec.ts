@@ -3,21 +3,21 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReviewDialogComponent} from './review-dialog.component';
 
 describe('ReviewDialogComponent', () => {
-  let component: ReviewDialogComponent;
-  let fixture: ComponentFixture<ReviewDialogComponent>;
+	let component: ReviewDialogComponent;
+	let fixture: ComponentFixture<ReviewDialogComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ReviewDialogComponent]
-    })
-      .compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			declarations: [ReviewDialogComponent]
+		})
+			.compileComponents();
 
-    fixture = TestBed.createComponent(ReviewDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+		fixture = TestBed.createComponent(ReviewDialogComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

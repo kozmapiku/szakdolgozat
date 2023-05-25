@@ -1,7 +1,7 @@
-import { Validation } from './validation';
+import {Validation} from './validation';
 
 describe('Validation', () => {
-  it('should create an instance', () => {
-    expect(new Validation()).toBeTruthy();
-  });
+	it('should create an instance', () => {
+		expect(new Validation()).toBeTruthy();
+	});
 });

@@ -1,40 +1,41 @@
 <mat-card>
-  <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="register(form)">
-      <h2>Regisztráció</h2>
-      <mat-form-field>
-        <input matInput placeholder="E-mail" formControlName="email" #emailInput required>
-        <mat-error *ngIf="form.hasError('required', 'email')">
-          Az e-mail cím megadása kötelező!
-        </mat-error>
-        <mat-error *ngIf="form.hasError('pattern', 'email')">
-          Az e-mail cím formátuma nem megfelelő!
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="Vezetéknév" formControlName="lastName" #lastNameInput required>
-        <mat-error>A vezetéknév megadása kötelező!</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="Keresztnév" formControlName="firstName" #firstNameInput required>
-        <mat-error>A keresztnév megadása kötelező!</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="password" placeholder="Jelszó" formControlName="password" #passwordInput required>
-        <mat-error *ngIf="form.hasError('required', 'password')">
-          A jelszó megadása kötelező!
-        </mat-error>
-        <mat-error *ngIf="form.hasError('minlength', 'password')">
-          A jelszó nem elég hosszú!
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="password" placeholder="Jelszó ismétlése" formControlName="confirmPassword" #confirmPasswordInput>
-        <mat-error *ngIf="form.hasError('matching')">
-          A jelszavak nem egyeznek!
-        </mat-error>
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Regisztráció</button>
-    </form>
-  </mat-card-content>
+	<mat-card-content>
+		<form (ngSubmit)="register(form)" [formGroup]="form">
+			<h2>Regisztráció</h2>
+			<mat-form-field>
+				<input #emailInput formControlName="email" matInput placeholder="E-mail" required>
+				<mat-error *ngIf="form.hasError('required', 'email')">
+					Az e-mail cím megadása kötelező!
+				</mat-error>
+				<mat-error *ngIf="form.hasError('pattern', 'email')">
+					Az e-mail cím formátuma nem megfelelő!
+				</mat-error>
+			</mat-form-field>
+			<mat-form-field>
+				<input #lastNameInput formControlName="lastName" matInput placeholder="Vezetéknév" required>
+				<mat-error>A vezetéknév megadása kötelező!</mat-error>
+			</mat-form-field>
+			<mat-form-field>
+				<input #firstNameInput formControlName="firstName" matInput placeholder="Keresztnév" required>
+				<mat-error>A keresztnév megadása kötelező!</mat-error>
+			</mat-form-field>
+			<mat-form-field>
+				<input #passwordInput formControlName="password" matInput placeholder="Jelszó" required type="password">
+				<mat-error *ngIf="form.hasError('required', 'password')">
+					A jelszó megadása kötelező!
+				</mat-error>
+				<mat-error *ngIf="form.hasError('minlength', 'password')">
+					A jelszó nem elég hosszú!
+				</mat-error>
+			</mat-form-field>
+			<mat-form-field>
+				<input #confirmPasswordInput formControlName="confirmPassword" matInput placeholder="Jelszó ismétlése"
+					   type="password">
+				<mat-error *ngIf="form.hasError('matching')">
+					A jelszavak nem egyeznek!
+				</mat-error>
+			</mat-form-field>
+			<button [disabled]="!form.valid" color="primary" mat-raised-button type="submit">Regisztráció</button>
+		</form>
+	</mat-card-content>
 </mat-card>

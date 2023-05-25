@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompactReviewDTO {
-    private String comment;
-    private Integer star;
-    private String name;
+	private String comment;
+	private Integer star;
+	private String name;
 }

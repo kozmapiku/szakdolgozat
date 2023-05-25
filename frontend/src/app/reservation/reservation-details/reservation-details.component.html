@@ -1,44 +1,44 @@
 <div fxLayoutAlign="center center">
-  <mat-card fxFlex="70">
-    <mat-card-header>
-        <h1><a [routerLink]="['/accommodation', reservation.accommodation.id, 'details']">Foglalás
-            a(z) {{reservation.accommodation.name}}-ba/be {{reservation.guests}} fő részére</a></h1>
-    </mat-card-header>
-    <mat-card-content>
-      <h4>Cím: {{reservation.accommodation.address}}</h4>
-      <h4>Összesen fizetendő: {{reservation.price}} Ft</h4>
-        <div fxLayout="row">
-            <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
-                <div>
-                    <h2>Érkezés</h2>
-                </div>
-                <div>
-                    <h4>{{reservation.startDate | date:'yyyy. MM. dd'}}</h4>
-                </div>
-            </div>
-            <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
-                <div>
-                    <h2>Távozás</h2>
-                </div>
-                <div>
-                    <h4>{{reservation.endDate | date:'yyyy. MM. dd'}}</h4>
-                </div>
-            </div>
-        </div>
-        <div *ngIf="reservation.isEnded && !this.alreadyReviewed()"
-             style="justify-content: center; display: flex; margin-bottom: 20px">
-            <button (click)="review()" color="primary" mat-raised-button style="width: 200px">Értékelés</button>
-        </div>
-        <div *ngIf="!reservation.isEnded" fxLayout="row" style="margin-bottom: 20px">
-            <div fxFlex style="justify-content: center; display: flex">
-                <button (click)="edit()" color="primary" mat-raised-button style="width: 200px">Módosítás</button>
-            </div>
-            <div fxFlex style="justify-content: center; display: flex">
-                <button (click)="delete()" color="warn" mat-raised-button style="width: 200px">Törlés</button>
-            </div>
-        </div>
-        <ng-image-slider [imageSize]="{width: '25%', height: 250}" [images]="this.reservationImages"
-                         [manageImageRatio]="true"/>
-    </mat-card-content>
-  </mat-card>
+	<mat-card fxFlex="70">
+		<mat-card-header>
+			<h1><a [routerLink]="['/accommodation', reservation.accommodation.id, 'details']">Foglalás
+				a(z) {{reservation.accommodation.name}}-ba/be {{reservation.guests}} fő részére</a></h1>
+		</mat-card-header>
+		<mat-card-content>
+			<h4>Cím: {{reservation.accommodation.address}}</h4>
+			<h4>Összesen fizetendő: {{reservation.price}} Ft</h4>
+			<div fxLayout="row">
+				<div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
+					<div>
+						<h2>Érkezés</h2>
+					</div>
+					<div>
+						<h4>{{reservation.startDate | date:'yyyy. MM. dd'}}</h4>
+					</div>
+				</div>
+				<div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
+					<div>
+						<h2>Távozás</h2>
+					</div>
+					<div>
+						<h4>{{reservation.endDate | date:'yyyy. MM. dd'}}</h4>
+					</div>
+				</div>
+			</div>
+			<div *ngIf="reservation.isEnded && !this.alreadyReviewed()"
+				 style="justify-content: center; display: flex; margin-bottom: 20px">
+				<button (click)="review()" color="primary" mat-raised-button style="width: 200px">Értékelés</button>
+			</div>
+			<div *ngIf="!reservation.isEnded" fxLayout="row" style="margin-bottom: 20px">
+				<div fxFlex style="justify-content: center; display: flex">
+					<button (click)="edit()" color="primary" mat-raised-button style="width: 200px">Módosítás</button>
+				</div>
+				<div fxFlex style="justify-content: center; display: flex">
+					<button (click)="delete()" color="warn" mat-raised-button style="width: 200px">Törlés</button>
+				</div>
+			</div>
+			<ng-image-slider [imageSize]="{width: '25%', height: 250}" [images]="this.reservationImages"
+							 [manageImageRatio]="true"/>
+		</mat-card-content>
+	</mat-card>
 </div>

@@ -1,6 +1,5 @@
 package hu.kozma.backend.services;
 
-import hu.kozma.backend.dto.CompactReviewDTO;
 import hu.kozma.backend.dto.ReviewDTO;
 import hu.kozma.backend.dto.SaveReviewDTO;
 import hu.kozma.backend.mappers.ReviewMapper;
@@ -19,21 +18,21 @@ import java.util.List;
 @AllArgsConstructor
 public class ReviewService {
 
-    private final AccommodationRepository accommodationRepository;
-    private final ReservationRepository reservationRepository;
-    private final ReviewRepository reviewRepository;
-    private final UserRepository userRepository;
+	private final AccommodationRepository accommodationRepository;
+	private final ReservationRepository reservationRepository;
+	private final ReviewRepository reviewRepository;
+	private final UserRepository userRepository;
 
-    public void addReview(SaveReviewDTO reviewDTO, String email) {
-        Review review = ReviewMapper.toReview(reviewDTO);
-        review.setUser(userRepository.findUserByEmail(email).orElseThrow(() -> new EntityNotFoundException("A felhasználó nem található.")));
-        review.setAccommodation(accommodationRepository.findById(reviewDTO.getAccommodationId()).orElseThrow(() -> new EntityNotFoundException("A szállás nem található")));
-        review.setReservation(reservationRepository.findById(reviewDTO.getReservationId()).orElseThrow(() -> new EntityNotFoundException("A foglalás nem található.")));
-        reviewRepository.save(review);
-    }
+	public void addReview(SaveReviewDTO reviewDTO, String email) {
+		Review review = ReviewMapper.toReview(reviewDTO);
+		review.setUser(userRepository.findUserByEmail(email).orElseThrow(() -> new EntityNotFoundException("A felhasználó nem található.")));
+		review.setAccommodation(accommodationRepository.findById(reviewDTO.getAccommodationId()).orElseThrow(() -> new EntityNotFoundException("A szállás nem található")));
+		review.setReservation(reservationRepository.findById(reviewDTO.getReservationId()).orElseThrow(() -> new EntityNotFoundException("A foglalás nem található.")));
+		reviewRepository.save(review);
+	}
 
-    public List<ReviewDTO> getReviews(String email) {
-        return reviewRepository.findByUserEmail(email)
-                .stream().map(ReviewMapper::toReviewDTO).toList();
-    }
+	public List<ReviewDTO> getReviews(String email) {
+		return reviewRepository.findByUserEmail(email)
+				.stream().map(ReviewMapper::toReviewDTO).toList();
+	}
 }

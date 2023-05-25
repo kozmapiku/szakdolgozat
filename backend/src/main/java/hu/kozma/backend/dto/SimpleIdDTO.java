@@ -9,6 +9,6 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class SimpleIdDTO {
-    @NotNull
-    private Long id;
+	@NotNull
+	private Long id;
 }

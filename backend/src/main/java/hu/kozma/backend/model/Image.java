@@ -12,25 +12,25 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 public class Image {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-    @Column(name = "location")
-    private String location;
-    @ToString.Exclude
-    @JsonBackReference
-    @ManyToOne
-    private Accommodation accommodation;
-    @Column(name = "is_main")
-    private boolean isMain;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
+	@Column(name = "location")
+	private String location;
+	@ToString.Exclude
+	@JsonBackReference
+	@ManyToOne
+	private Accommodation accommodation;
+	@Column(name = "is_main")
+	private boolean isMain;
 
-    public Image(String location, boolean isMain) {
-        this.location = location;
-        this.isMain = isMain;
-    }
+	public Image(String location, boolean isMain) {
+		this.location = location;
+		this.isMain = isMain;
+	}
 
-    public void deleteAccommodation() {
-        accommodation = null;
-    }
+	public void deleteAccommodation() {
+		accommodation = null;
+	}
 }

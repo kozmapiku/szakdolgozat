@@ -3,23 +3,23 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReservationDialogComponent} from './reservation-dialog.component';
 
 describe('ReservationDialogComponent', () => {
-  let component: ReservationDialogComponent;
-  let fixture: ComponentFixture<ReservationDialogComponent>;
+	let component: ReservationDialogComponent;
+	let fixture: ComponentFixture<ReservationDialogComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ReservationDialogComponent]
-    })
-        .compileComponents();
-  });
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			declarations: [ReservationDialogComponent]
+		})
+			.compileComponents();
+	});
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ReservationDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(ReservationDialogComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

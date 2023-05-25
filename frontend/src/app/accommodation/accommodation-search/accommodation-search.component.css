@@ -1,25 +1,25 @@
 .content {
-  padding: 16px;
+	padding: 16px;
 }
 
 mat-card {
-  height: 500px;
+	height: 500px;
 }
 
 mat-card img {
-  object-fit: contain; /*this makes the image in src fit to the size specified below*/
-  width: 100%; /* Here you can use wherever you want to specify the width and also the height of the <img>*/
-  height: 75%;
-  padding: 0 10px 0 10px;
-  object-position: center;
-  align-content: center;
+	object-fit: contain; /*this makes the image in src fit to the size specified below*/
+	width: 100%; /* Here you can use wherever you want to specify the width and also the height of the <img>*/
+	height: 75%;
+	padding: 0 10px 0 10px;
+	object-position: center;
+	align-content: center;
 }
 
 mat-card-footer {
-  padding-left: 16px;
+	padding-left: 16px;
 }
 
 mat-card-header {
-  justify-content: center;
+	justify-content: center;
 
 }

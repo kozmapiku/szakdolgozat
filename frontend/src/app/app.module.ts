@@ -23,9 +23,9 @@ import {AccommodationCreateComponent} from './accommodation/accommodation-create
 import {MatSelectModule} from "@angular/material/select";
 import {RegisterComponent} from './authorization/register/register.component';
 import {
-  DefaultMatCalendarRangeStrategy,
-  MAT_DATE_RANGE_SELECTION_STRATEGY,
-  MatDatepickerModule
+	DefaultMatCalendarRangeStrategy,
+	MAT_DATE_RANGE_SELECTION_STRATEGY,
+	MatDatepickerModule
 } from "@angular/material/datepicker";
 import {MAT_DATE_LOCALE, MatNativeDateModule} from "@angular/material/core";
 import {AccommodationDetailComponent} from './accommodation/accommodation-detail/accommodation-detail.component';
@@ -46,72 +46,73 @@ import {AccommodationMapSearch} from './accommodation/accommodation-map-search/a
 import {AccommodationUpdateComponent} from './accommodation/accommodation-update/accommodation-update.component';
 import {LayoutComponent} from "./layout/layout.component";
 import {
-  AccommodationFilterFormComponent
+	AccommodationFilterFormComponent
 } from './accommodation/accommodation-filter-form/accommodation-filter-form.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {AccommodationFormComponent} from './accommodation/accommodation-form/accommodation-form.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AccommodationSearchComponent,
-    HeaderComponent,
-    LoginComponent,
-    AccommodationCreateComponent,
-    RegisterComponent,
-    AccommodationDetailComponent,
-    ReservationDialogComponent,
-    ProfileComponent,
-    AccommodationOwnComponent,
-    ReviewOwnComponent,
-    ReservationOwnComponent,
-    ReservationDetailsComponent,
-    ReviewDialogComponent,
-    AccommodationMapSearch,
-    AccommodationUpdateComponent,
-    LayoutComponent,
-    AccommodationFilterFormComponent,
-    AccommodationFormComponent
-  ],
-  imports: [
-    BrowserModule,
-    RoutingModule,
-    BrowserAnimationsModule,
-    CommonModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    FlexLayoutModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatDialogModule,
-    MatMenuModule,
-    NgImageSliderModule,
-    StarRatingModule.forRoot(),
-    GoogleMapsModule,
-    GooglePlaceModule,
-    MatCheckboxModule
-  ],
-  providers: [AuthService,
-    {provide: HTTP_INTERCEPTORS, useClass: XhrInterceptorService, multi: true},
-    {
-      provide: APP_INITIALIZER, useFactory: (authService: AuthService) => () => authService.readUser(),
-      multi: true, deps: [AuthService]
-    },
-    {provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
-    {
-      provide: MAT_DATE_RANGE_SELECTION_STRATEGY,
-      useClass: DefaultMatCalendarRangeStrategy,
-    },
-  ],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		AccommodationSearchComponent,
+		HeaderComponent,
+		LoginComponent,
+		AccommodationCreateComponent,
+		RegisterComponent,
+		AccommodationDetailComponent,
+		ReservationDialogComponent,
+		ProfileComponent,
+		AccommodationOwnComponent,
+		ReviewOwnComponent,
+		ReservationOwnComponent,
+		ReservationDetailsComponent,
+		ReviewDialogComponent,
+		AccommodationMapSearch,
+		AccommodationUpdateComponent,
+		LayoutComponent,
+		AccommodationFilterFormComponent,
+		AccommodationFormComponent
+	],
+	imports: [
+		BrowserModule,
+		RoutingModule,
+		BrowserAnimationsModule,
+		CommonModule,
+		MatSidenavModule,
+		MatToolbarModule,
+		MatIconModule,
+		MatButtonModule,
+		FlexLayoutModule,
+		MatCardModule,
+		MatFormFieldModule,
+		MatInputModule,
+		FormsModule,
+		HttpClientModule,
+		ReactiveFormsModule,
+		MatSelectModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
+		MatDialogModule,
+		MatMenuModule,
+		NgImageSliderModule,
+		StarRatingModule.forRoot(),
+		GoogleMapsModule,
+		GooglePlaceModule,
+		MatCheckboxModule
+	],
+	providers: [AuthService,
+		{provide: HTTP_INTERCEPTORS, useClass: XhrInterceptorService, multi: true},
+		{
+			provide: APP_INITIALIZER, useFactory: (authService: AuthService) => () => authService.readUser(),
+			multi: true, deps: [AuthService]
+		},
+		{provide: MAT_DATE_LOCALE, useValue: 'hu-HU'},
+		{
+			provide: MAT_DATE_RANGE_SELECTION_STRATEGY,
+			useClass: DefaultMatCalendarRangeStrategy,
+		},
+	],
+	bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

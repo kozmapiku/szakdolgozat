@@ -13,6 +13,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAccommodationDTO extends SaveAccommodationDTO {
-    @NotNull
-    private Long id;
+	@NotNull
+	private Long id;
 }

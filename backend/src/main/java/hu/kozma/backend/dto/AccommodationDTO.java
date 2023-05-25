@@ -1,7 +1,9 @@
 package hu.kozma.backend.dto;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Getter
@@ -10,12 +12,12 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 public class AccommodationDTO {
-    private Long id;
-    private String name;
-    private Integer maxGuests;
-    private String address;
-    private Float lat;
-    private Float lng;
-    private byte[] mainImage;
-    private Double star;
+	private Long id;
+	private String name;
+	private Integer maxGuests;
+	private String address;
+	private Float lat;
+	private Float lng;
+	private byte[] mainImage;
+	private Double star;
 }

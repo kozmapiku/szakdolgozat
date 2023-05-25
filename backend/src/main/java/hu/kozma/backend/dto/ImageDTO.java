@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ImageDTO {
-    private String name;
-    private String image;
+	private String name;
+	private String image;
 }

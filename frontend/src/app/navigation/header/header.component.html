@@ -1,38 +1,38 @@
 <mat-toolbar color="primary">
-  <div fxHide.gt-xs>
-    <button mat-icon-button (click)="onToggleSidenav()">
-      <mat-icon>menu</mat-icon>
-    </button>
-  </div>
-  <div>
-    <a routerLink="/home">Főoldal</a>
-    <a routerLink="/map-search" style="margin-left: 20px">Térképes kereső</a>
-    <a *ngIf="authService.authenticated" routerLink="/accommodation/create" style="margin-left: 20px">Hirdetés</a>
-  </div>
-  <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
-    <ul fxLayout fxLayoutGap="15px" class="navigation-items">
-      <li>
-        <button *ngIf="authService.authenticated" [matMenuTriggerFor]="profile" mat-button>
-          <mat-icon>person</mat-icon>
-          {{authService.getUserName()}}
-          <mat-icon>menu</mat-icon>
-        </button>
-        <button *ngIf="!authService.authenticated" [matMenuTriggerFor]="auth" mat-button>
-          <mat-icon>person_outlined</mat-icon>
-          <mat-icon>menu</mat-icon>
-        </button>
-        <mat-menu #auth="matMenu">
-          <button mat-menu-item routerLink="/login">Bejelentkezés</button>
-          <button mat-menu-item routerLink="/register">Regisztráció</button>
-        </mat-menu>
-        <mat-menu #profile="matMenu">
-          <button mat-menu-item routerLink="/profile">Profilom</button>
-          <button mat-menu-item routerLink="/accommodation/mine">Meghírdetett szállásaim</button>
-          <button mat-menu-item routerLink="/review/mine">Értékeléseim</button>
-          <button mat-menu-item routerLink="/reservation/all">Foglalásaim</button>
-          <button (click)="logout()" mat-menu-item routerLink="/">Kijelentkezés</button>
-        </mat-menu>
-      </li>
-    </ul>
-  </div>
+	<div fxHide.gt-xs>
+		<button (click)="onToggleSidenav()" mat-icon-button>
+			<mat-icon>menu</mat-icon>
+		</button>
+	</div>
+	<div>
+		<a routerLink="/home">Főoldal</a>
+		<a routerLink="/map-search" style="margin-left: 20px">Térképes kereső</a>
+		<a *ngIf="authService.authenticated" routerLink="/accommodation/create" style="margin-left: 20px">Hirdetés</a>
+	</div>
+	<div fxFlex fxHide.xs fxLayout fxLayoutAlign="end">
+		<ul class="navigation-items" fxLayout fxLayoutGap="15px">
+			<li>
+				<button *ngIf="authService.authenticated" [matMenuTriggerFor]="profile" mat-button>
+					<mat-icon>person</mat-icon>
+					{{authService.getUserName()}}
+					<mat-icon>menu</mat-icon>
+				</button>
+				<button *ngIf="!authService.authenticated" [matMenuTriggerFor]="auth" mat-button>
+					<mat-icon>person_outlined</mat-icon>
+					<mat-icon>menu</mat-icon>
+				</button>
+				<mat-menu #auth="matMenu">
+					<button mat-menu-item routerLink="/login">Bejelentkezés</button>
+					<button mat-menu-item routerLink="/register">Regisztráció</button>
+				</mat-menu>
+				<mat-menu #profile="matMenu">
+					<button mat-menu-item routerLink="/profile">Profilom</button>
+					<button mat-menu-item routerLink="/accommodation/mine">Meghírdetett szállásaim</button>
+					<button mat-menu-item routerLink="/review/mine">Értékeléseim</button>
+					<button mat-menu-item routerLink="/reservation/all">Foglalásaim</button>
+					<button (click)="logout()" mat-menu-item routerLink="/">Kijelentkezés</button>
+				</mat-menu>
+			</li>
+		</ul>
+	</div>
 </mat-toolbar>

@@ -17,52 +17,52 @@ import static hu.kozma.backend.model.Role.USER;
 @Setter
 @Table(name = "\"user\"")
 public class User implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
-    @Column(name = "password", nullable = false)
-    private String password;
-    @Column(name = "enabled", nullable = false)
-    private boolean enabled = true;
-    @Column(name = "token_expired", nullable = false)
-    private boolean tokenExpired = true;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private Role role = USER;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
+	@Column(name = "email", nullable = false, unique = true)
+	private String email;
+	@Column(name = "first_name", nullable = false)
+	private String firstName;
+	@Column(name = "last_name", nullable = false)
+	private String lastName;
+	@Column(name = "password", nullable = false)
+	private String password;
+	@Column(name = "enabled", nullable = false)
+	private boolean enabled = true;
+	@Column(name = "token_expired", nullable = false)
+	private boolean tokenExpired = true;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role", nullable = false)
+	private Role role = USER;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role.name()));
+	}
 
-    public String getFullName() {
-        return lastName + " " + firstName;
-    }
+	public String getFullName() {
+		return lastName + " " + firstName;
+	}
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
+	@Override
+	public String getUsername() {
+		return email;
+	}
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return tokenExpired;
-    }
+	@Override
+	public boolean isAccountNonExpired() {
+		return tokenExpired;
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return enabled;
-    }
+	@Override
+	public boolean isAccountNonLocked() {
+		return enabled;
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
 }

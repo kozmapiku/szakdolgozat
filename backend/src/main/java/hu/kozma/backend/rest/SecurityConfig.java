@@ -19,43 +19,43 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @AllArgsConstructor
 public class SecurityConfig {
 
-    private final JwtRequestFilter jwtAuthFilter;
-    private final AuthenticationProvider authenticationProvider;
-    private final AuthenticationEntryPoint authEntryPoint;
+	private final JwtRequestFilter jwtAuthFilter;
+	private final AuthenticationProvider authenticationProvider;
+	private final AuthenticationEntryPoint authEntryPoint;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(httpSecurityCorsConfigurer ->
-                        httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
-                .csrf(httpSecurityCsrfConfigurer ->
-                {
-                    try {
-                        httpSecurityCsrfConfigurer.disable().
-                                authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                                        authorizationManagerRequestMatcherRegistry
-                                                .requestMatchers("/api/auth/register", "/api/auth/login", "/api/accommodation/all", "/api/accommodation/detail")
-                                                .permitAll()
-                                                .anyRequest()
-                                                .authenticated());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .sessionManagement(httpSecuritySessionManagementConfigurer ->
-                        httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
-                        .authenticationEntryPoint(authEntryPoint));
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http
+				.cors(httpSecurityCorsConfigurer ->
+						httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
+				.csrf(httpSecurityCsrfConfigurer ->
+				{
+					try {
+						httpSecurityCsrfConfigurer.disable().
+								authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+										authorizationManagerRequestMatcherRegistry
+												.requestMatchers("/api/auth/register", "/api/auth/login", "/api/accommodation/all", "/api/accommodation/detail")
+												.permitAll()
+												.anyRequest()
+												.authenticated());
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				})
+				.sessionManagement(httpSecuritySessionManagementConfigurer ->
+						httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authenticationProvider(authenticationProvider)
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+				.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
+						.authenticationEntryPoint(authEntryPoint));
 
-        return http.build();
-    }
+		return http.build();
+	}
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-        return source;
-    }
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		return source;
+	}
 }

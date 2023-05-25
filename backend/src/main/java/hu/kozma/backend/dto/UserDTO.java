@@ -1,6 +1,9 @@
 package hu.kozma.backend.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Getter
@@ -9,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    private String firstName;
-    private String lastName;
-    private String email;
+	private String firstName;
+	private String lastName;
+	private String email;
 }

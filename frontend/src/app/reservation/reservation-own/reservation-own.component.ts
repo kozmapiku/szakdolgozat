@@ -4,34 +4,34 @@ import {ReservationService} from "../../service/reservation.service";
 import {Reservation} from "../../model/reservation.model";
 
 @Component({
-  selector: 'app-my-reservations',
-  templateUrl: './reservation-own.component.html',
-  styleUrls: ['./reservation-own.component.css']
+	selector: 'app-my-reservations',
+	templateUrl: './reservation-own.component.html',
+	styleUrls: ['./reservation-own.component.css']
 })
 export class ReservationOwnComponent implements OnInit {
 
-  reservations: Reservation[] = [];
+	reservations: Reservation[] = [];
 
-  constructor(private authService: AuthService, private reservationService: ReservationService) {
-  }
+	constructor(private authService: AuthService, private reservationService: ReservationService) {
+	}
 
-  ngOnInit(): void {
-    this.getMyReservationsFromServer();
-  }
+	ngOnInit(): void {
+		this.getMyReservationsFromServer();
+	}
 
-  private getMyReservationsFromServer() {
-    this.reservationService.getMyReservations().subscribe({
-      next: (data) => {
-        this.reservations = data.data;
-        console.log(data.data)
-      },
-      error: (error) => {
-        console.log("Error " + JSON.stringify(error));
-      }
-    })
-  }
+	public expired(index: number) {
+		return this.reservations[index].endDate < Date.parse(new Date().toDateString());
+	}
 
-  public expired(index: number) {
-    return this.reservations[index].endDate < Date.parse(new Date().toDateString());
-  }
+	private getMyReservationsFromServer() {
+		this.reservationService.getMyReservations().subscribe({
+			next: (data) => {
+				this.reservations = data.data;
+				console.log(data.data)
+			},
+			error: (error) => {
+				console.log("Error " + JSON.stringify(error));
+			}
+		})
+	}
 }

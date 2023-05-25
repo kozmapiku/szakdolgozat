@@ -8,10 +8,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ImageMapper {
 
-    private FileSystemRepository fileSystemRepository;
+	private FileSystemRepository fileSystemRepository;
 
-    public static ImageDTO toImageDTO(Image image) {
-        ImageDTO imageDTO = new ImageDTO();
-        return imageDTO;
-    }
+	public static ImageDTO toImageDTO(Image image) {
+		ImageDTO imageDTO = new ImageDTO();
+		return imageDTO;
+	}
 }

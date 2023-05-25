@@ -14,10 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccommodationAltDTO {
-    private String name;
-    private List<byte[]> images;
-    private byte[] mainImage;
-    private String address;
-    private Long id;
-    private Integer maxGuests;
+	private String name;
+	private List<byte[]> images;
+	private byte[] mainImage;
+	private String address;
+	private Long id;
+	private Integer maxGuests;
 }

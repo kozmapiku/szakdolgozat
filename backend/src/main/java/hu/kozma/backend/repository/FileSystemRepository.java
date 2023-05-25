@@ -14,47 +14,47 @@ import java.util.Set;
 
 @Repository
 public class FileSystemRepository {
-    //TODO implement a good resource dir mechanism
-    private final String RESOURCES_DIR = "C:/res/";
+	//TODO implement a good resource dir mechanism
+	private final String RESOURCES_DIR = "C:/res/";
 
-    public String save(MultipartFile multipartFile, String username, int index) throws IOException {
-        Path newFile = Paths.get(RESOURCES_DIR + "/" + username + "/" + index + "-" + new Date().getTime() + "-" + multipartFile.getOriginalFilename());
-        Files.createDirectories(newFile.getParent());
-        multipartFile.transferTo(newFile);
-        return newFile.toAbsolutePath().toString();
-    }
+	public static byte[] load(Image image) throws Exception {
+		return Files.readAllBytes(Paths.get(image.getLocation()));
+	}
 
-    public static byte[] load(Image image) throws Exception {
-        return Files.readAllBytes(Paths.get(image.getLocation()));
-    }
+	public static byte[] load(String location) throws Exception {
+		return Files.readAllBytes(Paths.get(location));
+	}
 
-    public static byte[] load(String location) throws Exception {
-        return Files.readAllBytes(Paths.get(location));
-    }
+	public static List<byte[]> getImages(Set<Image> modelImages) {
+		return modelImages.stream().map(image -> {
+			try {
+				return load(image);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}).toList();
+	}
 
-    public static List<byte[]> getImages(Set<Image> modelImages) {
-        return modelImages.stream().map(image -> {
-            try {
-                return load(image);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }).toList();
-    }
+	public static byte[] getImage(String location) {
+		try {
+			return load(location);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    public static byte[] getImage(String location) {
-        try {
-            return load(location);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public static byte[] getImage(Image location) {
+		try {
+			return load(location);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    public static byte[] getImage(Image location) {
-        try {
-            return load(location);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public String save(MultipartFile multipartFile, String username, int index) throws IOException {
+		Path newFile = Paths.get(RESOURCES_DIR + "/" + username + "/" + index + "-" + new Date().getTime() + "-" + multipartFile.getOriginalFilename());
+		Files.createDirectories(newFile.getParent());
+		multipartFile.transferTo(newFile);
+		return newFile.toAbsolutePath().toString();
+	}
 }

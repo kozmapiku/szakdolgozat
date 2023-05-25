@@ -10,12 +10,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchAccommodationDTO {
-    private String name;
-    private String address;
-    @Nullable
-    @Size(min = 1, message = "A vendégek száma nem megfelelő.")
-    private Integer guests;
-    private Long fromDate;
-    private Long endDate;
-    private Boolean showOwn;
+	private String name;
+	private String address;
+	@Nullable
+	@Size(min = 1, message = "A vendégek száma nem megfelelő.")
+	private Integer guests;
+	private Long fromDate;
+	private Long endDate;
+	private Boolean showOwn;
 }

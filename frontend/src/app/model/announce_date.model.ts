@@ -1,5 +1,5 @@
-export interface AnnounceDate{
-    startDate: number
-    endDate: number
-    price: number
+export interface AnnounceDate {
+	startDate: number
+	endDate: number
+	price: number
 }

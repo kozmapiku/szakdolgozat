@@ -1,13 +1,14 @@
 <h1 mat-dialog-title>Add meg a részleteket a rendelés leadásához!</h1>
 <div mat-dialog-content>
-  <p>{{data.startDate | date:'yyyy. MM. dd'}} - {{data.endDate | date:'yyyy. MM. dd'}}</p>
-  <p>Ár: {{data.price}}</p>
-  <p>Hány főre szól a foglalás?</p>
-  <mat-form-field appearance="outline">
-      <input [(ngModel)]="data.guests" [max]="data.maxGuests" [min]="1" matInput type="number" value="{{data.guests}}">
-  </mat-form-field>
+	<p>{{data.startDate | date:'yyyy. MM. dd'}} - {{data.endDate | date:'yyyy. MM. dd'}}</p>
+	<p>Ár: {{data.price}}</p>
+	<p>Hány főre szól a foglalás?</p>
+	<mat-form-field appearance="outline">
+		<input [(ngModel)]="data.guests" [max]="data.maxGuests" [min]="1" matInput type="number"
+			   value="{{data.guests}}">
+	</mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button (click)="onNoClick()" mat-raised-button>Mégsem</button>
-  <button [mat-dialog-close]="data" mat-raised-button>Foglalás</button>
+	<button (click)="onNoClick()" mat-raised-button>Mégsem</button>
+	<button [mat-dialog-close]="data" mat-raised-button>Foglalás</button>
 </div>

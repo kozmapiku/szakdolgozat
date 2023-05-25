@@ -19,35 +19,35 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ReservationController {
 
-    private final ReservationService reservationService;
+	private final ReservationService reservationService;
 
-    @GetMapping("/own")
-    public ResponseEntity<?> getReservations(Principal principal) {
-        List<ReservationDTO> reservationDTOs = reservationService.getReservations(principal.getName());
-        return RestResponseHandler.generateResponse(reservationDTOs);
-    }
+	@GetMapping("/own")
+	public ResponseEntity<?> getReservations(Principal principal) {
+		List<ReservationDTO> reservationDTOs = reservationService.getReservations(principal.getName());
+		return RestResponseHandler.generateResponse(reservationDTOs);
+	}
 
-    @GetMapping("/detail")
-    public ResponseEntity<?> getReservationDetails(@RequestParam("id") Long id, Principal principal) {
-        ReservationDTO reservationDTO = reservationService.getReservation(id, principal.getName());
-        return RestResponseHandler.generateResponse(reservationDTO);
-    }
+	@GetMapping("/detail")
+	public ResponseEntity<?> getReservationDetails(@RequestParam("id") Long id, Principal principal) {
+		ReservationDTO reservationDTO = reservationService.getReservation(id, principal.getName());
+		return RestResponseHandler.generateResponse(reservationDTO);
+	}
 
-    @PostMapping("/delete")
-    public ResponseEntity<?> deleteReservation(@RequestBody Long id, Principal principal) {
-        reservationService.deleteReservation(id, principal.getName());
-        return RestResponseHandler.generateResponse("A törlés sikeres!");
-    }
+	@PostMapping("/delete")
+	public ResponseEntity<?> deleteReservation(@RequestBody Long id, Principal principal) {
+		reservationService.deleteReservation(id, principal.getName());
+		return RestResponseHandler.generateResponse("A törlés sikeres!");
+	}
 
-    @PostMapping("/reserve")
-    public ResponseEntity<?> addNewReservation(@Valid @RequestBody SaveReservation reservationDTO, Principal principal) {
-        reservationService.reserveAccommodation(reservationDTO, principal.getName());
-        return RestResponseHandler.generateResponse("A foglalás sikeres!");
-    }
+	@PostMapping("/reserve")
+	public ResponseEntity<?> addNewReservation(@Valid @RequestBody SaveReservation reservationDTO, Principal principal) {
+		reservationService.reserveAccommodation(reservationDTO, principal.getName());
+		return RestResponseHandler.generateResponse("A foglalás sikeres!");
+	}
 
-    @PostMapping("/update")
-    public ResponseEntity<?> updateReservation(@Valid @RequestBody UpdateReservationDTO reservationDTO, Principal principal) {
-        reservationService.updateReservation(reservationDTO, principal.getName());
-        return RestResponseHandler.generateResponse("A foglalás módosítása sikeres!");
-    }
+	@PostMapping("/update")
+	public ResponseEntity<?> updateReservation(@Valid @RequestBody UpdateReservationDTO reservationDTO, Principal principal) {
+		reservationService.updateReservation(reservationDTO, principal.getName());
+		return RestResponseHandler.generateResponse("A foglalás módosítása sikeres!");
+	}
 }

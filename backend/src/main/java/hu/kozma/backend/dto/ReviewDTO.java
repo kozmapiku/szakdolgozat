@@ -12,8 +12,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewDTO {
-    private String comment;
-    private Integer star;
-    private Long reservationId;
-    private AccommodationAltDTO accommodation;
+	private String comment;
+	private Integer star;
+	private Long reservationId;
+	private AccommodationAltDTO accommodation;
 }

@@ -7,25 +7,26 @@ import {ResponseList} from "../rest/response-list";
 import {Review} from "../model/review.model";
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class ReviewService {
 
-  baseUrl = environment.baseUrl + "/review";
-  constructor(private http: HttpClient, private router: Router) {
-  }
+	baseUrl = environment.baseUrl + "/review";
 
-  public review(accommodationId: number, reservationId: number, reviewStars: number, description: string) {
-    let body = {
-      "accommodationId": accommodationId,
-      "reservationId": reservationId,
-      "star": reviewStars,
-      "comment": description
-    };
-    return this.http.post<Response<string>>(this.baseUrl + "/create", body);
-  }
+	constructor(private http: HttpClient, private router: Router) {
+	}
 
-  public getMyReview() {
-      return this.http.get<ResponseList<Review>>(this.baseUrl + "/own");
-  }
+	public review(accommodationId: number, reservationId: number, reviewStars: number, description: string) {
+		let body = {
+			"accommodationId": accommodationId,
+			"reservationId": reservationId,
+			"star": reviewStars,
+			"comment": description
+		};
+		return this.http.post<Response<string>>(this.baseUrl + "/create", body);
+	}
+
+	public getMyReview() {
+		return this.http.get<ResponseList<Review>>(this.baseUrl + "/own");
+	}
 }

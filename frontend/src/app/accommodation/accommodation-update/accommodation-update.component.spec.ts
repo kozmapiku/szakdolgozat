@@ -3,21 +3,21 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {AccommodationUpdateComponent} from './accommodation-update.component';
 
 describe('ModifyAccommodationComponent', () => {
-  let component: AccommodationUpdateComponent;
-  let fixture: ComponentFixture<AccommodationUpdateComponent>;
+	let component: AccommodationUpdateComponent;
+	let fixture: ComponentFixture<AccommodationUpdateComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [AccommodationUpdateComponent]
-    })
-      .compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			declarations: [AccommodationUpdateComponent]
+		})
+			.compileComponents();
 
-    fixture = TestBed.createComponent(AccommodationUpdateComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+		fixture = TestBed.createComponent(AccommodationUpdateComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

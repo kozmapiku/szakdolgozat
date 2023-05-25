@@ -1,34 +1,35 @@
 <div class="content">
-  <section>
-    <app-accommodation-filter-form (filterChanged)="filterAccommodations($event)"/>
-  </section>
-  <div class="map-container">
-    <google-map
-      #map
-      [center]="center"
-      [options]="googleMapsOptions"
-      [zoom]="7"
-      height="100%"
-      width="100%">
-      <map-marker-clusterer
-        [imagePath]="'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'">
-        <map-marker #m="mapMarker"
-                    (mapClick)="openInfoWindow(m, index)"
-                    *ngFor="let marker of markers;let index = index"
-                    [position]="marker.position">
-          <map-info-window>
-            <h1><a
-              [routerLink]="['/accommodation', accommodations[index].id, 'details']">{{accommodations[index].name}}</a>
-            </h1>
-            <star-rating [rating]="accommodations[index].star" [starType]="'svg'"></star-rating>
-            <h2>{{accommodations[index].address}}</h2>
-            <img [src]="'data:image/jpeg;base64,' + accommodations[index].mainImage" alt="Szállásról egy fénykép"
-                 style="width: 100%">
-            <p>Férőhely: {{ accommodations[index].maxGuests }}</p>
-            <p>Cím: {{accommodations[index].address}}</p>
-          </map-info-window>
-        </map-marker>
-      </map-marker-clusterer>
-    </google-map>
-  </div>
+	<section>
+		<app-accommodation-filter-form (filterChanged)="filterAccommodations($event)"/>
+	</section>
+	<div class="map-container">
+		<google-map
+			#map
+			[center]="center"
+			[options]="googleMapsOptions"
+			[zoom]="7"
+			height="100%"
+			width="100%">
+			<map-marker-clusterer
+				[imagePath]="'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'">
+				<map-marker #m="mapMarker"
+							(mapClick)="openInfoWindow(m, index)"
+							*ngFor="let marker of markers;let index = index"
+							[position]="marker.position">
+					<map-info-window>
+						<h1><a
+							[routerLink]="['/accommodation', accommodations[index].id, 'details']">{{accommodations[index].name}}</a>
+						</h1>
+						<star-rating [rating]="accommodations[index].star" [starType]="'svg'"></star-rating>
+						<h2>{{accommodations[index].address}}</h2>
+						<img [src]="'data:image/jpeg;base64,' + accommodations[index].mainImage"
+							 alt="Szállásról egy fénykép"
+							 style="width: 100%">
+						<p>Férőhely: {{ accommodations[index].maxGuests }}</p>
+						<p>Cím: {{accommodations[index].address}}</p>
+					</map-info-window>
+				</map-marker>
+			</map-marker-clusterer>
+		</google-map>
+	</div>
 </div>

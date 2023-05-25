@@ -11,13 +11,13 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SaveReviewDTO {
-    @Size(max = 300, message = "A komment túl hosszú.")
-    private String comment;
-    @NotNull
-    @Max(value = 5, message = "Az értékelés nem megfelelő.")
-    private Integer star;
-    @NotNull(message = "A foglalás száma kötelező.")
-    private Long reservationId;
-    @NotNull(message = "A szállás száma kötelező.")
-    private Long accommodationId;
+	@Size(max = 300, message = "A komment túl hosszú.")
+	private String comment;
+	@NotNull
+	@Max(value = 5, message = "Az értékelés nem megfelelő.")
+	private Integer star;
+	@NotNull(message = "A foglalás száma kötelező.")
+	private Long reservationId;
+	@NotNull(message = "A szállás száma kötelező.")
+	private Long accommodationId;
 }

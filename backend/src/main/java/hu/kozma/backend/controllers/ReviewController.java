@@ -1,6 +1,5 @@
 package hu.kozma.backend.controllers;
 
-import hu.kozma.backend.dto.CompactReviewDTO;
 import hu.kozma.backend.dto.ReviewDTO;
 import hu.kozma.backend.dto.SaveReviewDTO;
 import hu.kozma.backend.rest.RestResponseHandler;
@@ -19,17 +18,17 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ReviewController {
 
-    private ReviewService reviewService;
+	private ReviewService reviewService;
 
-    @PostMapping("/create")
-    public ResponseEntity<?> review(@Valid @RequestBody SaveReviewDTO reviewDTO, Principal principal) {
-        reviewService.addReview(reviewDTO, principal.getName());
-        return RestResponseHandler.generateResponse("Az értékelés sikeres!");
-    }
+	@PostMapping("/create")
+	public ResponseEntity<?> review(@Valid @RequestBody SaveReviewDTO reviewDTO, Principal principal) {
+		reviewService.addReview(reviewDTO, principal.getName());
+		return RestResponseHandler.generateResponse("Az értékelés sikeres!");
+	}
 
-    @GetMapping("/own")
-    public ResponseEntity<?> getReviews(Principal principal) {
-        List<ReviewDTO> reviewList = reviewService.getReviews(principal.getName());
-        return RestResponseHandler.generateResponse(reviewList);
-    }
+	@GetMapping("/own")
+	public ResponseEntity<?> getReviews(Principal principal) {
+		List<ReviewDTO> reviewList = reviewService.getReviews(principal.getName());
+		return RestResponseHandler.generateResponse(reviewList);
+	}
 }
