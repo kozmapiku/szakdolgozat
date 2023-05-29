@@ -15,13 +15,14 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterDTO {
+	@NotBlank(message = "Az e-mail nem lehet üres.")
 	@Email(message = "Az e-mail formátuma nem megfelelő.")
 	private String email;
 	@NotBlank(message = "A keresztnév nem lehet üres.")
 	private String firstName;
 	@NotBlank(message = "A vezetéknév nem lehet üres.")
 	private String lastName;
-	@NotBlank
+	@NotBlank(message = "A jelszó nem lehet üres.")
 	@Size(min = 8, message = "A jelszó hossza nem megfelelő.")
 	private String password;
 }

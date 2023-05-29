@@ -1,11 +1,11 @@
 package hu.kozma.backend.mappers;
 
 import hu.kozma.backend.dto.ReservationDTO;
-import hu.kozma.backend.dto.SaveReservation;
+import hu.kozma.backend.dto.SaveReservationDTO;
 import hu.kozma.backend.model.Reservation;
 
 public class ReservationMapper {
-	public static Reservation toReservation(SaveReservation reservationDTO) {
+	public static Reservation toReservation(SaveReservationDTO reservationDTO) {
 		Reservation reservation = new Reservation();
 		reservation.setStartDate(MapperUtils.toDate(reservationDTO.getStartDate()));
 		reservation.setEndDate(MapperUtils.toDate(reservationDTO.getEndDate()));

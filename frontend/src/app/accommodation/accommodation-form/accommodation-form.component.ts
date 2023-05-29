@@ -82,6 +82,7 @@ export class AccommodationFormComponent implements OnInit {
 				this.center = {lat: this.accommodation.lat, lng: this.accommodation.lng};
 				this.form.get("name")?.setValue(this.accommodation.name);
 				this.form.get("address")?.setValue(this.accommodation.address);
+				console.log(this.accommodation.floor)
 				this.form.get("floor")?.setValue(this.accommodation.floor);
 				this.form.get("door")?.setValue(this.accommodation.door);
 				this.form.get("map")?.setValue("asd");
@@ -114,7 +115,7 @@ export class AccommodationFormComponent implements OnInit {
 				this.setPrimaryImage(0);
 				this.address = new Address();
 				this.address.name = this.accommodation.address
-				this.form.get("imageInput")?.setValue("asd");
+				//this.form.get("imageInput")?.setValue("asd");
 				//this.addAnnounceDateFilled("asd", "asd", 1000);
 			},
 			error: (error) => {
@@ -186,7 +187,8 @@ export class AccommodationFormComponent implements OnInit {
 		this.imageCompress.compressFile(image, orientation, 50, 50).then(
 			result => {
 				let imgResultAfterCompress = result;
-				const imageFile = new File([result], fileName, {type: 'image/jpeg'});
+				const imageBlob = this.dataURItoBlob(imgResultAfterCompress.split(',')[1]);
+				const imageFile = new File([imageBlob], fileName, {type: 'image/jpeg'});
 				this.previews.push(imgResultAfterCompress)
 				this.listOfFiles.push(imageFile)
 			});
@@ -245,13 +247,15 @@ export class AccommodationFormComponent implements OnInit {
 			lng: this.marker.position.lng,
 			description: form.controls["description"].value,
 			maxGuests: form.controls["maxGuest"].value,
-			announces: this.mapAnnounceDates()
+			announces: this.mapAnnounceDates(),
+			id: this.accommodation?.id !== undefined ? this.accommodation.id : 'null'
 		}))
 		console.log(this.primaryImage)
 		if (this.primaryImage != null) {
 			formData.append('files', this.primaryImage)
-			for (let i = 1; i < this.listOfFiles.length; i++) {
-				formData.append('files', this.listOfFiles[i]);
+			for (let i = 0; i < this.listOfFiles.length; i++) {
+				if (this.listOfFiles[i] != this.primaryImage)
+					formData.append('files', this.listOfFiles[i]);
 			}
 		} else {
 			this.listOfFiles.forEach(f => formData.append('files', f));
@@ -289,6 +293,7 @@ export class AccommodationFormComponent implements OnInit {
 					}
 				});
 		} else {
+			formData.get
 			this.accommodationService.modifyAccommodation(formData)
 				.subscribe({
 					next: (data) => {

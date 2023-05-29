@@ -22,6 +22,7 @@ export class AccommodationService {
 	}
 
 	public getAll() {
+		console.log("url: ", this.baseUrl)
 		return this.http.get<ResponseList<Accommodation>>(this.baseUrl + "/all");
 	}
 
@@ -36,13 +37,11 @@ export class AccommodationService {
 	}
 
 	public deleteAccommodation(id: number) {
-		let body = {"id": id};
-		return this.http.post<Response<string>>(this.baseUrl + "/delete", body);
+		return this.http.post<Response<string>>(this.baseUrl + "/delete", id);
 	}
 
 	public modifyAccommodation(formData: FormData) {
 		let body = formData
-		console.log(formData)
 		return this.http.post<Response<string>>(this.baseUrl + "/update", body);
 	}
 

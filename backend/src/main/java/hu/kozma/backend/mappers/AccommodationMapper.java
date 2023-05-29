@@ -44,6 +44,8 @@ public class AccommodationMapper {
 		accommodationDetailsDTO.setDescription(accommodation.getDescription());
 		accommodationDetailsDTO.setAnnounces(accommodation.getAnnounces().stream().map(AnnounceDateMapper::toAnnounceDateDTO).toList());
 		accommodationDetailsDTO.setReviews(accommodation.getReviews().stream().map(ReviewMapper::toCompactReviewDTO).toList());
+		accommodationDetailsDTO.setDoor(accommodation.getDoor());
+		accommodationDetailsDTO.setFloor(accommodation.getFloor());
 		return accommodationDetailsDTO;
 	}
 

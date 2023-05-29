@@ -4,6 +4,7 @@ import hu.kozma.backend.dto.*;
 import hu.kozma.backend.rest.RestResponseHandler;
 import hu.kozma.backend.services.AccommodationService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class AccommodationController {
 	@PostMapping(path = "/create",
 			produces = {MediaType.APPLICATION_JSON_VALUE},
 			consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, APPLICATION_OCTET_STREAM_VALUE})
-	public ResponseEntity<?> addAccommodation(@RequestPart("files") List<MultipartFile> multipartFiles,
+	public ResponseEntity<?> addAccommodation(@Valid @Size(min = 1) @RequestPart("files") List<MultipartFile> multipartFiles,
 											  @Valid @RequestPart("accommodation") SaveAccommodationDTO accommodationDTO,
 											  Principal principal) throws Exception {
 		accommodationService.saveAccommodation(accommodationDTO, multipartFiles, principal.getName());
@@ -55,9 +56,9 @@ public class AccommodationController {
 			produces = {MediaType.APPLICATION_JSON_VALUE},
 			consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, APPLICATION_OCTET_STREAM_VALUE})
 	public ResponseEntity<?> updateAccommodation(@RequestPart("files") List<MultipartFile> multipartFiles,
-												 @RequestPart("accommodation") UpdateAccommodationDTO accommodationDTO,
+												 @Valid @RequestPart("accommodation") UpdateAccommodationDTO accommodationDTO,
 												 Principal principal) throws Exception {
-		accommodationService.modifyAccommodation(accommodationDTO, multipartFiles, 0, principal.getName());
+		accommodationService.modifyAccommodation(accommodationDTO, multipartFiles, principal.getName());
 		return RestResponseHandler.generateResponse("Szállás módosítása sikeres!");
 	}
 

@@ -13,6 +13,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAccommodationDTO extends SaveAccommodationDTO {
-	@NotNull
+	@NotNull(message = "A szállás azonosítója nem lehet üres.")
 	private Long id;
 }

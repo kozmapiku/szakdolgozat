@@ -2,6 +2,7 @@ version: '2.0'
 
 volumes:
   dbdata:
+  uploads:
 
 services:
   postgres:
@@ -13,6 +14,11 @@ services:
       - POSTGRES_PASSWORD=Husleves2000*
     volumes:
       - dbdata:/var/lib/postgresql/data
+    ports:
+      - target: 5432
+        published: 6543
+        protocol: tcp
+        mode: host
   backend:
     container_name: backend
     image: szakdolgozat-backend
@@ -21,6 +27,8 @@ services:
       dockerfile: Dockerfile
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/szakdolgozat
+    volumes:
+      - uploads:/app/uploads
     ports:
       - "8080:8080"
     depends_on:

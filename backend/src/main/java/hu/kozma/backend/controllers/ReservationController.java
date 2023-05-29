@@ -1,7 +1,7 @@
 package hu.kozma.backend.controllers;
 
 import hu.kozma.backend.dto.ReservationDTO;
-import hu.kozma.backend.dto.SaveReservation;
+import hu.kozma.backend.dto.SaveReservationDTO;
 import hu.kozma.backend.dto.UpdateReservationDTO;
 import hu.kozma.backend.rest.RestResponseHandler;
 import hu.kozma.backend.services.ReservationService;
@@ -40,7 +40,7 @@ public class ReservationController {
 	}
 
 	@PostMapping("/reserve")
-	public ResponseEntity<?> addNewReservation(@Valid @RequestBody SaveReservation reservationDTO, Principal principal) {
+	public ResponseEntity<?> addNewReservation(@Valid @RequestBody SaveReservationDTO reservationDTO, Principal principal) {
 		reservationService.reserveAccommodation(reservationDTO, principal.getName());
 		return RestResponseHandler.generateResponse("A foglalás sikeres!");
 	}

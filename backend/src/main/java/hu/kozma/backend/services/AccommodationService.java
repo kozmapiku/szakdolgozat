@@ -7,7 +7,6 @@ import hu.kozma.backend.mappers.MapperUtils;
 import hu.kozma.backend.model.*;
 import hu.kozma.backend.repository.AccommodationRepository;
 import hu.kozma.backend.repository.FileSystemRepository;
-import hu.kozma.backend.repository.ReservationRepository;
 import hu.kozma.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -17,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static hu.kozma.backend.repository.FileSystemRepository.getImage;
@@ -33,7 +29,6 @@ public class AccommodationService {
 	private final AccommodationRepository accommodationRepository;
 	private final FileSystemRepository fileSystemRepository;
 	private final UserRepository userRepository;
-	private final ReservationRepository reservationRepository;
 
 	public static Boolean isWithinRange(LocalDate date, AnnounceDate announceDate) {
 		return !(date.isBefore(announceDate.getStartDate()) || date.isAfter(announceDate.getEndDate()));
@@ -172,19 +167,21 @@ public class AccommodationService {
 		return reservedDays;
 	}
 
-	public void modifyAccommodation(UpdateAccommodationDTO accommodationDTO, List<MultipartFile> multipartFiles, Integer mainImageIndex, String name) throws IOException, AnnounceDateConflict {
+	public void modifyAccommodation(UpdateAccommodationDTO accommodationDTO, List<MultipartFile> multipartFiles, String name) throws IOException, AnnounceDateConflict {
 		Accommodation accommodation = AccommodationMapper.toAccommodation(accommodationDTO);
-		Accommodation old = accommodationRepository.findById(accommodation.getId()).orElseThrow();
+		Accommodation old = accommodationRepository
+				.findById(accommodationDTO.getId())
+				.orElseThrow(() -> new EntityNotFoundException("A szállás nem található."));
 		if (!old.getName().equals(accommodation.getName())) {
 			old.setName(accommodation.getName());
 		}
 		if (!old.getAddress().equals(accommodation.getAddress())) {
 			old.setAddress(accommodation.getAddress());
 		}
-		if (!old.getFloor().equals(accommodation.getFloor())) {
+		if (!Objects.equals(old.getFloor(), accommodation.getFloor())) {
 			old.setFloor(accommodation.getFloor());
 		}
-		if (!old.getDoor().equals(accommodation.getDoor())) {
+		if (!Objects.equals(old.getFloor(), accommodation.getDoor())) {
 			old.setDoor(accommodation.getDoor());
 		}
 		if (!old.getLat().equals(accommodation.getLat())) {
@@ -202,11 +199,13 @@ public class AccommodationService {
 
 		old.deleteImages();
 		old.setImages(new HashSet<>());
-		for (int i = 0; i < multipartFiles.size(); i++)
-			old.addImage(new Image(fileSystemRepository.save(multipartFiles.get(i), name, i), i == mainImageIndex));
+		old.addImage(new Image(fileSystemRepository.save(multipartFiles.get(0), name, 0), true));
+		for (int i = 1; i < multipartFiles.size(); i++)
+			old.addImage(new Image(fileSystemRepository.save(multipartFiles.get(i), name, i), false));
 
 
 		List<AnnounceDate> newAnnounceDates = accommodation.getAnnounces();
+		newAnnounceDates.forEach(announceDate -> announceDate.setAccommodation(old));
 		for (AnnounceDate announceDate : old.getAnnounces()) {
 			if (!accommodation.getAnnounces().contains(announceDate)) {
 				if (old.getReservations().stream()
@@ -219,6 +218,7 @@ public class AccommodationService {
 			}
 		}
 		old.deleteAnnounceDates();
+		accommodationRepository.save(old);
 		old.setAnnounces(newAnnounceDates);
 		accommodationRepository.save(old);
 	}

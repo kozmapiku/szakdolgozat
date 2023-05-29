@@ -24,7 +24,6 @@ export class AccommodationMapSearch {
 	center: google.maps.LatLngLiteral = {lat: 47, lng: 19};
 
 	constructor(private authService: AuthService) {
-		console.log(authService.getUserName())
 	}
 
 	public openInfoWindow(marker: MapMarker, windowIndex: number) {

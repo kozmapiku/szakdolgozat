@@ -21,11 +21,10 @@ export class ReviewOwnComponent implements OnInit {
 	private getReviews() {
 		this.reviewService.getMyReview().subscribe({
 			next: (data) => {
-				console.log(JSON.stringify(data));
 				this.reviews = data.data;
 			},
 			error: (error) => {
-				console.log("Error " + JSON.stringify(error));
+				alert(error.error.error)
 			}
 		});
 	}

@@ -48,14 +48,13 @@ export class AccommodationDetailComponent implements OnInit {
 	public async getDetailsFromServer() {
 		await this.accommodationService.getDetails(this.id).subscribe({
 			next: (data) => {
-				console.log(JSON.stringify(data));
 				this.accommodation = data.data;
 				this.fillUpImages();
 				this.center = {lat: this.accommodation.lat, lng: this.accommodation.lng};
 				this.calculateAvailableDates();
 			},
 			error: (error) => {
-				console.log("Error " + JSON.stringify(error));
+				alert(error.error.error)
 			}
 		});
 	}
@@ -142,12 +141,11 @@ export class AccommodationDetailComponent implements OnInit {
 		if (confirm("Biztos törölni szeretnéd ezt a szállást?")) {
 			this.accommodationService.deleteAccommodation(this.accommodation.id).subscribe({
 				next: (data) => {
-					console.log(JSON.stringify(data));
 					alert(data.data);
 					this.router.navigateByUrl("/");
 				},
 				error: (error) => {
-					console.log("Error " + JSON.stringify(error));
+					alert(error.error.error);
 				}
 			})
 		}

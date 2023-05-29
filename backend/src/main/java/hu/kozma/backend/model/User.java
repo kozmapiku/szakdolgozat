@@ -1,20 +1,19 @@
 package hu.kozma.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 
-import static hu.kozma.backend.model.Role.USER;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "\"user\"")
 public class User implements UserDetails {
 	@Id
@@ -33,13 +32,10 @@ public class User implements UserDetails {
 	private boolean enabled = true;
 	@Column(name = "token_expired", nullable = false)
 	private boolean tokenExpired = true;
-	@Enumerated(EnumType.STRING)
-	@Column(name = "role", nullable = false)
-	private Role role = USER;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(role.name()));
+		return null;
 	}
 
 	public String getFullName() {

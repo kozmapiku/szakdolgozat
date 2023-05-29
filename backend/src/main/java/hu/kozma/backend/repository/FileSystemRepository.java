@@ -14,8 +14,7 @@ import java.util.Set;
 
 @Repository
 public class FileSystemRepository {
-	//TODO implement a good resource dir mechanism
-	private final String RESOURCES_DIR = "C:/res/";
+	private final String RESOURCES_DIR = "uploads";
 
 	public static byte[] load(Image image) throws Exception {
 		return Files.readAllBytes(Paths.get(image.getLocation()));

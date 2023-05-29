@@ -15,11 +15,13 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Objects;
@@ -113,6 +115,20 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		RestError restError = new RestError(HttpStatus.BAD_REQUEST);
 		restError.setError("Hibás lekérdezés.");
+		return buildResponseEntity(restError);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		RestError restError = new RestError(HttpStatus.METHOD_NOT_ALLOWED);
+		restError.setError("Nem létező lekérdezés.");
+		return buildResponseEntity(restError);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		RestError restError = new RestError(HttpStatus.NOT_FOUND);
+		restError.setError("Nem létező lekérdezés.");
 		return buildResponseEntity(restError);
 	}
 }

@@ -123,7 +123,7 @@
 					</mat-form-field>
 
 					<mat-form-field fxFlex="35">
-						<mat-label>Erre az időszakra vonatkozó ár/éjszaka</mat-label>
+						<mat-label>Erre az időszakra vonatkozó ár/nap</mat-label>
 						<input formControlName="price" matInput min="0" type="number">
 						<mat-error *ngIf="announceDateForm.get('price')?.hasError('required')">
 							Az ár megadása kötelező!
@@ -186,7 +186,7 @@
 			</button>
 		</ng-template>
 		<ng-template #elseBlock>
-			<button [disabled]="!form.valid || !hasImage()" color="primary" mat-raised-button type="submit">Módosítás
+			<button [disabled]="!form.valid" color="primary" mat-raised-button type="submit">Módosítás
 			</button>
 		</ng-template>
 	</div>

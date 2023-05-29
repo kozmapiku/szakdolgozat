@@ -23,7 +23,6 @@ export class AccommodationOwnComponent implements OnInit {
 		this.accommodationService.getMyAccommodations().subscribe({
 			next: (data) => {
 				this.accommodations = data.data;
-				console.log(data.data)
 			},
 			error: (error) => {
 				console.log("Error " + JSON.stringify(error));

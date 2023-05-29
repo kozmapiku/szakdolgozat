@@ -20,6 +20,8 @@ public class AccommodationDetailsDTO extends AccommodationDTO {
 	private String owner;
 	private String description;
 	private List<Long> reservedDays;
+	private Integer floor;
+	private Integer door;
 
 	public AccommodationDetailsDTO(AccommodationDTO accommodationDTO) {
 		super(accommodationDTO.getId(), accommodationDTO.getName(), accommodationDTO.getMaxGuests(),

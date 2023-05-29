@@ -27,10 +27,9 @@ export class ReservationOwnComponent implements OnInit {
 		this.reservationService.getMyReservations().subscribe({
 			next: (data) => {
 				this.reservations = data.data;
-				console.log(data.data)
 			},
 			error: (error) => {
-				console.log("Error " + JSON.stringify(error));
+				alert(error.error.error)
 			}
 		})
 	}

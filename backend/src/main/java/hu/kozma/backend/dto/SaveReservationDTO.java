@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SaveReservation {
+public class SaveReservationDTO {
 	@NotNull(message = "A szállás azonosítója nem lehet üres.")
 	private Long accommodationId;
 	@NotNull(message = "A kezdő dátum nem lehet üres.")

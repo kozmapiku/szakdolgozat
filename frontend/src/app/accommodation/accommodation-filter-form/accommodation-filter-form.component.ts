@@ -37,7 +37,7 @@ export class AccommodationFilterFormComponent {
 				this.filterChanged.emit(accommodations);
 			},
 			error: (error) => {
-				console.log("Error " + JSON.stringify(error));
+				alert(error.error.error)
 			}
 		})
 	}

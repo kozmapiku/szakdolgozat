@@ -1,7 +1,7 @@
 package hu.kozma.backend.services;
 
 import hu.kozma.backend.dto.ReservationDTO;
-import hu.kozma.backend.dto.SaveReservation;
+import hu.kozma.backend.dto.SaveReservationDTO;
 import hu.kozma.backend.dto.UpdateReservationDTO;
 import hu.kozma.backend.mappers.ReservationMapper;
 import hu.kozma.backend.model.Accommodation;
@@ -48,7 +48,7 @@ public class ReservationService {
 		reservationRepository.delete(reservation);
 	}
 
-	public void reserveAccommodation(SaveReservation reservationDTO, String email) {
+	public void reserveAccommodation(SaveReservationDTO reservationDTO, String email) {
 		Accommodation accommodation = accommodationRepository.findById(reservationDTO.getAccommodationId())
 				.orElseThrow(() -> new EntityNotFoundException("A szállás nem található."));
 		User user = userRepository.findUserByEmail(email).orElseThrow();

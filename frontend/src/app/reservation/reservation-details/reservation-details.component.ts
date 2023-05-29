@@ -45,7 +45,6 @@ export class ReservationDetailsComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(result => {
 			this.reviewData = result;
-			console.log(result);
 			if (this.reviewData.starReview != null)
 				this.sendReview();
 		});
@@ -73,12 +72,10 @@ export class ReservationDetailsComponent implements OnInit {
 	public delete() {
 		this.reservationService.delete(this.reservation.id).subscribe({
 			next: (data) => {
-				console.log(JSON.stringify(data));
 				alert(data.data);
 				this.router.navigateByUrl("/");
 			},
 			error: (error) => {
-				console.log("Error " + JSON.stringify(error));
 				alert(error.error.error);
 			}
 		})
