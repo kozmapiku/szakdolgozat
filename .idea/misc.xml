@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/frontend/pom.xml" />
       </list>
     </option>
+    <option name="workspaceImportForciblyTurnedOn" value="true" />
   </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="jakarta.annotation.Nullable" />
